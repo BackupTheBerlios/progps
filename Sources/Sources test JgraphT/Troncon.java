@@ -1,3 +1,6 @@
+
+
+
 import java.util.List;
 import java.util.Vector;
 
@@ -10,7 +13,15 @@ public class Troncon
 	private int longueur;
 	private boolean dispo;
 	private List<Ville> sesVilles = new Vector<Ville>();
+	private Route saRoute;
 	//private List<Etat> setEtats = new Vector<Etat>();
+	
+	public void genererValeursAleatoires(){
+		// 50 <= Vitesse <= 130 
+		vitesse=Math.round((float)Math.random()*80)+50;
+		// 0 <= Longueur <= 300
+		longueur=Math.round((float)Math.random()*300);
+	}
 
 	public Ville[] toSesVillesArray() {
 		Ville[] lSesVilles_Temp = new Ville[this.sesVilles.size()];
@@ -32,5 +43,13 @@ public class Troncon
 
 	public int getLongueur() {
 		return this.longueur;
+	}
+	
+	public Route getSaRoute() {
+		return saRoute;
+	}
+
+	public void setSaRoute(Route saRoute) {
+		this.saRoute = saRoute;
 	}
 }
