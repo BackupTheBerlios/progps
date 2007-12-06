@@ -60,12 +60,11 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
         }
     }
     
-    public ListeDeKChemins<Ville, Troncon> 
-	chercheKItineraires(
-			Ville villeDepart, 
-			Ville villeArrivee,
-			List<Ville> villesAEviter,
-			int nbChemins){
+    public ListeDeKChemins<Ville, Troncon> chercheKItineraires(
+												Ville villeDepart, 
+												Ville villeArrivee,
+												List<Ville> villesAEviter,
+												int nbChemins){
     	// Initialisation
     	aEviter=villesAEviter;
     	
@@ -76,4 +75,29 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
 
 		return liste;
 	}
+    
+    public class ThreadDesKChemins extends Thread {
+    	public ThreadDesKChemins(Ville villeDep, Ville villeArr){
+    		
+    		
+    	}
+    	
+    	public void run() {
+    		while( !isInterrupted()) {
+    			// TODO recherche des chemins
+    		}    		
+    	}
+    }
+    
+    public class ThreadDuMeilleurChemin extends Thread {
+    	public ThreadDuMeilleurChemin(Ville villeDep, Ville villeArr){
+    		
+    		
+    	}
+    	public void run() {
+    		while( !isInterrupted()) {
+    			// TODO recherche avec Dijkstra
+    		}    		
+    	}
+    }
 }

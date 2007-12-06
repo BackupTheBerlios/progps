@@ -130,6 +130,7 @@ public class ProGPS {
 	public static void main(String[] args) {
 		ProGPS me = new ProGPS();
 		me.initialiseGraphComplet(10);
+		
 //		me.decrireRoutesGraph();
 		List<Ville> deuxVilles = me.prendreDeuxVillesAuHasard();
 		List<Ville> villesAEviter;
