@@ -16,7 +16,7 @@ public class Troncon
 	private boolean dispo;
 	private List<Ville> sesVilles = new Vector<Ville>();
 	private Route saRoute;
-	//private List<Etat> setEtats = new Vector<Etat>();
+	private List<Etat> setEtats = new Vector<Etat>();
 	
 	public void genererValeursAleatoires(){
 		Random rand = new Random();
@@ -83,5 +83,9 @@ public class Troncon
 		lesVilles.add(ville1);
 		lesVilles.add(ville2);
 		this.sesVilles = lesVilles;
+	}
+	
+	public void addEtat(Etat e) {
+		this.setEtats.add(e);
 	}
 }

@@ -9,7 +9,7 @@ import org.jgrapht.alg.ListeDeKChemins;
 /*
  * Lancer avec -Xmx512M -Xms512M dans les arguments de la VM
  */
-public class ProGPS {
+public class SingletonProgps {
 
 	// Objet qui contient la représentation du graph  
 	MyWeightedMultigraph<Ville, Troncon> graph;
@@ -128,7 +128,7 @@ public class ProGPS {
 	}
 	
 	public static void main(String[] args) {
-		ProGPS me = new ProGPS();
+		SingletonProgps me = new SingletonProgps();
 		me.initialiseGraphComplet(10);
 		
 //		me.decrireRoutesGraph();
