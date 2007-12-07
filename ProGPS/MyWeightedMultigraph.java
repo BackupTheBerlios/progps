@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -18,7 +19,6 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
 	// Constantes
 	private double const_indispo=1000000;
 	private double const_ville_a_eviter=1000;
-	
 	
 	private List<Ville> aEviter=new Vector<Ville>();
 
@@ -60,6 +60,10 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
         }
     }
     
+    public ArrayList<Itineraire> trouver3Chemins(){
+		return null;    	
+    }
+    
     public ListeDeKChemins<Ville, Troncon> chercheKItineraires(
 												Ville villeDepart, 
 												Ville villeArrivee,
@@ -75,29 +79,4 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
 
 		return liste;
 	}
-    
-    public class ThreadDesKChemins extends Thread {
-    	public ThreadDesKChemins(Ville villeDep, Ville villeArr){
-    		
-    		
-    	}
-    	
-    	public void run() {
-    		while( !isInterrupted()) {
-    			// TODO recherche des chemins
-    		}    		
-    	}
-    }
-    
-    public class ThreadDuMeilleurChemin extends Thread {
-    	public ThreadDuMeilleurChemin(Ville villeDep, Ville villeArr){
-    		
-    		
-    	}
-    	public void run() {
-    		while( !isInterrupted()) {
-    			// TODO recherche avec Dijkstra
-    		}    		
-    	}
-    }
 }

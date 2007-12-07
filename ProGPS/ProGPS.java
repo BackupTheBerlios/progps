@@ -138,7 +138,6 @@ public class ProGPS {
 			villesAEviter = me.prendreDeuxVillesAuHasard();
 		} while (villesAEviter.contains(deuxVilles.get(0)) || villesAEviter.contains(deuxVilles.get(1)));
 		
-		
 		System.out.println("******************************");
 		System.out.println("Méthode 1");
 		me.chercheChemin(deuxVilles.get(0), deuxVilles.get(1));
