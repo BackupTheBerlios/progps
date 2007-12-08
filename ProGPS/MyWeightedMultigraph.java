@@ -2,11 +2,13 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.WeightedGraph;
+import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.ListeDeKChemins;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -60,23 +62,84 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
         }
     }
     
-    public ArrayList<Itineraire> trouver3Chemins(){
-		return null;    	
+    public Itineraire trouverLeChemin(
+    		Ville villeDepart, 
+			Ville villeArrivee,
+			List<Ville> villesAEviter){
+//    	 Initialisation
+    	aEviter=villesAEviter;
+    	Itineraire theResult = new Itineraire();
+    	
+    	List<E> listOfEdges = DijkstraShortestPath.findPathBetween(this, (V)villeDepart, (V)villeArrivee);
+    	
+    	for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
+			E anEdge = (E) iter.next();
+			if (anEdge instanceof Troncon) {
+				Troncon unTroncon = (Troncon) anEdge;
+				theResult.addUnTroncon(unTroncon);
+			}else{
+				// TODO levée d'exception
+			}
+		}
+    	return theResult;
     }
     
-    public ListeDeKChemins<Ville, Troncon> chercheKItineraires(
-												Ville villeDepart, 
-												Ville villeArrivee,
-												List<Ville> villesAEviter,
-												int nbChemins){
-    	// Initialisation
+    public List<Itineraire> trouver3Chemins(
+    		Ville villeDepart, 
+			Ville villeArrivee,
+			List<Ville> villesAEviter){
+//    	 Initialisation
     	aEviter=villesAEviter;
+    	List<Itineraire> result = new ArrayList<Itineraire>();
     	
-		long debut = System.currentTimeMillis();
-		ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((Multigraph)this, villeDepart, villeArrivee, nbChemins);
-		long fin = System.currentTimeMillis();
-		System.out.println("Temps de calcul : "+(fin-debut)+"ms");
+    	ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((Multigraph)this, villeDepart, villeArrivee, 3);
+    	
+    	Itineraire unIti;
+    	// On liste des 3 chemins (il se peut qu'il y ait moins de 3 chemins
+    	for (int i = 0; i < liste.size(); i++) {
+			// On liste tous les troncons
+    		unIti = new Itineraire();
+    		
+    		List<Troncon> lesTroncons = liste.getEdgesDuChemin(i);
+    		for (Iterator iter = lesTroncons.iterator(); iter.hasNext();) {
+				Troncon unTroncon = (Troncon) iter.next();
+				unIti.addUnTroncon(unTroncon);
+			}
+    		
+    		result.add(unIti);
+		}
+    	return result;
+    }
+    
+    public boolean ajouterUneVille(V uneVille){
+    	return this.addVertex(uneVille);
+    }
+    
+    public Troncon ajouterUnTroncon(V ville1, V ville2){
+    	E theEdge = this.addEdge(ville1, ville2);
+    	Troncon troncon=null;
+    	if (theEdge instanceof Troncon) {
+			troncon = (Troncon) theEdge;
+		}else{
+    		// TODO levée d'exception
+    	}
+    	return troncon;
+    }
 
-		return liste;
+	private void seDecrire(){
+		Set<E> lesTroncons=this.edgeSet();
+		for (E theEdge : lesTroncons) {
+			if (theEdge instanceof Troncon) {
+				Troncon troncon = (Troncon) theEdge;
+				System.out.println("**************");
+				System.out.println("De :"+this.getEdgeSource(theEdge).toString());
+				System.out.println("A :"+this.getEdgeTarget(theEdge).toString());
+				System.out.println("Dist:"+troncon.getLongueur()+"km");
+				System.out.println("Vit:"+troncon.getVitesse()+"km/h");
+			}else{
+				// TODO levée d'exception
+				
+			}
+		}
 	}
 }

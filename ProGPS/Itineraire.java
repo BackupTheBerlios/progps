@@ -2,15 +2,15 @@ import java.util.List;
 import java.util.Vector;
 
 public class Itineraire {
-	private int longueurTotal;
-	private int nbRadars;
-	private int prix;
-	private int distanceTouristique;
-	private int vitesseMin;
-	private int vitesseMax;
-	private Troncon tronconCourant;
+	private int longueurTotal=0;
+	private int nbRadars=0;
+	private int prix=0;
+	private int distanceTouristique=0;
+	private int vitesseMin=0;
+	private int vitesseMax=0;
+	private Troncon tronconCourant=null;
 	private List<Troncon> lesTroncons = new Vector<Troncon>();
-
+	
 	public Ville getVilleSuivante(Ville derniereVilleTraversé) {
 		throw new UnsupportedOperationException();
 	}
@@ -27,12 +27,15 @@ public class Itineraire {
 		return this.tronconCourant;
 	}
 
-	public void addLesTroncons(Troncon lesTroncons) {
-		this.lesTroncons.add(lesTroncons);
+	public void addUnTroncon(Troncon unTroncon) {
+		this.lesTroncons.add(unTroncon);
+		//TODO Modifier tous les compteurs !
+		longueurTotal+=unTroncon.getLongueur();
+		
 	}
 
-	public void removeLesTroncons(Troncon lesTroncons) {
-		this.lesTroncons.remove(lesTroncons);
+	public void removeUnTroncon(Troncon unTroncon) {
+		this.lesTroncons.remove(unTroncon);
 	}
 
 	public Troncon[] toLesTronconsArray() {
