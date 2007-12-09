@@ -1,3 +1,4 @@
+package noyau;
 
 public class Ville {
 	private String idVille;
@@ -7,15 +8,19 @@ public class Ville {
 	private boolean touristique;
 
 	/** Constructeur de ville
-	 * Ne vérifie pas si une ville porte déjà le même nom !
-	 * TODO Ajouter la vérification d'unicité
+	 * 
+	 * @param nomVille
+	 */
+	public Ville(String nomVille) {
+		this.nomVille = nomVille;
+	}
+	/** Constructeur de ville
 	 * 
 	 * @param nomVille
 	 * @param typeVille
 	 * @param touristique
 	 */
 	public Ville(String nomVille, int typeVille, boolean touristique) {
-		super();
 		this.nomVille = nomVille;
 		this.typeVille = typeVille;
 		this.touristique = touristique;

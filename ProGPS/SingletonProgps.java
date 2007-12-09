@@ -3,8 +3,17 @@
 import java.util.*;
 
 
+import noyau.Itineraire;
+import noyau.MyWeightedMultigraph;
+import noyau.Route;
+import noyau.Troncon;
+
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.ListeDeKChemins;
+
+import exceptions.ExceptionRecherche;
+
+import noyau.Ville;
 
 /*
  * Lancer avec -Xmx512M -Xms512M dans les arguments de la VM
@@ -70,7 +79,22 @@ public class SingletonProgps {
 
 		// TODO Etape 1 : Lancement de l'interface
 		// TODO Etape 2 : Lancement du chargement XML
-		// TODO Etape 3 : Ouverture de l'interface sur la fenêtre principale 
+		// TODO Etape 3 : Ouverture de l'interface sur la fenêtre principale
+		
+		me.initialiseGraphComplet(100);
+		List deuxVilles = me.prendreDeuxVillesAuHasard();
+		
+		try {
+			List<Itineraire> lesIti = me.graph.trouver3Chemins((Ville)deuxVilles.get(0), (Ville)deuxVilles.get(1), null, null);
+			for (Iterator iter = lesIti.iterator(); iter.hasNext();) {
+				Itineraire unIti = (Itineraire) iter.next();
+				System.out.println(unIti.toString());
+				System.out.println();
+			}
+		} catch (ExceptionRecherche e) {
+			// Error
+			e.printStackTrace();
+		}
 	}
 
 }

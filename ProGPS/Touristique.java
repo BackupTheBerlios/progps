@@ -1,3 +1,6 @@
+import noyau.Etat;
+import noyau.Troncon;
+
 
 public class Touristique extends Etat {
 	

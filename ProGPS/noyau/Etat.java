@@ -1,3 +1,5 @@
+package noyau;
+
 
 public abstract class Etat {
 	private Troncon sonTroncon;

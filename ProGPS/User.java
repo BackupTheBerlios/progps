@@ -1,6 +1,12 @@
 
 import java.util.*;
 
+import noyau.Itineraire;
+import noyau.Route;
+import noyau.Troncon;
+
+import noyau.Ville;
+
 
 public class User {
 	private List<Ville> villeEtapes = new Vector<Ville>();

@@ -1,9 +1,13 @@
+package noyau;
 
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -28,10 +32,9 @@ public class Troncon
 		dispo=(rand.nextBoolean());
 	}
 
-	public Ville[] toSesVillesArray() {
-		Ville[] lSesVilles_Temp = new Ville[this.sesVilles.size()];
-		this.sesVilles.toArray(lSesVilles_Temp);
-		return lSesVilles_Temp;
+	public Set<Ville> getSesVilles() {
+		Set villes = new HashSet<Ville>(sesVilles);
+		return villes;
 	}
 
 	public void setVitesse(int vitesse) {
@@ -70,7 +73,7 @@ public class Troncon
 		return sesVilles.contains(laVille);
 	}
 	
-	public boolean isRelieVille(List<Ville> lesVilles) {
+	public boolean isRelieVille(Set<Ville> lesVilles) {
 		for (Iterator iter = lesVilles.iterator(); iter.hasNext();) {
 			Ville uneVille = (Ville) iter.next();
 			if (sesVilles.contains(uneVille)) return true;
@@ -79,7 +82,7 @@ public class Troncon
 	}
 
 	public void setSesVilles(Ville ville1, Ville ville2) {
-		List<Ville> lesVilles = new Vector<Ville>();
+		List<Ville> lesVilles = new ArrayList<Ville>();
 		lesVilles.add(ville1);
 		lesVilles.add(ville2);
 		this.sesVilles = lesVilles;

@@ -1,6 +1,7 @@
+package threads;
 
 public class ThreadCalculDesKChemins extends Thread {
-	public ThreadCalculDesKChemins(Ville villeDep, Ville villeArr){
+	public ThreadCalculDesKChemins(){
 		
 		
 	}

@@ -1,7 +1,11 @@
+package noyau;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 public class Itineraire {
+	private Ville villeDepart;
+	private Ville villeArrivee;
 	private int longueurTotal=0;
 	private int nbRadars=0;
 	private int prix=0;
@@ -13,6 +17,14 @@ public class Itineraire {
 	
 	public Ville getVilleSuivante(Ville derniereVilleTraversé) {
 		throw new UnsupportedOperationException();
+	}
+
+	public void setVilleArrivee(Ville villeArrivee) {
+		this.villeArrivee = villeArrivee;
+	}
+
+	public void setVilleDepart(Ville villeDepart) {
+		this.villeDepart = villeDepart;
 	}
 
 	public Itineraire refraichirItineraire() {
@@ -31,7 +43,6 @@ public class Itineraire {
 		this.lesTroncons.add(unTroncon);
 		//TODO Modifier tous les compteurs !
 		longueurTotal+=unTroncon.getLongueur();
-		
 	}
 
 	public void removeUnTroncon(Troncon unTroncon) {
@@ -74,5 +85,33 @@ public class Itineraire {
 
 	public int getVitesseMax() {
 		return this.vitesseMax;
+	}
+	
+	public String toString(){
+		// TODO à completer
+		String mess = "---- Description ----";
+		mess +="\nLongueur : "+this.longueurTotal+" km";
+		mess +="\nDepart : "+this.villeDepart.getNomVille();
+		mess +="\nArrivee : "+this.villeArrivee.getNomVille();
+		
+		Ville derniereVilleVue = this.villeDepart;
+		mess += "\nNbr d'étapes : "+lesTroncons.size();
+		
+		for (Iterator iter = lesTroncons.iterator(); iter.hasNext();) {
+			Troncon unTroncon = (Troncon) iter.next();
+			for (Iterator iterator = unTroncon.getSesVilles().iterator(); iterator.hasNext();) {
+				Ville uneVilleReliee = (Ville) iterator.next();
+				if (uneVilleReliee.equals(derniereVilleVue)) {
+					mess += "\nPartir de "+derniereVilleVue.getNomVille();
+					derniereVilleVue=((Ville) iterator.next());
+					mess += " vers "+derniereVilleVue.getNomVille();
+				} else {
+					mess += "\nPartir de "+derniereVilleVue.getNomVille()+" vers "+uneVilleReliee.getNomVille();
+					derniereVilleVue=uneVilleReliee;
+					iterator.next();
+				}
+			}
+		}
+		return mess;
 	}
 }
