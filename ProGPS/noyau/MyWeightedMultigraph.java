@@ -1,21 +1,17 @@
 package noyau;
 
 
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
-
 
 import org.jgrapht.EdgeFactory;
-import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.ListeDeKChemins;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.Multigraph;
 import org.jgrapht.graph.WeightedMultigraph;
 
@@ -107,12 +103,14 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
 			Set<Ville> villesEtapes) throws Exception{
     	
 //    	Vérification qu'une ville étape n'est pas à éviter
-    	for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
-			Ville uneEtape = (Ville) iter.next();
-			if(villesAEviter.contains(uneEtape)){
-				throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
-			}
-		}
+    	if (villesEtapes!=null && villesAEviter!=null) {
+    		for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
+    			Ville uneEtape = (Ville) iter.next();
+    			if(villesAEviter.contains(uneEtape)){
+    				throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
+    			}
+    		}
+    	}
     	
 //    	 Initialisation
     	aEviter=villesAEviter;
@@ -177,7 +175,7 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
     }
     
 
-	private void seDecrire() throws ExceptionGraph{
+	public void seDecrire() throws ExceptionGraph{
 		Set<E> lesTroncons=this.edgeSet();
 		for (E theEdge : lesTroncons) {
 			if (theEdge instanceof Troncon) {
