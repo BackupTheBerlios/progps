@@ -1,3 +1,9 @@
+/*
+ * jPanel_AffichageItineraire.java
+ *
+ * Created on 14 novembre 2007, 00:29
+ */
+
 package progps_ihm;
 
 import java.awt.*;
@@ -409,6 +415,11 @@ public class ChoixItineraire extends JPanel {
 		if (jButton_Choix == null) {
 			jButton_Choix = new JButton();
 			jButton_Choix.setText("Choisir cet itinéraire");
+			jButton_Choix.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// TODO
+				}
+			});
 		}
 		return jButton_Choix;
 	}
