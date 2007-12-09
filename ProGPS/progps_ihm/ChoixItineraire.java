@@ -1,14 +1,13 @@
-/*
- * jPanel_AffichageItineraire.java
- *
- * Created on 14 novembre 2007, 00:29
- */
-
 package progps_ihm;
 
 import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
+import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -20,24 +19,11 @@ import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.JScrollPane;
 
 public class ChoixItineraire extends JPanel {
 
-	private JLabel jLabel_Distance_1;
-	private JLabel jLabel_Distance_2;
-	private JLabel jLabel_Distance_3;
-	private JLabel jLabel_Duree_1;
-	private JLabel jLabel_Duree_2;
-	private JLabel jLabel_Duree_3;
-	private JLabel jLabel_Preference_1;
-	private JLabel jLabel_Preference_2;
-	private JLabel jLabel_Preference_3;
-	private JLabel jLabel_Prix_1;
-	private JLabel jLabel_Prix_2;
-	private JLabel jLabel_Prix_3;
-	private JLabel jLabel_Titre_1;
-	private JLabel jLabel_Titre_2;
-	private JLabel jLabel_Titre_3;
 	private JPanel jPanel_Gauche;
 	private JPanel jPanel_Droite;
 	private JPanel jPanel_Itineraire_1;
@@ -60,212 +46,119 @@ public class ChoixItineraire extends JPanel {
 	private JPanel jPanel_Centre = null;
 	private JPanel jPanel_Bas = null;
 	private JButton jButton_Choix = null;
-	private JLabel jLabel_viol_1 = null;
-	private JLabel jLabel_viol_2 = null;
-	private JLabel jLabel_viol_3 = null;
-	private JLabel jLabel_viol_4 = null;
-	private JLabel jLabel_viol_5 = null;
-	private JLabel jLabel_viol_6 = null;
 	private JPanel jPanel_Haut = null;
-	private JLabel jLabel_haut = null;   
+	private JLabel jLabel_haut = null;
+	private JTextPane jTextPane_recap3 = null;
+	private JScrollPane jScrollPane_recap_3 = null;
+	private JScrollPane jScrollPane_recap_2 = null;
+	private JTextPane jTextPane_recap2 = null;
+	private JScrollPane jScrollPane_recap_1 = null;
+	private JTextPane jTextPane_recap1 = null;   
 
 	public ChoixItineraire() {
 		initComponents();
 	}
 
+	/**
+	 * Remplir les informations d'un récapitulatif
+	 * @param num 3=gauche,2=centre,1=droite
+	 * @param String[] Infos : Distance, durée, prix (seulement les valeurs, ex : "25€50")
+	 * @param String[] Preferences violées (texte complet, ex : "Radars : 3")
+	 */
+	public void remplirRecap(int num, String[] infos, String[] viols) {
+		String v = "";
+		for(int i=0; i<viols.length;i++) {
+			v += viols[i];
+			v += "\n";
+		}
+		String[] initString =
+		{ "Récapitulatif :\n",            //regular
+				"Distance : " + infos[0] + "\n",                                   //italic
+				"Durée : " + infos[1] + "\n",                                    //bold
+				"Prix : " + infos[0] + "\n\n",                                      //small
+				"Préférences violées : \n",                                //large
+				v
+		};
+
+		String[] initStyles =
+		{ "bold",
+		  "regular",
+		  "regular",
+		  "regular",
+		  "bold_italic",
+		  "red",
+		};
+
+		StyledDocument doc = null;
+		
+		try {
+			switch(num){
+				case 1: doc = jTextPane_recap1.getStyledDocument(); break;
+				case 2: doc = jTextPane_recap2.getStyledDocument(); break;
+				case 3: doc = jTextPane_recap3.getStyledDocument(); break;
+				default: throw new Exception("Erreur : le numéro du récapitulatif doit etre compris entre 1 et 3");
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		addStylesToDocument(doc);
+
+		try {
+			for (int i=0; i < initString.length; i++) {
+				doc.insertString(doc.getLength(), initString[i],
+						doc.getStyle(initStyles[i]));
+			}
+		} catch (BadLocationException ble) {
+			System.err.println("Impossible d'insérer le texte dans le TextPane.");
+		}
+	}
+	
+	protected void addStylesToDocument(StyledDocument doc) {
+		// Initialize some styles.
+        Style def = StyleContext.getDefaultStyleContext().
+                        getStyle(StyleContext.DEFAULT_STYLE);
+
+        Style regular = doc.addStyle("regular", def);
+        StyleConstants.setFontFamily(def, "SansSerif");
+
+        Style s = doc.addStyle("italic", regular);
+        StyleConstants.setItalic(s, true);
+
+        s = doc.addStyle("bold", regular);
+        StyleConstants.setBold(s, true);
+        
+        s = doc.addStyle("bold_italic", regular);
+        StyleConstants.setBold(s, true);
+        StyleConstants.setItalic(s, true);
+
+        s = doc.addStyle("red", regular);
+        StyleConstants.setForeground(s, Color.RED);
+	}
+
 	private void initComponents() {
-		jLabel_viol_6 = new JLabel();
-		jLabel_viol_6.setText(" ");
-		jLabel_viol_5 = new JLabel();
-		jLabel_viol_5.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_viol_5.setForeground(Color.RED);
-		jLabel_viol_5.setText("Limitation mini : 90 km/h");
-		jLabel_viol_4 = new JLabel();
-		jLabel_viol_4.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_viol_4.setForeground(Color.RED);
-		jLabel_viol_4.setText("Limitation mini : 50 km/h");
-		jLabel_viol_3 = new JLabel();
-		jLabel_viol_3.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_viol_3.setForeground(Color.RED);
-		jLabel_viol_3.setText("Radars : 3");
-		jLabel_viol_2 = new JLabel();
-		jLabel_viol_2.setText(" ");
-		jLabel_viol_1 = new JLabel();
-		jLabel_viol_1.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_viol_1.setForeground(Color.RED);
-		jLabel_viol_1.setText("Radars : 2");
 		jPanel_Droite = new JPanel();
 		jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		jPanel_RecapChoix_1 = new JPanel();
 		jPanel_RecapitulatifChoix_1 = new JPanel();
-		jLabel_Titre_1 = new JLabel();
-		jLabel_Distance_1 = new JLabel();
-		jLabel_Distance_1.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Duree_1 = new JLabel();
-		jLabel_Duree_1.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Prix_1 = new JLabel();
-		jLabel_Prix_1.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Preference_1 = new JLabel();
-		jLabel_Preference_1.setFont(new Font("Arial",Font.BOLD+Font.ITALIC,12));
 		jPanel_Itineraire_1 = new JPanel();
 		jScrollPane_Itineraire_1 = new JScrollPane();
 		jPanel_Milieu = new JPanel();
 		jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		jPanel_RecapChoix_2 = new JPanel();
 		jPanel_RecapitulatifChoix_2 = new JPanel();
-		jLabel_Titre_2 = new JLabel();
-		jLabel_Distance_2 = new JLabel();
-		jLabel_Distance_2.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Duree_2 = new JLabel();
-		jLabel_Duree_2.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Prix_2 = new JLabel();
-		jLabel_Prix_2.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Preference_2 = new JLabel();
-		jLabel_Preference_2.setFont(new Font("Arial",Font.BOLD+Font.ITALIC,12));
 		jPanel_Itineraire_2 = new JPanel();
 		jScrollPane_Itineraire_2 = new JScrollPane();
 		jPanel_Gauche = new JPanel();
 		jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		jPanel_RecapChoix_3 = new JPanel();
 		jPanel_RecapitulatifChoix_3 = new JPanel();
-		jLabel_Titre_3 = new JLabel();
-		jLabel_Distance_3 = new JLabel();
-		jLabel_Distance_3.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Duree_3 = new JLabel();
-		jLabel_Duree_3.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Prix_3 = new JLabel();
-		jLabel_Prix_3.setFont(new Font("Arial",Font.PLAIN,12));
-		jLabel_Preference_3 = new JLabel();
-		jLabel_Preference_3.setFont(new Font("Arial",Font.BOLD+Font.ITALIC,12));
-		
+
 		jPanel_Itineraire_3 = new JPanel();
 		jScrollPane_Itineraire_3 = new JScrollPane();
+
+		initArbres();
 		
-//      Construction du noeud racine.
-        DefaultMutableTreeNode myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
-         
-//       Construction des différents noeuds de l'arbre.
-        DefaultMutableTreeNode etape = new DefaultMutableTreeNode("Autoroute A5");
-        myRoot.add(etape);
-        DefaultMutableTreeNode troncon = new DefaultMutableTreeNode("Paris -> Melun");
-        etape.add(troncon);
-        troncon = new DefaultMutableTreeNode("Melun -> Troyes");
-        etape.add(troncon);
-        troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
-        etape.add(troncon);
-        etape = new DefaultMutableTreeNode("Departementale D81");
-        myRoot.add(etape);
-        troncon = new DefaultMutableTreeNode("Chaumont -> Besançon");
-        etape.add(troncon);
-        etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
-        myRoot.add(etape);
-             
-//         Construction du modèle de l'arbre.
-        DefaultTreeModel myModel = new DefaultTreeModel(myRoot);
-         
-//         Construction de l'arbre.
-        jTree_Itineraire_1 = new JTree(myModel);
-        jTree_Itineraire_1.addMouseListener(new java.awt.event.MouseListener() {
-        	public void mouseClicked(java.awt.event.MouseEvent e) {
-        		jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
-        		jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        		jTree_Itineraire_2.setEnabled(false);
-        		jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
-        		jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        		jTree_Itineraire_3.setEnabled(false);
-        		jTree_Itineraire_1.setBackground(Color.WHITE);
-        		jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-        		jTree_Itineraire_1.setEnabled(true);
-        	}
-        	public void mousePressed(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseReleased(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseEntered(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseExited(java.awt.event.MouseEvent e) {
-        	}
-        });
-        
-        myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
-        etape = new DefaultMutableTreeNode("Autoroute A5");
-        myRoot.add(etape);
-        troncon = new DefaultMutableTreeNode(" Paris -> Melun");
-        etape.add(troncon);
-        troncon = new DefaultMutableTreeNode("Melun -> Troyes");
-        etape.add(troncon);
-        troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
-        etape.add(troncon);
-        etape = new DefaultMutableTreeNode("Autoroute A6");
-        myRoot.add(etape);
-        troncon = new DefaultMutableTreeNode("Chaumont -> Dijon");
-        etape.add(troncon);
-        troncon = new DefaultMutableTreeNode("Dijon -> Besançon");
-        etape.add(troncon);
-        etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
-        //etape = new DefaultMutableTreeNode(new Noeuds("Chemin",new ImageIcon("Icone/gps_small.png")));
-        myRoot.add(etape);
-        myModel = new DefaultTreeModel(myRoot);
-        
-        jTree_Itineraire_2 = new JTree(myModel);
-        jTree_Itineraire_2.addMouseListener(new java.awt.event.MouseListener() {
-        	public void mouseClicked(java.awt.event.MouseEvent e) {
-        		jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
-        		jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        		jTree_Itineraire_1.setEnabled(false);
-        		jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
-        		jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        		jTree_Itineraire_3.setEnabled(false);
-        		jTree_Itineraire_2.setBackground(Color.WHITE);
-        		jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-        		jTree_Itineraire_2.setEnabled(true);
-        	}
-        	public void mousePressed(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseReleased(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseEntered(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseExited(java.awt.event.MouseEvent e) {
-        	}
-        });
-        
-        
-        myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
-        etape = new DefaultMutableTreeNode("Autoroute A6");
-        myRoot.add(etape);
-        troncon = new DefaultMutableTreeNode("Paris -> Dijon");
-        etape.add(troncon);
-        troncon = new DefaultMutableTreeNode("Dijon -> Lyon");
-        etape.add(troncon);
-        troncon = new DefaultMutableTreeNode("Lyon -> Aix-en-Provence");
-        etape.add(troncon);
-        etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
-        myRoot.add(etape);
-        myModel = new DefaultTreeModel(myRoot);
-        
-        jTree_Itineraire_3 = new JTree(myModel);
-        jTree_Itineraire_3.addMouseListener(new java.awt.event.MouseListener() {
-        	public void mouseClicked(java.awt.event.MouseEvent e) {
-        		jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
-        		jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-        		jTree_Itineraire_1.setEnabled(false);
-        		jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
-        		jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        		jTree_Itineraire_2.setEnabled(false);
-        		jTree_Itineraire_3.setBackground(Color.WHITE);
-        		jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-        		jTree_Itineraire_3.setEnabled(true);
-        	}
-        	public void mousePressed(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseReleased(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseEntered(java.awt.event.MouseEvent e) {
-        	}
-        	public void mouseExited(java.awt.event.MouseEvent e) {
-        	}
-        });
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		jPanel_Droite.setLayout(new BoxLayout(jPanel_Droite, BoxLayout.Y_AXIS));
@@ -274,23 +167,7 @@ public class ChoixItineraire extends JPanel {
 
 		jPanel_RecapitulatifChoix_1.setLayout(new BoxLayout(jPanel_RecapitulatifChoix_1, BoxLayout.Y_AXIS));
 
-		jLabel_Titre_1.setText("Récapitulatif");
-		jPanel_RecapitulatifChoix_1.add(jLabel_Titre_1);
-
-		jLabel_Distance_1.setText("Distance : 850 km");
-		jPanel_RecapitulatifChoix_1.add(jLabel_Distance_1);
-
-		jLabel_Duree_1.setText("Durée : 8 h 25 min 00 sec");
-		jPanel_RecapitulatifChoix_1.add(jLabel_Duree_1);
-
-		jLabel_Prix_1.setText("Prix : 13 € 20");
-		jPanel_RecapitulatifChoix_1.add(jLabel_Prix_1);
-
-		jLabel_Preference_1.setText("Préférences violées :");
-		jPanel_RecapitulatifChoix_1.add(jLabel_Preference_1);
-
-		jPanel_RecapitulatifChoix_1.add(jLabel_viol_5, null);
-		jPanel_RecapitulatifChoix_1.add(jLabel_viol_6, null);
+		jPanel_RecapitulatifChoix_1.add(getJScrollPane_recap_1(), null);
 		jPanel_RecapChoix_1.add(jPanel_RecapitulatifChoix_1, BorderLayout.CENTER);
 
 		jPanel_Droite.add(jPanel_RecapChoix_1);
@@ -309,24 +186,8 @@ public class ChoixItineraire extends JPanel {
 
 		jPanel_RecapitulatifChoix_2.setLayout(new BoxLayout(jPanel_RecapitulatifChoix_2, BoxLayout.Y_AXIS));
 
-		jLabel_Titre_2.setText("Récapitulatif");
-		jPanel_RecapitulatifChoix_2.add(jLabel_Titre_2);
-
-		jLabel_Distance_2.setText("Distance : 710 km");
-		jPanel_RecapitulatifChoix_2.add(jLabel_Distance_2);
-
-		jLabel_Duree_2.setText("Durée : 7 h 00 min 00 sec");
-		jPanel_RecapitulatifChoix_2.add(jLabel_Duree_2);
-
-		jLabel_Prix_2.setText("Prix : 25 € 50");
-		jPanel_RecapitulatifChoix_2.add(jLabel_Prix_2);
-
-		jLabel_Preference_2.setText("Préférences violées :");
-		jPanel_RecapitulatifChoix_2.add(jLabel_Preference_2);
-
-		jPanel_RecapitulatifChoix_2.add(jLabel_viol_3, null);
-		jPanel_RecapitulatifChoix_2.add(jLabel_viol_4, null);
-		jPanel_RecapChoix_2.add(jPanel_RecapitulatifChoix_2, BorderLayout.NORTH);
+		jPanel_RecapitulatifChoix_2.add(getJScrollPane_recap_2(), null);
+		jPanel_RecapChoix_2.add(jPanel_RecapitulatifChoix_2, BorderLayout.CENTER);
 
 		jPanel_Milieu.add(jPanel_RecapChoix_2);
 
@@ -344,23 +205,7 @@ public class ChoixItineraire extends JPanel {
 
 		jPanel_RecapitulatifChoix_3.setLayout(new BoxLayout(jPanel_RecapitulatifChoix_3, BoxLayout.Y_AXIS));
 
-		jLabel_Titre_3.setText("Récapitulatif");
-		jPanel_RecapitulatifChoix_3.add(jLabel_Titre_3);
-
-		jLabel_Distance_3.setText("Distance : 680 km");
-		jPanel_RecapitulatifChoix_3.add(jLabel_Distance_3);
-
-		jLabel_Duree_3.setText("Durée : 6 h 55 min 00 sec");
-		jPanel_RecapitulatifChoix_3.add(jLabel_Duree_3);
-
-		jLabel_Prix_3.setText("Prix : 29 € 50");
-		jPanel_RecapitulatifChoix_3.add(jLabel_Prix_3);
-
-		jLabel_Preference_3.setText("Préférences violées : ");
-		jPanel_RecapitulatifChoix_3.add(jLabel_Preference_3);
-
-		jPanel_RecapitulatifChoix_3.add(jLabel_viol_1, null);
-		jPanel_RecapitulatifChoix_3.add(jLabel_viol_2, null);
+		jPanel_RecapitulatifChoix_3.add(getJScrollPane_recap_3(), null);
 		jPanel_RecapChoix_3.add(jPanel_RecapitulatifChoix_3, BorderLayout.CENTER);
 
 		jPanel_Gauche.add(jPanel_RecapChoix_3);
@@ -372,20 +217,6 @@ public class ChoixItineraire extends JPanel {
 		jPanel_Itineraire_3.add(jScrollPane_Itineraire_3, BorderLayout.CENTER);
 
 		jPanel_Gauche.add(jPanel_Itineraire_3);
-
-		DefaultTreeCellRenderer myRenderer = new DefaultTreeCellRenderer();
-		
-//		 Changement de l'icône pour les feuilles de l'arbre.
-		myRenderer.setLeafIcon(new ImageIcon("C://progps_images//pas.png"));
-//		 Changement de l'icône pour les noeuds fermés.
-		myRenderer.setClosedIcon(new ImageIcon("C://progps_images//route_icone.png"));
-//		 Changement de l'icône pour les noeuds ouverts.
-		myRenderer.setOpenIcon(new ImageIcon("C://progps_images//route_icone.png"));
-		 
-//		 Application de l'afficheur à l'arbre.
-		jTree_Itineraire_1.setCellRenderer(myRenderer);
-		jTree_Itineraire_2.setCellRenderer(myRenderer);
-		jTree_Itineraire_3.setCellRenderer(myRenderer);
 		
 		jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
 		jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
@@ -396,6 +227,126 @@ public class ChoixItineraire extends JPanel {
 		jTree_Itineraire_3.setBackground(Color.WHITE);
 		jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
 		this.add(getJPanel_Content(), null);
+	}
+	
+	public void initArbres() {
+//		Construction du noeud racine.
+		DefaultMutableTreeNode myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
+
+//		Construction des différents noeuds de l'arbre.
+		DefaultMutableTreeNode etape = new DefaultMutableTreeNode("Autoroute A5");
+		myRoot.add(etape);
+		DefaultMutableTreeNode troncon = new DefaultMutableTreeNode("Paris -> Melun");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Melun -> Troyes");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Departementale D81");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode("Chaumont -> Besançon");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
+		myRoot.add(etape);
+
+//		Construction du modèle de l'arbre.
+		DefaultTreeModel myModel = new DefaultTreeModel(myRoot);
+
+//		Construction de l'arbre.
+		jTree_Itineraire_1 = new JTree(myModel);
+		jTree_Itineraire_1.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
+				jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				jTree_Itineraire_2.setEnabled(false);
+				jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
+				jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				jTree_Itineraire_3.setEnabled(false);
+				jTree_Itineraire_1.setBackground(Color.WHITE);
+				jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+				jTree_Itineraire_1.setEnabled(true);
+			}
+		});
+
+		myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
+		etape = new DefaultMutableTreeNode("Autoroute A5");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode(" Paris -> Melun");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Melun -> Troyes");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Autoroute A6");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode("Chaumont -> Dijon");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Dijon -> Besançon");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
+		//etape = new DefaultMutableTreeNode(new Noeuds("Chemin",new ImageIcon("Icone/gps_small.png")));
+		myRoot.add(etape);
+		myModel = new DefaultTreeModel(myRoot);
+
+		jTree_Itineraire_2 = new JTree(myModel);
+		jTree_Itineraire_2.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
+				jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				jTree_Itineraire_1.setEnabled(false);
+				jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
+				jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				jTree_Itineraire_3.setEnabled(false);
+				jTree_Itineraire_2.setBackground(Color.WHITE);
+				jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+				jTree_Itineraire_2.setEnabled(true);
+			}
+		});
+
+
+		myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
+		etape = new DefaultMutableTreeNode("Autoroute A6");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode("Paris -> Dijon");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Dijon -> Lyon");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Lyon -> Aix-en-Provence");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
+		myRoot.add(etape);
+		myModel = new DefaultTreeModel(myRoot);
+
+		jTree_Itineraire_3 = new JTree(myModel);
+		jTree_Itineraire_3.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
+				jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+				jTree_Itineraire_1.setEnabled(false);
+				jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
+				jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				jTree_Itineraire_2.setEnabled(false);
+				jTree_Itineraire_3.setBackground(Color.WHITE);
+				jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+				jTree_Itineraire_3.setEnabled(true);
+			}
+		});
+		
+		DefaultTreeCellRenderer myRenderer = new DefaultTreeCellRenderer();
+
+//		Changement de l'icône pour les feuilles de l'arbre.
+		myRenderer.setLeafIcon(new ImageIcon("C://progps_images//pas.png"));
+//		Changement de l'icône pour les noeuds fermés.
+		myRenderer.setClosedIcon(new ImageIcon("C://progps_images//route_icone.png"));
+//		Changement de l'icône pour les noeuds ouverts.
+		myRenderer.setOpenIcon(new ImageIcon("C://progps_images//route_icone.png"));
+
+//		Application de l'afficheur à l'arbre.
+		jTree_Itineraire_1.setCellRenderer(myRenderer);
+		jTree_Itineraire_2.setCellRenderer(myRenderer);
+		jTree_Itineraire_3.setCellRenderer(myRenderer);
+
+		
 	}
 
 	/**
@@ -478,5 +429,135 @@ public class ChoixItineraire extends JPanel {
 			jPanel_Haut.add(jLabel_haut, null);
 		}
 		return jPanel_Haut;
+	}
+
+	/**
+	 * This method initializes jTextPane_recap3	
+	 * 	
+	 * @return javax.swing.JTextPane
+	 */
+	private JTextPane getJTextPane_recap3() {
+		if (jTextPane_recap3 == null) {
+			jTextPane_recap3 = new JTextPane();
+			jTextPane_recap3.setEditable(false);
+			jTextPane_recap3.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
+					jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+					jTree_Itineraire_1.setEnabled(false);
+					jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
+					jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+					jTree_Itineraire_2.setEnabled(false);
+					jTree_Itineraire_3.setBackground(Color.WHITE);
+					jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+					jTree_Itineraire_3.setEnabled(true);
+				}
+			});
+			
+			String[] infos = {"710 kms","7h00m00s","25€50"};
+			String[] viols = {"Radars : 3","Limitation : 110 km/h"};
+			remplirRecap(3,infos,viols);
+		}
+		return jTextPane_recap3;
+	}
+
+	/**
+	 * This method initializes jScrollPane_recap_3	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane_recap_3() {
+		if (jScrollPane_recap_3 == null) {
+			jScrollPane_recap_3 = new JScrollPane();
+			//jScrollPane_recap_3.setPreferredSize(new Dimension(150,100));
+			jScrollPane_recap_3.setViewportView(getJTextPane_recap3());
+		}
+		return jScrollPane_recap_3;
+	}
+
+	/**
+	 * This method initializes jScrollPane_recap_2	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane_recap_2() {
+		if (jScrollPane_recap_2 == null) {
+			jScrollPane_recap_2 = new JScrollPane();
+			jScrollPane_recap_2.setViewportView(getJTextPane_recap2());
+		}
+		return jScrollPane_recap_2;
+	}
+
+	/**
+	 * This method initializes jTextPane_recap2	
+	 * 	
+	 * @return javax.swing.JTextPane	
+	 */
+	private JTextPane getJTextPane_recap2() {
+		if (jTextPane_recap2 == null) {
+			jTextPane_recap2 = new JTextPane();
+			jTextPane_recap2.setEditable(false);
+			jTextPane_recap2.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
+					jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+					jTree_Itineraire_1.setEnabled(false);
+					jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
+					jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+					jTree_Itineraire_3.setEnabled(false);
+					jTree_Itineraire_2.setBackground(Color.WHITE);
+					jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+					jTree_Itineraire_2.setEnabled(true);
+				}
+			});
+			
+			String[] infos = {"710 kms","7h00m00s","25€50"};
+			String[] viols = {"Radars : 3","Limitation : 110 km/h"};
+			remplirRecap(2,infos,viols);
+		}
+		return jTextPane_recap2;
+	}
+
+	/**
+	 * This method initializes jScrollPane_recap_1	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane_recap_1() {
+		if (jScrollPane_recap_1 == null) {
+			jScrollPane_recap_1 = new JScrollPane();
+			jScrollPane_recap_1.setViewportView(getJTextPane_recap1());
+		}
+		return jScrollPane_recap_1;
+	}
+
+	/**
+	 * This method initializes jTextPane_recap1	
+	 * 	
+	 * @return javax.swing.JTextPane	
+	 */
+	private JTextPane getJTextPane_recap1() {
+		if (jTextPane_recap1 == null) {
+			jTextPane_recap1 = new JTextPane();
+			jTextPane_recap1.setEditable(false);
+			jTextPane_recap1.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
+					jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+					jTree_Itineraire_2.setEnabled(false);
+					jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
+					jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+					jTree_Itineraire_3.setEnabled(false);
+					jTree_Itineraire_1.setBackground(Color.WHITE);
+					jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+					jTree_Itineraire_1.setEnabled(true);
+				}
+			});
+			
+			String[] infos = {"710 kms","7h00m00s","25€50"};
+			String[] viols = {"Radars : 3","Limitation : 110 km/h"};
+			remplirRecap(1,infos,viols);
+		}
+		return jTextPane_recap1;
 	} 
 }
