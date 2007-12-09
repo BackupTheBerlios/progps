@@ -6,8 +6,13 @@ public class Touristique extends Etat {
 	
 	private String descriptif;
 	
-	public Touristique(Troncon tr, String d) {
-		super(tr);
+	public Touristique(String d) {
+		super();
 		this.descriptif=d;
 	}
+	
+	public String toString() {
+		return "touristique";
+	}
+	
 }
