@@ -12,7 +12,7 @@ public class Touristique extends Etat {
 	}
 	
 	public String toString() {
-		return "touristique";
+		return "payant";
 	}
 	
 }

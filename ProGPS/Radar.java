@@ -4,9 +4,13 @@ import noyau.Troncon;
 
 public class Radar extends Etat {
 
-	public Radar(Troncon tr) {
-		super(tr);
+	public Radar() {
+		super();
 	}
 
+	public String toString() {
+		return "radar";
+	}
+	
 
 }
