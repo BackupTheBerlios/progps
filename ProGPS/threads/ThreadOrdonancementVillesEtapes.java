@@ -2,6 +2,10 @@ package threads;
 
 import java.util.*;
 
+import exceptions.ExceptionGraph;
+import exceptions.ExceptionRecherche;
+
+import noyau.Itineraire;
 import noyau.MyWeightedMultigraph;
 
 public class ThreadOrdonancementVillesEtapes<Ville, Troncon> extends Thread {
@@ -10,11 +14,16 @@ public class ThreadOrdonancementVillesEtapes<Ville, Troncon> extends Thread {
 	private Ville villeArr = null;
 	private Set<Ville> nonOrdonnees = null;
 	private List<Ville> ordonnees = null;
+	private boolean upToDate = false;
 	
 	public ThreadOrdonancementVillesEtapes(
 			MyWeightedMultigraph<Ville, Troncon> graph,
+			Ville villeDep,
+			Ville villeArr, 
 			Set<Ville> nonOrd){
 		this.graph=graph;
+		this.villeDep = villeDep;
+		this.villeArr = villeArr;
 		nonOrdonnees=nonOrd;
 	}
 
@@ -24,12 +33,15 @@ public class ThreadOrdonancementVillesEtapes<Ville, Troncon> extends Thread {
 	 *  	sinon les villes dans le meilleur ordre 
 	 */
 	public List<Ville> getVillesOrdonnees(){
-		return ordonnees;
+		if (upToDate) {
+			return ordonnees;
+		} else {
+			return null;
+		}
 	}
 	
 	/**
 	 * Méthode pour modifier les paramètres du thread
-	 * @param graph : Le réseau routier
 	 * @param villeDep : La ville de départ de l'iti
 	 * @param villeArr : Villeille d'arrivée de l'iti
 	 * @param nonOrdonnees : un Set de villes étapes (peut être null)
@@ -41,11 +53,24 @@ public class ThreadOrdonancementVillesEtapes<Ville, Troncon> extends Thread {
 		this.villeDep = villeDep;
 		this.villeArr = villeArr;
 		this.nonOrdonnees = nonOrdonnees;
+		upToDate=false;
 	}
 
 	public void run() {
 		while( !isInterrupted()) {
-			// 
+			if (!upToDate) {
+				ordonnees = new ArrayList<Ville>();
+
+				Map<Double, Ville> collection = new TreeMap<Double, Ville>();
+				// Liste toutes les villes etape
+				for (Iterator iter = nonOrdonnees.iterator(); iter.hasNext();) {
+					Ville uneVilleEtape = (Ville) iter.next();
+
+					// TODO Grosse merde
+					//graph.trouverLeChemin(villeDep, (Ville)uneVilleEtape, null, null);
+					collection.put(10.0, uneVilleEtape);
+				}
+			}
 		}    		
 	}
 }
