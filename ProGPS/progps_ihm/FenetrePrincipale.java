@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Dimension;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,6 +28,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.JCheckBox;
@@ -256,6 +260,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JComboBox jComboBox_villeCourante = null;
 
 	private JLabel jLabel_empty43 = null;
+	
+	
+	
+	private int numEtape = 0;
+	private int nbEtapes = 0;
 
 	public FenetrePrincipale() {
 		super();
@@ -364,6 +373,79 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		tabEtapesModele.addRow(line2);
 		tabEtapesModele.addRow(line3);
 		tabEtapesModele.addRow(line4);
+		
+		nbEtapes = 4;
+	}
+	
+	/*public void initItineraire(Itineraire iti) {
+		for (int i=0;i<nbEtapes; i++) {
+			tabEtapesModele.removeRow(0);
+		}
+		
+		Vector<String> line = new Vector<String>();
+		int num = 1;
+		
+		Ville villeDep = iti.getVilleDepart();
+		Ville villeArr = iti.getVilleArrivee();
+		Ville derniereVilleTrav = villeDep;
+		Ville tmp;
+		String infos = "";
+		
+		for(Iterator iter = iti.getTroncons().iterator(); iter.hasNext();) {
+			Troncon tronc = (Troncon)iter.next();
+			line.add("" + num);												// Numero de l'etape
+			line.add(derniereVilleTrav.getNomVille());						// Ville départ troncon			
+			tmp = iti.getVilleSuivante(derniereVilleTrav);
+			line.add(tmp.getNomVille());									// Ville arrivée troncon
+			line.add(tronc.getSaRoute().getNomRoute());						// Nom de la route
+			infos += tronc.getVitesse();
+			
+			for(Iterator iter2 = iti.getTronconCourant().getSesEtats().iterator(); iter2.hasNext();) {
+				Etat e = (Etat)iter2.hasNext()
+				infos += "/";
+				infos += e.toString();
+			}
+			line.add(infos);
+			
+			tabEtapesModele.addRow(line);
+			derniereVilleTrav = tmp;
+			num++;
+		}
+		
+		nbEtapes = --num;
+		//jTable_etapes.repaint();
+	}*/
+	
+	public void setVillesCourantesPoss(Vector<String> villes) {
+		jComboBox_villeCourante.removeAllItems();
+		Collections.sort(villes);
+		DefaultComboBoxModel combo = new DefaultComboBoxModel(villes);
+		jComboBox_villeCourante.setModel(combo);
+		//for (int i=0;i<)
+	}
+	
+	public void setNumEtapeCourante(int num) {
+		if (num <= nbEtapes && num >= 0) {
+			numEtape = num;
+			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
+			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
+			jTable_etapes.repaint();
+		}
+		else System.out.println("setNumEtapeCourante : Valeur incorrecte");
+	}
+	
+	public void resetAllItineraire() {
+		for (int i=0;i<nbEtapes; i++) {
+			tabEtapesModele.removeRow(0);
+		}
+		
+		jComboBox_villeCourante.removeAllItems();
+		jLabel_itineraireDepart.setText("");
+		jLabel_itineraireArrivee.setText("");
+	}
+	
+	public void changerValeur(String valeur, int ligne, int col) {
+		tabEtapesModele.setValueAt(valeur, ligne, col);
 	}
 	
 	private void lancerRecherche() {
@@ -661,8 +743,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_itineraireModifier
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							//TODO
-							
 							jTabbedPane_global.setSelectedIndex(0);
 							jTabbedPane_global.setEnabledAt(0, true);
 						}
@@ -726,9 +806,21 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_OKlocalisation.setText("OK");
 			jButton_OKlocalisation.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(2));
-					jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(2));
-					jTable_etapes.repaint();
+					if (((String)tabEtapesModele.getValueAt(numEtape, 2)).equals((String)jComboBox_villeCourante.getSelectedItem())) {
+						numEtape++;
+						jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
+						jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
+						jTable_etapes.repaint();
+						if (numEtape == nbEtapes) {
+							jButton_OKlocalisation.setEnabled(false);
+							jComboBox_villeCourante.setEnabled(false);
+							JOptionPane.showMessageDialog(null, "Vous êtes arrivés à destination !", "Arrivée", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					else {
+						//TODO
+						System.out.println("Recalcul necessaire !");
+					}
 				}
 			});
 		}
@@ -786,18 +878,18 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			tabEtapesModele.addColumn("Distance");
 			tabEtapesModele.addColumn("Informations");
 			
-			initTabExemple();
-			
 			jTable_etapes = new JTable(tabEtapesModele);
 			jTable_etapes.setAutoCreateColumnsFromModel(false);
 			jTable_etapes.setRowHeight(35);
 			jTable_etapes.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
 			
-			jTable_etapes.getTableHeader().setReorderingAllowed(true);
+			jTable_etapes.getTableHeader().setReorderingAllowed(false);
 			
-			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(1));
-			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(1));
+			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
+			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
 			jTable_etapes.getColumnModel().getColumn(0).setMaxWidth(20);
+			
+			initTabExemple();
 			
 		}
 		return jTable_etapes;	
@@ -1713,9 +1805,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JComboBox getJComboBox_villeCourante() {
 		if (jComboBox_villeCourante == null) {
-			String[] villesCourPoss = {"Lyon","Nancy","Besançon"};
+			String[] villesCourPoss = {"Lyon","Nancy","Besançon","Dijon","Aix-en-Provence","Avignon"};
 			jComboBox_villeCourante = new JComboBox(villesCourPoss);
-			jComboBox_villeCourante.setPreferredSize(new Dimension(200,20));
+			jComboBox_villeCourante.setPreferredSize(new Dimension(200,22));
 			jComboBox_villeCourante.setBackground(Color.WHITE);
 		}
 		return jComboBox_villeCourante;
