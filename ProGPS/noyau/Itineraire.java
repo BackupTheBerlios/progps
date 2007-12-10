@@ -1,5 +1,6 @@
 package noyau;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -15,7 +16,7 @@ public class Itineraire {
 	private int vitesseMin=0;
 	private int vitesseMax=0;
 	private Troncon tronconCourant=null;
-	private List<Troncon> lesTroncons = new Vector<Troncon>();
+	private List<Troncon> lesTroncons = new ArrayList<Troncon>();
 	
 	public Ville getVilleSuivante(Ville derniereVilleTraversé) {
 		throw new UnsupportedOperationException();

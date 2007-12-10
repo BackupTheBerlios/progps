@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.Vector;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
 
@@ -18,9 +17,9 @@ public class Troncon
 	private int vitesse;
 	private int longueur;
 	private boolean dispo;
-	private List<Ville> sesVilles = new Vector<Ville>();
+	private List<Ville> sesVilles = new ArrayList<Ville>();
 	private Route saRoute;
-	private List<Etat> setEtats = new Vector<Etat>();
+	private List<Etat> setEtats = new ArrayList<Etat>();
 	
 	public void genererValeursAleatoires(){
 		Random rand = new Random();

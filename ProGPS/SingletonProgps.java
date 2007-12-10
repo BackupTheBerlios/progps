@@ -11,6 +11,8 @@ import noyau.Troncon;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.ListeDeKChemins;
 
+import threads.ThreadOrdonancementVillesEtapes;
+
 import exceptions.ExceptionRecherche;
 
 import noyau.Ville;
@@ -83,6 +85,9 @@ public class SingletonProgps {
 		
 		me.initialiseGraphComplet(100);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();
+		
+		ThreadOrdonancementVillesEtapes<Ville, Troncon> leThread = new ThreadOrdonancementVillesEtapes<Ville, Troncon>(me.graph, (Ville)deuxVilles.get(0), (Ville)deuxVilles.get(1), new HashSet<Ville>(deuxVilles));
+		leThread.start();
 		
 		try {
 			List<Itineraire> lesIti = me.graph.trouver3Chemins((Ville)deuxVilles.get(0), (Ville)deuxVilles.get(1), null, null);

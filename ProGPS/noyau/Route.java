@@ -1,7 +1,7 @@
 package noyau;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 
 
@@ -10,7 +10,7 @@ public class Route {
 	private Object idRoute;
 	private String nomRoute;
 	private int typeRoute;
-	private List<Troncon> sesTroncons = new Vector<Troncon>();
+	private List<Troncon> sesTroncons = new ArrayList<Troncon>();
 
 	/** Constructeur de route
 	 * Ne vérifie pas si une route a déjà le même nom !
