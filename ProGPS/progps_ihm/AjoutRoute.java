@@ -201,10 +201,11 @@ public class AjoutRoute extends JWindow {
 		if (jComboBox_typeVille == null) {
 			jComboBox_typeVille = new JComboBox();
 			jComboBox_typeVille.setBackground(Color.WHITE);
-			jComboBox_typeVille.setPreferredSize(new Dimension(100,20));
-			jComboBox_typeVille.addItem("Petite");
-			jComboBox_typeVille.addItem("Moyenne");
-			jComboBox_typeVille.addItem("Grande");
+			jComboBox_typeVille.setPreferredSize(new Dimension(150,20));
+			jComboBox_typeVille.addItem("Départementale");
+			jComboBox_typeVille.addItem("Nationale");
+			jComboBox_typeVille.addItem("Autoroute");
+			jComboBox_typeVille.addItem("Autre");
 		}
 		return jComboBox_typeVille;
 	}
