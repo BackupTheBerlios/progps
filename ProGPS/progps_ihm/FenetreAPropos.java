@@ -16,8 +16,6 @@ import java.awt.GridBagConstraints;
 public class FenetreAPropos extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	
-	//private FenetreAPropos laFenetre = this;
 
 	private JPanel jContentPane = null;
 

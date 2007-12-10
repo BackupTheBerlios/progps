@@ -73,7 +73,7 @@ public class FenetreAdminPass extends JFrame {
 		if (jContentPane == null) {
 			jLabel_north = new JLabel();
 			jLabel_north.setPreferredSize(new Dimension(150, 40));
-			jLabel_north.setText("Changer le mot de passe de l'administration");
+			jLabel_north.setText("Changer le mot de passe administrateur");
 			jLabel_north.setHorizontalAlignment(JLabel.CENTER);
 			jContentPane = new JPanel();
 			jContentPane.setLayout(new BorderLayout());

@@ -10,7 +10,7 @@ import java.awt.Frame;
 import java.awt.BorderLayout;
 import javax.swing.JWindow;
 
-public class WaitPanel extends JWindow {
+public class PanelWait extends JWindow {
 
 	private static final long serialVersionUID = 1L;
 
@@ -20,7 +20,7 @@ public class WaitPanel extends JWindow {
 	/**
 	 * @param owner
 	 */
-	public WaitPanel(Frame owner) {
+	public PanelWait(Frame owner) {
 		super(owner);
 		initialize();
 		//setPreferredSize(new Dimension(32,32));

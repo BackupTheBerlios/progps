@@ -97,7 +97,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 
 	private JTable jTable_etapes = null;
 	
-	private TableDataModel tabEtapesModele = new TableDataModel();
+	private TableDataModel tabEtapesModele = new TableDataModel();  //  @jve:decl-index=0:visual-constraint="839,55"
 
 	private JPasswordField jPasswordField_adminpass = null;
 
@@ -459,6 +459,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		wp.setLocation((int)(this.getLocation().getX()+this.getWidth()/2-wp.getWidth()/2),(int)(this.getLocation().getY()+this.getHeight()/2-wp.getHeight()/2));
 		wp.setVisible(true);
 		this.setEnabled(false);*/
+		//TODO
 	}
 	
 

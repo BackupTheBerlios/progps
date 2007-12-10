@@ -81,7 +81,7 @@ public class ChoixItineraire extends JPanel {
 		{ "Récapitulatif :\n",            //regular
 				"Distance : " + infos[0] + "\n",                                   //italic
 				"Durée : " + infos[1] + "\n",                                    //bold
-				"Prix : " + infos[0] + "\n\n",                                      //small
+				"Prix : " + infos[2] + "\n\n",                                      //small
 				"Préférences violées : \n",                                //large
 				v
 		};

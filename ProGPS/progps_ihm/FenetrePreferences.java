@@ -229,6 +229,12 @@ public class FenetrePreferences extends JFrame {
 		if (jButton_ok == null) {
 			jButton_ok = new JButton();
 			jButton_ok.setText("OK");
+			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					//TODO
+					dispose();
+				}
+			});
 		}
 		return jButton_ok;
 	}

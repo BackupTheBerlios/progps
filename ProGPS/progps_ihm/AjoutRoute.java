@@ -14,18 +14,16 @@ import javax.swing.ButtonGroup;
 import javax.swing.JWindow;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 
 
-public class ModifVille extends JWindow {
+public class AjoutRoute extends JWindow {
 
 	private static final long serialVersionUID = 1L;
-	
-	private JButton ownerButton = null;
 
+	private JButton ownerButton = null;
+	
 	private JPanel jContentPane = null;
 
 	private JTextField jTextField_north = null;
@@ -42,18 +40,6 @@ public class ModifVille extends JWindow {
 
 	private JTextField jTextField_nomVille = null;
 
-	private JLabel jLabel_touristique = null;
-	
-	private ButtonGroup radioGroup1 = new ButtonGroup();
-
-	private JRadioButton jRadioButton_yes = null;
-
-	private JRadioButton jRadioButton_no = null;
-
-	private JLabel jLabel_yes = null;
-
-	private JLabel jLabel_no = null;
-
 	private JLabel jLabel_typeVille = null;
 
 	private JComboBox jComboBox_typeVille = null;
@@ -61,7 +47,7 @@ public class ModifVille extends JWindow {
 	/**
 	 * @param owner
 	 */
-	public ModifVille(Frame owner, JButton but) {
+	public AjoutRoute(Frame owner, JButton but) {
 		super(owner);
 		ownerButton = but;
 		initialize();
@@ -73,7 +59,7 @@ public class ModifVille extends JWindow {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(270, 148);
+		this.setSize(270, 130);
 		this.setContentPane(getJContentPane());
 	}
 
@@ -102,7 +88,7 @@ public class ModifVille extends JWindow {
 	private JTextField getJTextField_north() {
 		if (jTextField_north == null) {
 			jTextField_north = new JTextField();
-			jTextField_north.setText("Modification d'une ville dans la base");
+			jTextField_north.setText("Ajout d'une route dans la base");
 			jTextField_north.setFont(new Font("Arial",Font.BOLD,12));
 			jTextField_north.setOpaque(false);
 			jTextField_north.setHorizontalAlignment(JTextField.CENTER);
@@ -139,6 +125,7 @@ public class ModifVille extends JWindow {
 			jButton_cancel.setText("Annuler");
 			jButton_cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// action modif ville
 					ownerButton.setEnabled(true);
 					dispose();
 				}
@@ -158,7 +145,8 @@ public class ModifVille extends JWindow {
 			jButton_ok = new JButton();
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// TODO
+					//TODO
+					
 					ownerButton.setEnabled(true);
 					dispose();
 				}
@@ -176,19 +164,10 @@ public class ModifVille extends JWindow {
 	private JPanel getJPanel_center() {
 		if (jPanel_center == null) {
 			jLabel_typeVille = new JLabel();
-			jLabel_typeVille.setText("Type de la ville : ");
 			jLabel_typeVille.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_no = new JLabel();
-			jLabel_no.setText("Non");
-			jLabel_no.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_yes = new JLabel();
-			jLabel_yes.setText("Oui");
-			jLabel_yes.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_touristique = new JLabel();
-			jLabel_touristique.setText("Ville touristique : ");
-			jLabel_touristique.setFont(new Font("Arial",Font.PLAIN,12));
+			jLabel_typeVille.setText("Type de la route : ");
 			jLabel_nomVille = new JLabel();
-			jLabel_nomVille.setText("Nom de la ville : ");
+			jLabel_nomVille.setText("Nom de la route : ");
 			jLabel_nomVille.setFont(new Font("Arial",Font.PLAIN,12));
 			jPanel_center = new JPanel();
 			jPanel_center.setLayout(new FlowLayout());
@@ -196,16 +175,6 @@ public class ModifVille extends JWindow {
 			jPanel_center.add(getJTextField_nomVille(), null);
 			jPanel_center.add(jLabel_typeVille, null);
 			jPanel_center.add(getJComboBox_typeVille(), null);
-			jPanel_center.add(jLabel_touristique, null);
-			jPanel_center.add(getJRadioButton_yes(), null);
-			jPanel_center.add(jLabel_yes, null);
-			jPanel_center.add(getJRadioButton_no(), null);
-			jPanel_center.add(jLabel_no, null);
-			
-			radioGroup1.add(jRadioButton_yes);
-			radioGroup1.add(jRadioButton_no);
-			
-			
 		}
 		return jPanel_center;
 	}
@@ -219,33 +188,8 @@ public class ModifVille extends JWindow {
 		if (jTextField_nomVille == null) {
 			jTextField_nomVille = new JTextField();
 			jTextField_nomVille.setPreferredSize(new Dimension(150,18));
-			jTextField_nomVille.setText("Orsay");
 		}
 		return jTextField_nomVille;
-	}
-
-	/**
-	 * This method initializes jRadioButton_yes	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getJRadioButton_yes() {
-		if (jRadioButton_yes == null) {
-			jRadioButton_yes = new JRadioButton();
-		}
-		return jRadioButton_yes;
-	}
-
-	/**
-	 * This method initializes jRadioButton_no	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getJRadioButton_no() {
-		if (jRadioButton_no == null) {
-			jRadioButton_no = new JRadioButton();
-		}
-		return jRadioButton_no;
 	}
 
 	/**
