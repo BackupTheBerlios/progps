@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
+import parser.XmlParser;
+import progps_ihm.FenetreChargement;
 import progps_ihm.FenetrePrincipale;
 import exceptions.ExceptionGraph;
 import exceptions.ExceptionRecherche;
@@ -95,6 +97,10 @@ public class SingletonProgps {
 	public static void main(String[] args) throws ExceptionGraph {
 		SingletonProgps me = getInstance();
 
+		// Etape 1 : Création du thread de parsing
+		XmlParser threadDeParsing = new XmlParser(me, );
+		// Etape 2 : Création de la fenêtre de loading...
+		FenetreChargement chargement = new FenetreChargement();
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
 		// TODO Etape 2 : Lancement du chargement XML
 
