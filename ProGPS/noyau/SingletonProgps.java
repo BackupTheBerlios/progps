@@ -101,7 +101,7 @@ public class SingletonProgps {
 		SingletonProgps me = getInstance();
 		String urlFichier;
 
-		if (args.length==0){ urlFichier = new String("C:\\network.xml");}
+		if (args.length==0){ urlFichier = new String("parser/network.xml");}
 		else{urlFichier=args[0];}
 		
 		// Etape 1 : Création du thread de parsing

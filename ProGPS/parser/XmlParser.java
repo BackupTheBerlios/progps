@@ -14,7 +14,14 @@ import org.xml.sax.InputSource;
 
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import exceptions.ExceptionParser;
+/**
+ * Pour lancer le chargement du xml :exemple :
 
+		SingletonProgps pr = SingletonProgps.getInstance();
+		XmlParser xMLStats = new XmlParser(pr,"C:\\Documents and Settings\\Test\\Bureau\\network.xml");
+		xMLStats.start();
+ *
+ */
 public class XmlParser extends Thread{
 	private SingletonProgps myProgps;
 	private String filename = null;
