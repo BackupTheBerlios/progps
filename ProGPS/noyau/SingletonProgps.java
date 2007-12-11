@@ -18,7 +18,7 @@ import exceptions.ExceptionRecherche;
 public class SingletonProgps {
 
 	// Objet qui contient la représentation du graph  
-	MyWeightedMultigraph<Ville, Troncon> graph;
+	MyWeightedMultigraph graph;
 	private List<Route> sesRoutes = new Vector<Route>();
 	private static LinkedList<Ville> sesVilles = new LinkedList<Ville>();
 	private static SingletonProgps instance=null;
@@ -43,7 +43,7 @@ public class SingletonProgps {
 
 	private void initialiseGraphComplet(int nbVilles) throws ExceptionGraph{
 		sesRoutes = new Vector<Route>();
-		graph = new MyWeightedMultigraph<Ville, Troncon>( Troncon.class );
+		graph = new MyWeightedMultigraph( Troncon.class );
 
 		// Creation de 1 route
 		Route laRoute = new Route("A6", 5);
@@ -60,7 +60,9 @@ public class SingletonProgps {
 //				Test pour vérifier qu'on essaie pas d'ajouter une route qui parte
 //				et arrive à la même ville
 				if(!uneVille.equals(nouvelleVille)){
-					// EXception
+					// Exception
+					graph.addEdge(uneVille, nouvelleVille);
+					//
 					Troncon nouveauTr = graph.ajouterUnTroncon(uneVille, nouvelleVille);
 //					On attribue la route au tronçon
 					nouveauTr.setSaRoute(laRoute);

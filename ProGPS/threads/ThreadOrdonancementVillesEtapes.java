@@ -8,7 +8,7 @@ import exceptions.ExceptionRecherche;
 import noyau.*;
 
 public class ThreadOrdonancementVillesEtapes<V, T> extends Thread {
-	private MyWeightedMultigraph<Ville, Troncon> graph=null;
+	private MyWeightedMultigraph graph=null;
 	private Ville villeDep = null;
 	private Ville villeArr = null;
 	private Set<Ville> nonOrdonnees = null;
@@ -16,7 +16,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread {
 	private boolean upToDate = false;
 	
 	public ThreadOrdonancementVillesEtapes(
-			MyWeightedMultigraph<Ville, Troncon> graph,
+			MyWeightedMultigraph graph,
 			Ville villeDep,
 			Ville villeArr, 
 			Set<Ville> nonOrd){

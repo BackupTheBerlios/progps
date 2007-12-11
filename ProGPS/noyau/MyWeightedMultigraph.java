@@ -20,7 +20,7 @@ import exceptions.ExceptionRecherche;
 
 
 
-public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
+public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	// Constantes
 	private double const_indispo=1000000;
 	private double const_ville_a_eviter=1000;
@@ -33,7 +33,7 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
      *
      * @param ef the edge factory of the new graph.
      */
-    public MyWeightedMultigraph(EdgeFactory<V, E> ef)
+    public MyWeightedMultigraph(EdgeFactory<Ville, Troncon> ef)
     {
         super(ef);
     }
@@ -43,43 +43,35 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
      *
      * @param edgeClass class on which to base factory for edges
      */
-    public MyWeightedMultigraph(Class<? extends E> edgeClass)
+    public MyWeightedMultigraph(Class<? extends Troncon> edgeClass)
     {
-        this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+        this(new ClassBasedEdgeFactory<Ville, Troncon>(edgeClass));
     }
 
     public Ville ajouterUneVille(String nom) throws ExceptionGraph{
     	// Teste si une ville ne porte pas déjà le même nom
-    	Set<V> lesVertex = this.vertexSet();
+    	Set<Ville> lesVertex = this.vertexSet();
     	for (Iterator iter = lesVertex.iterator(); iter.hasNext();) {
-			V unVertex = (V) iter.next();
-			if (unVertex instanceof Ville) {
-				Ville uneVille = (Ville) unVertex;
-				if (uneVille.getNomVille().equals(nom))
-					throw new ExceptionGraph("Le graph contient déjà une ville de nom : "+nom);
-			} else {
-				throw new ExceptionGraph("Le graph contient des objets inconnus : "+unVertex.getClass()+" au lieu de Ville");
-			}
-			
-		}
+    		Ville unVertex = (Ville) iter.next();
+    		Ville uneVille = (Ville) unVertex;
+    		if (uneVille.getNomVille().equals(nom))
+    			throw new ExceptionGraph("Le graph contient déjà une ville de nom : "+nom);
+    	}
     	Ville nouvelleVille = new Ville(nom);
-    	this.addVertex((V)nouvelleVille);
-    	
+    	this.addVertex((Ville)nouvelleVille);
+
     	return nouvelleVille;
     }
     
-    public Troncon ajouterUnTroncon(V ville1, V ville2) throws ExceptionGraph{
-    	E theEdge = this.addEdge(ville1, ville2);
+    public Troncon ajouterUnTroncon(Ville ville1, Ville ville2){
+    	Troncon theEdge = this.addEdge(ville1, ville2);
     	Troncon troncon=null;
-    	if (theEdge instanceof Troncon) {
-			troncon = (Troncon) theEdge;
-		}else{
-    		throw new ExceptionGraph("Tentative d'ajouter un objet non Troncon pour les arcs");
-    	}
+		
+    	troncon = (Troncon) theEdge;
     	return troncon;
     }
     
-    public double getEdgeWeight(E e)
+    public double getEdgeWeight(Troncon e)
     {
     	if (e instanceof Troncon) {
 //  		Méthode de calcul
@@ -118,16 +110,12 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
     	theResult.setVilleDepart(villeDepart);
     	theResult.setVilleArrivee(villeArrivee);
     	
-    	List<E> listOfEdges = DijkstraShortestPath.findPathBetween(this, (V)villeDepart, (V)villeArrivee);
+    	List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villeDepart, (Ville)villeArrivee);
     	
     	for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
-			E anEdge = (E) iter.next();
-			if (anEdge instanceof Troncon) {
-				Troncon unTroncon = (Troncon) anEdge;
-				theResult.addUnTroncon(unTroncon);
-			}else{
-				throw new ExceptionGraph("Le graph contient des objets inconnus : "+anEdge.getClass()+" au lieu de Troncon");
-			}
+    		Troncon anEdge = (Troncon) iter.next();
+    		Troncon unTroncon = (Troncon) anEdge;
+    		theResult.addUnTroncon(unTroncon);
 		}
     	return theResult;
     }
@@ -175,18 +163,15 @@ public class MyWeightedMultigraph<V, E> extends WeightedMultigraph<V, E> {
     }
     
 
-	public void seDecrire() throws ExceptionGraph{
-		Set<E> lesTroncons=this.edgeSet();
-		for (E theEdge : lesTroncons) {
-			if (theEdge instanceof Troncon) {
+	public void seDecrire(){
+		Set<Troncon> lesTroncons=this.edgeSet();
+		for (Troncon theEdge : lesTroncons) {
 				Troncon troncon = (Troncon) theEdge;
 				System.out.println("**************");
 				System.out.println("De :"+this.getEdgeSource(theEdge).toString());
 				System.out.println("A :"+this.getEdgeTarget(theEdge).toString());
 				System.out.println("Dist:"+troncon.getLongueur()+"km");
 				System.out.println("Vit:"+troncon.getVitesse()+"km/h");
-			}else
-				throw new ExceptionGraph("Le graph contient des objets inconnus : "+theEdge.getClass()+" au lieu de Troncon");
 		}
 	}
 }
