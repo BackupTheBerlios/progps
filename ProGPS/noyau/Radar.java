@@ -3,8 +3,16 @@ package noyau;
 
 public class Radar extends Etat {
 
-	public Radar() {
-		super();
+	private static Radar instance;
+
+	private Radar() {
+	}
+
+	public synchronized static Radar getInstance() {
+		if (null == instance) {
+			instance = new Radar();
+		}
+		return instance;
 	}
 
 	public String toString() {

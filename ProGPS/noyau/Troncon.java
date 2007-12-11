@@ -5,6 +5,7 @@ package noyau;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -20,7 +21,21 @@ public class Troncon
 	private List<Ville> sesVilles = new ArrayList<Ville>();
 	private Route saRoute;
 	private List<Etat> setEtats = new ArrayList<Etat>();
+	private Route route;
+	private Ville ville1;
+	private Ville ville2;
 	
+	public Troncon(int vitesse, int longueur, boolean dispo, Route route2, Ville ville1, Ville ville2, LinkedList<Etat> sesEtats) {
+		super();
+		this.vitesse = vitesse;
+		this.longueur = longueur;
+		this.dispo = dispo;
+		this.route = route2;
+		this.ville1 = ville1;
+		this.ville2 = ville2;
+		this.setEtats = sesEtats;
+	}
+
 	public void genererValeursAleatoires(){
 		Random rand = new Random();
 		// 50 <= Vitesse <= 130 

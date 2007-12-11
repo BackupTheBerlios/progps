@@ -1,13 +1,18 @@
 package noyau;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 
 
-
 public class Route {
-	private Object idRoute;
+	public static final int AUTOROUTE = 0;
+	public static final int NATIONALE = 1;
+	public static final int DEPARTEMENTALE = 2;
+	
+	private int idRoute;
 	private String nomRoute;
 	private int typeRoute;
 	private List<Troncon> sesTroncons = new ArrayList<Troncon>();
@@ -22,6 +27,29 @@ public class Route {
 		super();
 		this.nomRoute = nomRoute;
 		this.typeRoute = typeRoute;
+	}
+	
+	public int getIdRoute() {
+		return idRoute;
+	}
+
+	public String getNomRoute() {
+		return nomRoute;
+	}
+
+	public int getTypeRoute() {
+		return typeRoute;
+	}
+
+	public Route(int idRoute, String nomRoute, int typeRoute) {
+		super();
+		this.idRoute = idRoute;
+		this.nomRoute = nomRoute;
+		this.typeRoute = typeRoute;
+	}
+
+	public void ajouterTroncon(String nomVille, String nomVille2, int intVitesse, int intLongueur, LinkedList<Etat> etats) throws Exception {
+		sesTroncons.add(new Troncon(intVitesse,intLongueur,true,this,SingletonProgps.getVille(nomVille),SingletonProgps.getVille(nomVille2),etats));
 	}
 	
 	public boolean ajouterTroncon(String ville1, String ville2, int vitesse, boolean touristique, boolean radar, int prix, int longueur) {

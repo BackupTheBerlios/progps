@@ -1,7 +1,7 @@
 package noyau;
 
 public class Ville {
-	private String idVille;
+	private int idVille;
 	private String nomVille;
 	private boolean dispoVille;
 	private int typeVille;
@@ -13,6 +13,15 @@ public class Ville {
 	 */
 	public Ville(String nomVille) {
 		this.nomVille = nomVille;
+	}
+	
+	public Ville(int idVille, String nomVille, boolean dispoVille, int typeVille, boolean touristique) {
+		super();
+		this.idVille = idVille;
+		this.nomVille = nomVille;
+		this.dispoVille = dispoVille;
+		this.typeVille = typeVille;
+		this.touristique = touristique;
 	}
 	/** Constructeur de ville
 	 * 
@@ -52,5 +61,17 @@ public class Ville {
 	
 	public String toString(){
 		return nomVille;
+	}
+
+	public int getIdVille() {
+		return idVille;
+	}
+
+	public boolean isTouristique() {
+		return touristique;
+	}
+
+	public void setTouristique(boolean touristique) {
+		this.touristique = touristique;
 	}
 }
