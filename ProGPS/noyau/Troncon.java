@@ -114,6 +114,21 @@ public class Troncon
 		this.setEtats.add(e);
 	}
 	
+	
+	//renvoit true si l'état a été supprimé, false s'il n'a pas été trouvé
+	public boolean removeEtat(String s) {
+		Iterator<Etat> it = this.setEtats.iterator();
+		Etat et;
+		while (it.hasNext()) {
+			et=(Etat)it.next();
+			if (et.name().equals(s)) {
+				this.setEtats.remove(et);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean isPayant() {
 		Iterator<Etat> it = this.setEtats.iterator();
 		Etat et;
