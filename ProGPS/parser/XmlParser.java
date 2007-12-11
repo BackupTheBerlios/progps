@@ -132,7 +132,7 @@ public class XmlParser {
 									intLongueur = Integer.parseInt(longueur);
 									etats = new LinkedList<Etat>();
 									if (touristique.equalsIgnoreCase("oui")) {
-										etats.add(Touristique.getInstance());
+										etats.add(Etat.Touristique);
 									} else if (touristique
 											.equalsIgnoreCase("non")) {
 
@@ -141,14 +141,14 @@ public class XmlParser {
 												"XML Error : Unknow city tourism state for "
 														+ nomVille);
 									if (radar.equalsIgnoreCase("oui")) {
-										etats.add(Radar.getInstance());
+										etats.add(Etat.Radar);
 									} else if (radar.equalsIgnoreCase("non")) {
 									} else
 										throw new Exception(
 												"XML Error : Unknow city radar state for "
 														+ nomVille);
 									if (payant.equalsIgnoreCase("oui")) {
-										etats.add(Payant.getInstance());
+										etats.add(Etat.Payant);
 									} else if (payant.equalsIgnoreCase("non")) {
 									} else
 										throw new Exception(
