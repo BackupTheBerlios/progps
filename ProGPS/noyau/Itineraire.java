@@ -50,6 +50,8 @@ public class Itineraire {
 
 	public void removeUnTroncon(Troncon unTroncon) {
 		this.lesTroncons.remove(unTroncon);
+		// TODO modifier tous les compteurs
+		longueurTotal-=unTroncon.getLongueur();
 	}
 
 	public Troncon[] toLesTronconsArray() {

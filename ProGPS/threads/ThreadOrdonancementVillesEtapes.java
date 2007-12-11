@@ -5,10 +5,9 @@ import java.util.*;
 import exceptions.ExceptionGraph;
 import exceptions.ExceptionRecherche;
 
-import noyau.Itineraire;
-import noyau.MyWeightedMultigraph;
+import noyau.*;
 
-public class ThreadOrdonancementVillesEtapes<Ville, Troncon> extends Thread {
+public class ThreadOrdonancementVillesEtapes<V, T> extends Thread {
 	private MyWeightedMultigraph<Ville, Troncon> graph=null;
 	private Ville villeDep = null;
 	private Ville villeArr = null;
@@ -55,10 +54,14 @@ public class ThreadOrdonancementVillesEtapes<Ville, Troncon> extends Thread {
 		this.nonOrdonnees = nonOrdonnees;
 		upToDate=false;
 	}
+	
+	public void ordonne(){
+		
+	}
 
 	public void run() {
 		while( !isInterrupted()) {
-			if (!upToDate) {
+			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonnees!=null) {
 				ordonnees = new ArrayList<Ville>();
 
 				Map<Double, Ville> collection = new TreeMap<Double, Ville>();
@@ -66,9 +69,17 @@ public class ThreadOrdonancementVillesEtapes<Ville, Troncon> extends Thread {
 				for (Iterator iter = nonOrdonnees.iterator(); iter.hasNext();) {
 					Ville uneVilleEtape = (Ville) iter.next();
 
-					// TODO Grosse merde
-					//graph.trouverLeChemin(villeDep, (Ville)uneVilleEtape, null, null);
-					collection.put(10.0, uneVilleEtape);
+					Itineraire leChemin;
+					try {
+						leChemin = graph.trouverLeChemin(villeDep, uneVilleEtape, null, null);
+						collection.put((double)leChemin.getLongueurTotal(), uneVilleEtape);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+
+
 				}
 			}
 		}    		

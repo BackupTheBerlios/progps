@@ -83,7 +83,7 @@ public class SingletonProgps {
 		// TODO Etape 2 : Lancement du chargement XML
 		// TODO Etape 3 : Ouverture de l'interface sur la fenêtre principale
 		
-		me.initialiseGraphComplet(100);
+		me.initialiseGraphComplet(5);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();
 		
 		ThreadOrdonancementVillesEtapes<Ville, Troncon> leThread = new ThreadOrdonancementVillesEtapes<Ville, Troncon>(me.graph, (Ville)deuxVilles.get(0), (Ville)deuxVilles.get(1), new HashSet<Ville>(deuxVilles));
@@ -100,6 +100,14 @@ public class SingletonProgps {
 			// Error
 			e.printStackTrace();
 		}
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 }
