@@ -8,7 +8,7 @@ public class LabelPayant extends JLabel {
 
 	public LabelPayant() {
 		super();
-		setIcon(new ImageIcon("C://progps_images//euros_small.png"));
+		setIcon(new ImageIcon("images//euros_small.png"));
 		setPreferredSize(new Dimension(49,30));
 		setToolTipText("Ce tronçon est payant");
 	}

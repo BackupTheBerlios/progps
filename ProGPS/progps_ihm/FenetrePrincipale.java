@@ -44,11 +44,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	
 	private FenetrePreferences fenPrefs = null;
 	
-	//private SingletonProgps progps = null;
+	private SingletonProgps progps = null;
 	
-	//private Admin admin = null;
+	private Admin admin = null;
 	
-	//private User utilisateur = null;
+	private User utilisateur = null;
 	
 	private javax.swing.JPanel jFrameContentPane = null;
 
@@ -269,8 +269,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private int numEtape = 0;
 	private int nbEtapes = 0;
 
-	public FenetrePrincipale() {
+	public FenetrePrincipale(SingletonProgps leProgps) {
 		super();
+		progps = leProgps;
 		initialize();
 	}
 
@@ -294,7 +295,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		this.setContentPane(getJFrameContentPane());
 		this.setJMenuBar(getJMenuBar_menu());
 		this.setTitle("ProGPS");
-		this.setIconImage(this.getToolkit().getImage("C://progps_images//gps_small.png"));
+		this.setIconImage(this.getToolkit().getImage("images//gps_small.png"));
 		this.setResizable(false);
 		this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		this.setBounds(23, 36, 803, 740);
@@ -975,8 +976,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JButton getJButton_okadmin() {
 		if (jButton_okadmin == null) {
 			jButton_okadmin = new JButton();
-			//jButton_okadmin.setText("OK");
-			jButton_okadmin.setIcon(new ImageIcon("C://progps_images//icon_unlock.gif"));
+			jButton_okadmin.setIcon(new ImageIcon("images//icon_unlock.gif"));
 			jButton_okadmin.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					verifyAdminPass();
@@ -1034,7 +1034,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_rechercherIti == null) {
 			jButton_rechercherIti = new JButton();
 			jButton_rechercherIti.setText("Rechercher les itinéraires possibles");
-			jButton_rechercherIti.setIcon(new ImageIcon("C://progps_images//gps_small.png"));
+			jButton_rechercherIti.setIcon(new ImageIcon("images//gps_small.png"));
 			jButton_rechercherIti.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					lancerRecherche();
@@ -1401,7 +1401,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_options53 = new JLabel();
 			jLabel_options53.setText("le plus court");
 			jLabel_options51 = new JLabel();
-			jLabel_options51.setIcon(new ImageIcon("C://progps_images//reseau_small.jpg"));
+			jLabel_options51.setIcon(new ImageIcon("images//reseau_small.jpg"));
 			jLabel_options51.setPreferredSize(new Dimension(35,30));
 			jLabel_options5 = new JLabel();
 			jLabel_options5.setText("Je souhaite que mon chemin soit :");
@@ -1412,7 +1412,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_options42.setText("de moins de :");
 			jLabel_options42.setEnabled(false);
 			jLabel_options41 = new JLabel();
-			jLabel_options41.setIcon(new ImageIcon("C://progps_images//panneau90_small.png"));
+			jLabel_options41.setIcon(new ImageIcon("images//panneau90_small.png"));
 			jLabel_options4 = new JLabel();
 			jLabel_options4.setText("Je souhaite éviter les limitations");
 			jLabel_options4.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1426,11 +1426,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_empty17.setPreferredSize(new Dimension(750, 2));
 			jLabel_empty17.setText("");
 			jLabel_options11 = new JLabel();
-			jLabel_options11.setIcon(new ImageIcon("C://progps_images//eiffel_small.png"));
+			jLabel_options11.setIcon(new ImageIcon("images//eiffel_small.png"));
 			jLabel_options31 = new JLabel();
-			jLabel_options31.setIcon(new ImageIcon("C://progps_images//radar.jpg"));
+			jLabel_options31.setIcon(new ImageIcon("images//radar.jpg"));
 			jLabel_options21 = new JLabel();
-			jLabel_options21.setIcon(new ImageIcon("C://progps_images//euros_small.png"));
+			jLabel_options21.setIcon(new ImageIcon("images//euros_small.png"));
 			jLabel_options3 = new JLabel();
 			jLabel_options3.setText("Je souhaite éviter les radars");
 			jLabel_options3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1759,7 +1759,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_affinerParams == null) {
 			jButton_affinerParams = new JButton();
 			jButton_affinerParams.setText("Affiner les paramètres");
-			jButton_affinerParams.setIcon(new ImageIcon("C://progps_images//slider_small.png"));
+			jButton_affinerParams.setIcon(new ImageIcon("images//slider_small.png"));
 			jButton_affinerParams.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (fenPrefs != null) {

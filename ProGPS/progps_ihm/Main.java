@@ -10,7 +10,7 @@ public class Main {
 		//FenetreChargement fen1 = new FenetreChargement(new Frame());
 		//fen1.setVisible(true);
 		
-		FenetrePrincipale fen2 = new FenetrePrincipale();
+		FenetrePrincipale fen2 = new FenetrePrincipale(null);
 		fen2.setVisible(true);
 	}
 

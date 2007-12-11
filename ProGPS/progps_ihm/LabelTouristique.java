@@ -8,7 +8,7 @@ public class LabelTouristique extends JLabel {
 
 	public LabelTouristique() {
 		super();
-		setIcon(new ImageIcon("C://progps_images//eiffel_small.png"));
+		setIcon(new ImageIcon("images//eiffel_small.png"));
 		setPreferredSize(new Dimension(23,30));
 		setToolTipText("Ce tronçon est touristique");
 	}

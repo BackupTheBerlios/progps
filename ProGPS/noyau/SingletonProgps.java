@@ -92,9 +92,10 @@ public class SingletonProgps {
 		SingletonProgps me = getInstance();
 
 		// TODO Etape 1 : Lancement de l'interface
-		new FenetrePrincipale();
+		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
 		// TODO Etape 2 : Lancement du chargement XML
 		// TODO Etape 3 : Ouverture de l'interface sur la fenêtre principale
+		laFenetre.setVisible(true);
 		
 		me.initialiseGraphComplet(5);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();

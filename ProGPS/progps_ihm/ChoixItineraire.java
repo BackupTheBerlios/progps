@@ -296,7 +296,7 @@ public class ChoixItineraire extends JPanel {
 		troncon = new DefaultMutableTreeNode("Dijon -> Besançon");
 		etape.add(troncon);
 		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
-		//etape = new DefaultMutableTreeNode(new Noeuds("Chemin",new ImageIcon("Icone/gps_small.png")));
+		
 		myRoot.add(etape);
 		myModel = new DefaultTreeModel(myRoot);
 
@@ -347,11 +347,11 @@ public class ChoixItineraire extends JPanel {
 		DefaultTreeCellRenderer myRenderer = new DefaultTreeCellRenderer();
 
 //		Changement de l'icône pour les feuilles de l'arbre.
-		myRenderer.setLeafIcon(new ImageIcon("C://progps_images//route_icone.png"));
+		myRenderer.setLeafIcon(new ImageIcon("images//gps_small.png"));
 //		Changement de l'icône pour les noeuds fermés.
-		myRenderer.setClosedIcon(new ImageIcon("C://progps_images//route_icone.png"));
+		myRenderer.setClosedIcon(new ImageIcon("images//route_icone.png"));
 //		Changement de l'icône pour les noeuds ouverts.
-		myRenderer.setOpenIcon(new ImageIcon("C://progps_images//route_icone.png"));
+		myRenderer.setOpenIcon(new ImageIcon("images//route_icone.png"));
 
 //		Application de l'afficheur à l'arbre.
 		jTree_Itineraire_1.setCellRenderer(myRenderer);
