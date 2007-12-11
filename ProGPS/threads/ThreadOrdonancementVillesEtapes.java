@@ -7,13 +7,15 @@ import exceptions.ExceptionRecherche;
 
 import noyau.*;
 
-public class ThreadOrdonancementVillesEtapes<V, T> extends Thread {
+public class ThreadOrdonancementVillesEtapes<V, T> extends Thread implements Comparator<Double> {
 	private MyWeightedMultigraph graph=null;
 	private Ville villeDep = null;
 	private Ville villeArr = null;
 	private Set<Ville> nonOrdonnees = null;
 	private List<Ville> ordonnees = null;
+	private List cles = null;
 	private boolean upToDate = false;
+	private TreeMap<Double, Ville> collection;
 	
 	public ThreadOrdonancementVillesEtapes(
 			MyWeightedMultigraph graph,
@@ -64,9 +66,9 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread {
 			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonnees!=null) {
 				ordonnees = new ArrayList<Ville>();
 
-				Map<Double, Ville> collection = new TreeMap<Double, Ville>();
+				collection = new TreeMap<Double, Ville>();
 				// Liste toutes les villes etape
-				for (Iterator iter = nonOrdonnees.iterator(); iter.hasNext();) {
+				for (Iterator<Ville> iter = nonOrdonnees.iterator(); iter.hasNext();) {
 					Ville uneVilleEtape = (Ville) iter.next();
 
 					Itineraire leChemin;
@@ -77,11 +79,26 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-
-
 				}
+				Collections.sort(collection., collection.comparator());
+				
+
+		
 			}
-		}    		
+		}
+		
+
 	}
+	public int compare(Double d1, Double d2) {
+		List<Double> cles = new ArrayList<Double>(collection.keySet());
+		Double v1, v2;
+		v1=cles.get(d1.intValue());
+		v2=cles.get(d2.intValue());
+		if (v1>v2)
+			return 1;
+		else if (v2==d1)
+			return 0;
+		else return -1;
+	}
+	
 }
