@@ -23,6 +23,8 @@ import java.awt.GridBagConstraints;
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
@@ -62,6 +64,8 @@ public class ChoixItineraire extends JPanel {
 	private JTextPane jTextPane_recap2 = null;
 	private JScrollPane jScrollPane_recap_1 = null;
 	private JTextPane jTextPane_recap1 = null;   
+	
+	private ArrayList<Itineraire> lesItis = null;  //  @jve:decl-index=0:
 
 	public ChoixItineraire() {
 		initComponents();
@@ -143,8 +147,133 @@ public class ChoixItineraire extends JPanel {
         s = doc.addStyle("red", regular);
         StyleConstants.setForeground(s, Color.RED);
 	}
+	
+	public void remplirItineraires(ArrayList<Itineraire> itisCalcules) {
+		if (itisCalcules != null || itisCalcules.size() != 0) {
+			lesItis = itisCalcules;
+			for (int i=0; i<itisCalcules.size(); i++) {
+				remplirTree((i+1), lesItis.get(i));
+			}
+			if (itisCalcules.size() == 2) {
+				jTree_Itineraire_1.setModel(new DefaultTreeModel(null));
+				jTree_Itineraire_1.setEnabled(false);
+				jTextPane_recap1.setEnabled(false);
+			}
+		}
+	}
 
-	public void remplirTree(Itineraire iti) {
+	private void remplirTree(int num, Itineraire iti) {
+		switch (num) {
+			case 1: 
+				
+				
+				jTree_Itineraire_1.addMouseListener(new java.awt.event.MouseAdapter() {
+					public void mouseClicked(java.awt.event.MouseEvent e) {
+						jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
+						jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_2.setEnabled(false);
+						jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
+						jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_3.setEnabled(false);
+						jTree_Itineraire_1.setBackground(Color.WHITE);
+						jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+						jTree_Itineraire_1.setEnabled(true);
+					}
+				});
+				
+				break;
+			case 2:
+				
+
+				jTree_Itineraire_2.addMouseListener(new java.awt.event.MouseAdapter() {
+					public void mouseClicked(java.awt.event.MouseEvent e) {
+						jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
+						jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_1.setEnabled(false);
+						jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
+						jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_3.setEnabled(false);
+						jTree_Itineraire_2.setBackground(Color.WHITE);
+						jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+						jTree_Itineraire_2.setEnabled(true);
+					}
+				});
+				
+				break;
+			case 3:
+				
+				jTree_Itineraire_3.addMouseListener(new java.awt.event.MouseAdapter() {
+					public void mouseClicked(java.awt.event.MouseEvent e) {
+						jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
+						jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+						jTree_Itineraire_1.setEnabled(false);
+						jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
+						jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_2.setEnabled(false);
+						jTree_Itineraire_3.setBackground(Color.WHITE);
+						jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_3.setEnabled(true);
+					}
+				});
+				
+				break;
+		}
+		
+//		 Construction du noeud racine.
+		DefaultMutableTreeNode myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
+
+//		Construction des différents noeuds de l'arbre.
+		DefaultMutableTreeNode etape = new DefaultMutableTreeNode("Autoroute A5");
+		myRoot.add(etape);
+		DefaultMutableTreeNode troncon = new DefaultMutableTreeNode("Paris -> Melun");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Melun -> Troyes");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Departementale D81");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode("Chaumont -> Besançon");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
+		myRoot.add(etape);
+
+//		Construction du modèle de l'arbre.
+		DefaultTreeModel myModel = new DefaultTreeModel(myRoot);
+
+		myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
+		etape = new DefaultMutableTreeNode("Autoroute A5");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode(" Paris -> Melun");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Melun -> Troyes");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Autoroute A6");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode("Chaumont -> Dijon");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Dijon -> Besançon");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
+		
+		myRoot.add(etape);
+		myModel = new DefaultTreeModel(myRoot);
+
+		myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
+		etape = new DefaultMutableTreeNode("Autoroute A6");
+		myRoot.add(etape);
+		troncon = new DefaultMutableTreeNode("Paris -> Dijon");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Dijon -> Lyon");
+		etape.add(troncon);
+		troncon = new DefaultMutableTreeNode("Lyon -> Aix-en-Provence");
+		etape.add(troncon);
+		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
+		myRoot.add(etape);
+		myModel = new DefaultTreeModel(myRoot);
+		
 		
 	}
 	
@@ -169,7 +298,20 @@ public class ChoixItineraire extends JPanel {
 		jPanel_Itineraire_3 = new JPanel();
 		jScrollPane_Itineraire_3 = new JScrollPane();
 
-		initArbres();
+		jTree_Itineraire_1 = new JTree();			
+		jTree_Itineraire_2 = new JTree();
+		jTree_Itineraire_3 = new JTree();
+		
+		
+		DefaultTreeCellRenderer myRenderer = new DefaultTreeCellRenderer();
+		
+		myRenderer.setLeafIcon(new ImageIcon("images//gps_small.png"));
+		myRenderer.setClosedIcon(new ImageIcon("images//route_icone.png"));
+		myRenderer.setOpenIcon(new ImageIcon("images//route_icone.png"));
+
+		jTree_Itineraire_1.setCellRenderer(myRenderer);
+		jTree_Itineraire_2.setCellRenderer(myRenderer);
+		jTree_Itineraire_3.setCellRenderer(myRenderer);
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -242,121 +384,7 @@ public class ChoixItineraire extends JPanel {
 	}
 	
 	public void initArbres() {
-		// Construction du noeud racine.
-		DefaultMutableTreeNode myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
-
-//		Construction des différents noeuds de l'arbre.
-		DefaultMutableTreeNode etape = new DefaultMutableTreeNode("Autoroute A5");
-		myRoot.add(etape);
-		DefaultMutableTreeNode troncon = new DefaultMutableTreeNode("Paris -> Melun");
-		etape.add(troncon);
-		troncon = new DefaultMutableTreeNode("Melun -> Troyes");
-		etape.add(troncon);
-		troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
-		etape.add(troncon);
-		etape = new DefaultMutableTreeNode("Departementale D81");
-		myRoot.add(etape);
-		troncon = new DefaultMutableTreeNode("Chaumont -> Besançon");
-		etape.add(troncon);
-		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
-		myRoot.add(etape);
-
-//		Construction du modèle de l'arbre.
-		DefaultTreeModel myModel = new DefaultTreeModel(myRoot);
-
-//		Construction de l'arbre.
-		jTree_Itineraire_1 = new JTree(myModel);
-		jTree_Itineraire_1.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
-				jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-				jTree_Itineraire_2.setEnabled(false);
-				jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
-				jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-				jTree_Itineraire_3.setEnabled(false);
-				jTree_Itineraire_1.setBackground(Color.WHITE);
-				jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-				jTree_Itineraire_1.setEnabled(true);
-			}
-		});
-
-		myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
-		etape = new DefaultMutableTreeNode("Autoroute A5");
-		myRoot.add(etape);
-		troncon = new DefaultMutableTreeNode(" Paris -> Melun");
-		etape.add(troncon);
-		troncon = new DefaultMutableTreeNode("Melun -> Troyes");
-		etape.add(troncon);
-		troncon = new DefaultMutableTreeNode("Troyes -> Chaumont");
-		etape.add(troncon);
-		etape = new DefaultMutableTreeNode("Autoroute A6");
-		myRoot.add(etape);
-		troncon = new DefaultMutableTreeNode("Chaumont -> Dijon");
-		etape.add(troncon);
-		troncon = new DefaultMutableTreeNode("Dijon -> Besançon");
-		etape.add(troncon);
-		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
 		
-		myRoot.add(etape);
-		myModel = new DefaultTreeModel(myRoot);
-
-		jTree_Itineraire_2 = new JTree(myModel);
-		jTree_Itineraire_2.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
-				jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-				jTree_Itineraire_1.setEnabled(false);
-				jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
-				jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-				jTree_Itineraire_3.setEnabled(false);
-				jTree_Itineraire_2.setBackground(Color.WHITE);
-				jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-				jTree_Itineraire_2.setEnabled(true);
-			}
-		});
-
-
-		myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
-		etape = new DefaultMutableTreeNode("Autoroute A6");
-		myRoot.add(etape);
-		troncon = new DefaultMutableTreeNode("Paris -> Dijon");
-		etape.add(troncon);
-		troncon = new DefaultMutableTreeNode("Dijon -> Lyon");
-		etape.add(troncon);
-		troncon = new DefaultMutableTreeNode("Lyon -> Aix-en-Provence");
-		etape.add(troncon);
-		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
-		myRoot.add(etape);
-		myModel = new DefaultTreeModel(myRoot);
-
-		jTree_Itineraire_3 = new JTree(myModel);
-		jTree_Itineraire_3.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
-				jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-				jTree_Itineraire_1.setEnabled(false);
-				jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
-				jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-				jTree_Itineraire_2.setEnabled(false);
-				jTree_Itineraire_3.setBackground(Color.WHITE);
-				jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-				jTree_Itineraire_3.setEnabled(true);
-			}
-		});
-		
-		DefaultTreeCellRenderer myRenderer = new DefaultTreeCellRenderer();
-
-//		Changement de l'icône pour les feuilles de l'arbre.
-		myRenderer.setLeafIcon(new ImageIcon("images//gps_small.png"));
-//		Changement de l'icône pour les noeuds fermés.
-		myRenderer.setClosedIcon(new ImageIcon("images//route_icone.png"));
-//		Changement de l'icône pour les noeuds ouverts.
-		myRenderer.setOpenIcon(new ImageIcon("images//route_icone.png"));
-
-//		Application de l'afficheur à l'arbre.
-		jTree_Itineraire_1.setCellRenderer(myRenderer);
-		jTree_Itineraire_2.setCellRenderer(myRenderer);
-		jTree_Itineraire_3.setCellRenderer(myRenderer);
 
 		
 	}

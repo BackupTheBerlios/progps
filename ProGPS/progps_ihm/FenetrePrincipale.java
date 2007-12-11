@@ -1330,10 +1330,12 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			mod.addElement("Orsay3");
 			mod.addElement("Orsay4");	
 			jList_villes = new JList();
-			jList_villes.setModel(mod);
 			
-			//TODO
-			//jList_villes.setPreferredSize(new Dimension(150,100));
+			/*for (int i=0;i<progps.getVilles().size();i++) {
+				mod.addElement(progps.getVilles().get(i));
+			}*/
+			
+			jList_villes.setModel(mod);
 		}
 		return jList_villes;
 	}
