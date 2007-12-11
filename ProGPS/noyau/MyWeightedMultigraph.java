@@ -164,6 +164,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     
 
 	public void seDecrire(){
+		System.out.println("Nombre de villes : "+this.vertexSet().size());
 		Set<Troncon> lesTroncons=this.edgeSet();
 		for (Troncon theEdge : lesTroncons) {
 				Troncon troncon = (Troncon) theEdge;

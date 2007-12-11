@@ -19,12 +19,14 @@ public class Troncon
 	private int vitesse;
 	private int longueur;
 	private boolean dispo;
-	private List<Ville> sesVilles = new ArrayList<Ville>();
 	private Route saRoute;
 	private List<Etat> setEtats = new ArrayList<Etat>();
 	private Route route;
 	private Ville ville1;
 	private Ville ville2;
+	
+	public Troncon() {
+	}
 	
 	public Troncon(int vitesse, int longueur, boolean dispo, Route route2, Ville ville1, Ville ville2, LinkedList<Etat> sesEtats) {
 		super();
@@ -48,7 +50,9 @@ public class Troncon
 	}
 
 	public Set<Ville> getSesVilles() {
-		Set villes = new HashSet<Ville>(sesVilles);
+		Set villes = new HashSet<Ville>();
+		villes.add(ville1);
+		villes.add(ville2);
 		return villes;
 	}
 
@@ -85,22 +89,20 @@ public class Troncon
 	}
 
 	public boolean isRelieVille(Ville laVille) {
-		return sesVilles.contains(laVille);
+		return (ville1.equals(laVille) || ville2.equals(laVille));
 	}
 	
 	public boolean isRelieVille(Set<Ville> lesVilles) {
 		for (Iterator iter = lesVilles.iterator(); iter.hasNext();) {
 			Ville uneVille = (Ville) iter.next();
-			if (sesVilles.contains(uneVille)) return true;
+			if (this.isRelieVille(uneVille)) return true;
 		}
 		return false;
 	}
 
 	public void setSesVilles(Ville ville1, Ville ville2) {
-		List<Ville> lesVilles = new ArrayList<Ville>();
-		lesVilles.add(ville1);
-		lesVilles.add(ville2);
-		this.sesVilles = lesVilles;
+		this.ville1=ville1;
+		this.ville2=ville2;
 	}
 	
 	public void addEtat(Etat e) throws ExceptionRecherche {

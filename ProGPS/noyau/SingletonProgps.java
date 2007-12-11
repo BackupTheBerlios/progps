@@ -61,6 +61,7 @@ public class SingletonProgps {
 //				et arrive à la même ville
 				if(!uneVille.equals(nouvelleVille)){
 					// Exception
+					graph.seDecrire();
 					graph.addEdge(uneVille, nouvelleVille);
 					//
 					Troncon nouveauTr = graph.ajouterUnTroncon(uneVille, nouvelleVille);
