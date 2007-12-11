@@ -89,7 +89,7 @@ public class SingletonProgps {
 
 	
 	public static void main(String[] args) {
-		SingletonProgps me = new SingletonProgps();
+		SingletonProgps me = getInstance();
 
 		// TODO Etape 1 : Lancement de l'interface
 		new FenetrePrincipale();
@@ -113,6 +113,7 @@ public class SingletonProgps {
 		
 		
 	}
+	
 	public boolean ajouterVille(noyau.Ville ville) throws Exception {
 		if(!villeConnu(ville)){
 			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
@@ -126,7 +127,7 @@ public class SingletonProgps {
 		}else throw new Exception("City already know " + ville.getNomVille());
 	  }
 	  
-	  public boolean ajouterRoute(noyau.Route r) throws Exception {
+	  public boolean ajouterRoute(Route r) throws Exception {
 		if(!routeConnue(r)){
 			for (Iterator i = sesRoutes.iterator(); i.hasNext();) {
 				Route routeAccontrole = (Route) i.next();
@@ -139,7 +140,7 @@ public class SingletonProgps {
 		}else throw new Exception("Road already know " + r.getNomRoute());
 	  }
 
-	private boolean routeConnue(noyau.Route r) {
+	private boolean routeConnue(Route r) {
 		if(sesRoutes.contains(r)){
 			return true;
 		}else {
