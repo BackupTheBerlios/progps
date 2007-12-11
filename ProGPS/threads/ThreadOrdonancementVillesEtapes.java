@@ -80,7 +80,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread implements Com
 						e.printStackTrace();
 					}
 				}
-				Collections.sort(collection, collection.comparator());
+				//Collections.sort(collection, collection.comparator());
 				
 
 		
