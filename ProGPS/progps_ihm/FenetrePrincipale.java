@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 import java.awt.Dimension;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -272,6 +273,10 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	public FenetrePrincipale(SingletonProgps leProgps) {
 		super();
 		progps = leProgps;
+		Admin lAdmin = new Admin(leProgps);
+		User lUser = new User(leProgps);
+		leProgps.setSonAdmin(lAdmin);
+		leProgps.setSonUser(lUser);
 		initialize();
 	}
 
@@ -1253,7 +1258,24 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_versEtapes.setText("<<");
 			jButton_versEtapes.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					DefaultListModel mod = (DefaultListModel)jList_villesEtapes.getModel();
+					mod.addElement(jList_villes.getSelectedValue());
+					jList_villesEtapes.setModel(mod);
+					
+					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
+					mod2.removeElementAt(jList_villes.getSelectedIndex());
+					jList_villes.setModel(mod2);
+					
+					if (!jButton_effacerVillesEtapes.isEnabled()) {
+						jButton_enleverEtape.setEnabled(true);
+						jButton_effacerVillesEtapes.setEnabled(true);
+					}
+					
+					if (mod2.isEmpty()) {
+						jButton_versEtapes.setEnabled(false);
+					}
+					
+					// TODO event()
 				}
 			});
 		}
@@ -1269,9 +1291,26 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_enleverEtape == null) {
 			jButton_enleverEtape = new JButton();
 			jButton_enleverEtape.setText(">>");
+			jButton_enleverEtape.setEnabled(false);
 			jButton_enleverEtape.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
+					mod.addElement(jList_villesEtapes.getSelectedValue());
+					jList_villes.setModel(mod);
+
+					DefaultListModel mod2 = (DefaultListModel)jList_villesEtapes.getModel();
+					mod2.removeElementAt(jList_villesEtapes.getSelectedIndex());
+					jList_villesEtapes.setModel(mod2);
+					// TODO event()
+					
+					if (!jButton_versEtapes.isEnabled()) {
+						jButton_versEtapes.setEnabled(true);
+					}
+					
+					if (mod2.isEmpty()) {
+						jButton_enleverEtape.setEnabled(false);
+						jButton_effacerVillesEtapes.setEnabled(false);
+					}
 				}
 			});
 		}
@@ -1285,21 +1324,15 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JList getJList_villes() {
 		if (jList_villes == null) {
-			Vector<String> villes = new Vector<String>();
-			villes.add("Besançon");
-			villes.add("Dijon");
-			villes.add("Evian");
-			villes.add("Lyon");
-			villes.add("Marseille");
-			villes.add("Montpellier");
-			villes.add("Nancy");
-			villes.add("Nice");
-			villes.add("Reims");
-			villes.add("Saint-Etienne");
-			villes.add("Strasbourg");
-			villes.add("Trifouillis-les-Oies");
+			DefaultListModel mod = new DefaultListModel();
+			mod.addElement("Orsay");
+			mod.addElement("Orsay2");
+			mod.addElement("Orsay3");
+			mod.addElement("Orsay4");	
+			jList_villes = new JList();
+			jList_villes.setModel(mod);
 			
-			jList_villes = new JList(villes);
+			//TODO
 			//jList_villes.setPreferredSize(new Dimension(150,100));
 		}
 		return jList_villes;
@@ -1316,7 +1349,23 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_versEviter.setText(">>");
 			jButton_versEviter.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					DefaultListModel mod = (DefaultListModel)jList_villesEviter.getModel();
+					mod.addElement(jList_villes.getSelectedValue());
+					jList_villesEviter.setModel(mod);
+					
+					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
+					mod2.removeElementAt(jList_villes.getSelectedIndex());
+					jList_villes.setModel(mod2);
+					
+					if (!jButton_effacerVillesEviter.isEnabled()) {
+						jButton_effacerVillesEviter.setEnabled(true);
+						jButton_enleverEviter.setEnabled(true);
+					}
+					
+					if (mod2.isEmpty()) {
+						jButton_versEviter.setEnabled(false);
+					}
+					// TODO event()
 				}
 			});
 		}
@@ -1332,6 +1381,28 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_enleverEviter == null) {
 			jButton_enleverEviter = new JButton();
 			jButton_enleverEviter.setText("<<");
+			jButton_enleverEviter.setEnabled(false);
+			jButton_enleverEviter.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
+					mod.addElement(jList_villesEviter.getSelectedValue());
+					jList_villes.setModel(mod);
+					
+					DefaultListModel mod2 = (DefaultListModel)jList_villesEviter.getModel();
+					mod2.removeElementAt(jList_villesEviter.getSelectedIndex());
+					jList_villesEviter.setModel(mod2);
+					
+					if (!jButton_versEviter.isEnabled()) {
+						jButton_versEviter.setEnabled(true);
+					}
+					
+					if (mod2.isEmpty()) {
+						jButton_enleverEviter.setEnabled(false);
+						jButton_effacerVillesEviter.setEnabled(false);
+					}
+					//TODO event()
+				}
+			});
 		}
 		return jButton_enleverEviter;
 	}
@@ -1345,6 +1416,23 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_effacerVillesEtapes == null) {
 			jButton_effacerVillesEtapes = new JButton();
 			jButton_effacerVillesEtapes.setText("Effacer tout");
+			jButton_effacerVillesEtapes.setEnabled(false);
+			jButton_effacerVillesEtapes
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							DefaultListModel mod = (DefaultListModel)jList_villesEtapes.getModel();
+							DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
+							int tmp = mod.size();
+							for (int i=0; i<tmp; i++) {
+								mod2.addElement(mod.get(0));
+								mod.remove(0);
+							}
+							jList_villesEtapes.setModel(mod);
+							jList_villes.setModel(mod2);
+							
+							// TODO event()
+						}
+					});
 		}
 		return jButton_effacerVillesEtapes;
 	}
@@ -1358,6 +1446,23 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_effacerVillesEviter == null) {
 			jButton_effacerVillesEviter = new JButton();
 			jButton_effacerVillesEviter.setText("Effacer tout");
+			jButton_effacerVillesEviter.setEnabled(false);
+			jButton_effacerVillesEviter
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							DefaultListModel mod = (DefaultListModel)jList_villesEviter.getModel();
+							DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
+							int tmp = mod.size();
+							for (int i=0; i<tmp; i++) {
+								mod2.addElement(mod.get(0));
+								mod.remove(0);
+							}
+							jList_villesEviter.setModel(mod);
+							jList_villes.setModel(mod2);
+							
+							// TODO event()
+						}
+					});
 		}
 		return jButton_effacerVillesEviter;
 	}
@@ -1621,11 +1726,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JList getJList_villesEtapes() {
 		if (jList_villesEtapes == null) {
-			Vector<String> villesEtapes = new Vector<String>();
-			villesEtapes.add("Dijon");
-			villesEtapes.add("Lyon");
-			jList_villesEtapes = new JList(villesEtapes);
+			jList_villesEtapes = new JList();
 			jList_villesEtapes.setForeground(new Color(0,176,52));
+			jList_villesEtapes.setModel(new DefaultListModel());
 		}
 		return jList_villesEtapes;
 	}
@@ -1651,12 +1754,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JList getJList_villesEviter() {
 		if (jList_villesEviter == null) {
-			Vector<String> villesEviter = new Vector<String>();
-			villesEviter.add("Strasbourg");
-			villesEviter.add("Nice");
-			villesEviter.add("Evian");
-			jList_villesEviter = new JList(villesEviter);
+			jList_villesEviter = new JList();
 			jList_villesEviter.setForeground(Color.RED);
+			jList_villesEviter.setModel(new DefaultListModel());
 		}
 		return jList_villesEviter;
 	}
