@@ -114,6 +114,9 @@ public class SingletonProgps {
 		
 	}
 	
+	/*
+	 * Début modifications pour le parseur
+	 */
 	public boolean ajouterVille(noyau.Ville ville) throws Exception {
 		if(!villeConnu(ville)){
 			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
@@ -192,4 +195,7 @@ public class SingletonProgps {
 		}
 		return false;
 	}
+	/*
+	 * Fin modifications pour le parseur
+	 */
 }
