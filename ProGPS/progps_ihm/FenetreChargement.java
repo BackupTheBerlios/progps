@@ -40,6 +40,11 @@ public class FenetreChargement extends JWindow {
 		super(owner);
 		initialize();
 	}
+	
+	public void setProgressbarValue(int value) {
+		jProgressBar_chargement.setValue(value);
+		jProgressBar_chargement.setToolTipText(value + "%");
+	}
 
 	/**
 	 * This method initializes this
@@ -103,7 +108,7 @@ public class FenetreChargement extends JWindow {
 			flowLayout.setHgap(5);
 			flowLayout.setVgap(2);
 			jLabel_chargement = new JLabel();
-			jLabel_chargement.setFont(new Font("Verdana",Font.ITALIC,11));
+			jLabel_chargement.setFont(new Font("Verdana",Font.ITALIC,12));
 			jLabel_chargement.setText("Chargement...");
 			
 			jPanel_chargement = new JPanel();
@@ -128,7 +133,7 @@ public class FenetreChargement extends JWindow {
 			jProgressBar_chargement.setBackground(Color.WHITE);
 			jProgressBar_chargement.setForeground(Color.ORANGE);
 			jProgressBar_chargement.setStringPainted(true);
-			jProgressBar_chargement.setValue(78);
+			//jProgressBar_chargement.setValue(78);
 		}
 		return jProgressBar_chargement;
 	}
