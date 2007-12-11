@@ -1,11 +1,8 @@
+package noyau;
 
 import java.util.*;
 
-import noyau.Itineraire;
-import noyau.Route;
-import noyau.Troncon;
 
-import noyau.Ville;
 
 
 public class User {

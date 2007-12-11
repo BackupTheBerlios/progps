@@ -1,5 +1,4 @@
-import noyau.Etat;
-import noyau.Troncon;
+package noyau;
 
 
 public class Payant extends Etat {

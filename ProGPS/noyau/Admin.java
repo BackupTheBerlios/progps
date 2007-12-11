@@ -1,3 +1,5 @@
+package noyau;
+
 public class Admin {
 	private String nomAdmin;
 	private String mdp;

@@ -1,12 +1,9 @@
+package noyau;
 
 
 import java.util.*;
 
 
-import noyau.Itineraire;
-import noyau.MyWeightedMultigraph;
-import noyau.Route;
-import noyau.Troncon;
 
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.ListeDeKChemins;
@@ -15,7 +12,6 @@ import threads.ThreadOrdonancementVillesEtapes;
 
 import exceptions.ExceptionRecherche;
 
-import noyau.Ville;
 
 /*
  * Lancer avec -Xmx512M -Xms512M dans les arguments de la VM

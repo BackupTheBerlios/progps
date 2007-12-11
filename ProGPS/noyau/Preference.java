@@ -1,3 +1,5 @@
+package noyau;
+
 
 public enum Preference {
 	Radars, TypeRoute, Villes, VillesAEviter, Vitesse, Payante, Touristique;

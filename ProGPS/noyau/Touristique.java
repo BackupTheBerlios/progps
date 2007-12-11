@@ -1,5 +1,4 @@
-import noyau.Etat;
-import noyau.Troncon;
+package noyau;
 
 
 public class Touristique extends Etat {
@@ -12,7 +11,7 @@ public class Touristique extends Etat {
 	}
 	
 	public String toString() {
-		return "payant";
+		return "touristique";
 	}
 	
 }
