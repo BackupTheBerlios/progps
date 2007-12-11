@@ -20,7 +20,7 @@ public class Troncon
 	private int longueur;
 	private boolean dispo;
 	private Route saRoute;
-	private List<Etat> setEtats = new ArrayList<Etat>();
+	private List<Etat> sesEtats = new ArrayList<Etat>();
 	private Route route;
 	private Ville ville1;
 	private Ville ville2;
@@ -36,7 +36,7 @@ public class Troncon
 		this.route = route2;
 		this.ville1 = ville1;
 		this.ville2 = ville2;
-		this.setEtats = sesEtats;
+		this.sesEtats = sesEtats;
 	}
 
 	public void genererValeursAleatoires(){
@@ -106,25 +106,25 @@ public class Troncon
 	}
 	
 	public void addEtat(Etat e) throws ExceptionRecherche {
-		Iterator<Etat> it = this.setEtats.iterator();
+		Iterator<Etat> it = this.sesEtats.iterator();
 		Etat et;
 		while (it.hasNext()) {
 			et=(Etat)it.next();
 			if (et.name().equals(e.name()))
 				throw new ExceptionRecherche("Ce tronçon est deja classifié comme "+e.name()+".");
 		}
-		this.setEtats.add(e);
+		this.sesEtats.add(e);
 	}
 	
 	
 	//renvoit true si l'état a été supprimé, false s'il n'a pas été trouvé
 	public boolean removeEtat(String s) {
-		Iterator<Etat> it = this.setEtats.iterator();
+		Iterator<Etat> it = this.sesEtats.iterator();
 		Etat et;
 		while (it.hasNext()) {
 			et=(Etat)it.next();
 			if (et.name().equals(s)) {
-				this.setEtats.remove(et);
+				this.sesEtats.remove(et);
 				return true;
 			}
 		}
@@ -132,7 +132,7 @@ public class Troncon
 	}
 	
 	public boolean isPayant() {
-		Iterator<Etat> it = this.setEtats.iterator();
+		Iterator<Etat> it = this.sesEtats.iterator();
 		Etat et;
 		while (it.hasNext()) {
 			et=(Etat)it.next();
@@ -143,7 +143,7 @@ public class Troncon
 	}
 	
 	public boolean isTouristique() {
-		Iterator<Etat> it = this.setEtats.iterator();
+		Iterator<Etat> it = this.sesEtats.iterator();
 		Etat et;
 		while (it.hasNext()) {
 			et=(Etat)it.next();
@@ -154,7 +154,7 @@ public class Troncon
 	}
 	
 	public boolean isRadar() {
-		Iterator<Etat> it = this.setEtats.iterator();
+		Iterator<Etat> it = this.sesEtats.iterator();
 		Etat et;
 		while (it.hasNext()) {
 			et=(Etat)it.next();
@@ -162,6 +162,10 @@ public class Troncon
 				return true;
 		}
 		return false;
+	}
+
+	public void setSesEtats(List<Etat> setEtats) {
+		this.sesEtats = setEtats;
 	}
 	
 }

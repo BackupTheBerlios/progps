@@ -29,16 +29,6 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	private Set<Ville> etapes=new HashSet<Ville>();
 
     /** Inherited code
-     * Creates a new weighted multigraph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     */
-    public MyWeightedMultigraph(EdgeFactory<Ville, Troncon> ef)
-    {
-        super(ef);
-    }
-
-    /** Inherited code
      * Creates a new weighted multigraph.
      *
      * @param edgeClass class on which to base factory for edges
@@ -46,6 +36,16 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     public MyWeightedMultigraph(Class<? extends Troncon> edgeClass)
     {
         this(new ClassBasedEdgeFactory<Ville, Troncon>(edgeClass));
+    }
+
+    /** Inherited code
+     * Creates a new weighted multigraph with the specified edge factory.
+     *
+     * @param ef the edge factory of the new graph.
+     */
+    public MyWeightedMultigraph(EdgeFactory<Ville, Troncon> ef)
+    {
+        super(ef);
     }
 
     public Ville ajouterUneVille(String nom) throws ExceptionGraph{
@@ -71,6 +71,15 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     	return troncon;
     }
     
+    public Ville getVille(String nom) throws ExceptionGraph{
+    	for (Iterator iter = this.vertexSet().iterator(); iter.hasNext();) {
+			Ville uneVille = (Ville) iter.next();
+			if(uneVille.getNomVille().equalsIgnoreCase(nom))
+				return uneVille;
+		}
+    	throw new ExceptionGraph("La ville "+nom+" n'est pas dans le graph.");
+    }
+    
     public double getEdgeWeight(Troncon e)
     {
     	if (e instanceof Troncon) {
@@ -88,37 +97,18 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     	}
     }
     
-    public Itineraire trouverLeChemin(
-    		Ville villeDepart, 
-			Ville villeArrivee,
-			Set<Ville> villesAEviter,
-			Set<Ville> villesEtapes) throws Exception{
-    	
-//    	Vérification qu'une ville étape n'est pas à éviter
-    	if (villesEtapes!=null && villesAEviter!=null) {
-    		for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
-    			Ville uneEtape = (Ville) iter.next();
-    			if(villesAEviter.contains(uneEtape)){
-    				throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
-    			}
-    		}
-    	}
-    	
-//    	 Initialisation
-    	aEviter=villesAEviter;
-    	Itineraire theResult = new Itineraire();
-    	theResult.setVilleDepart(villeDepart);
-    	theResult.setVilleArrivee(villeArrivee);
-    	
-    	List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villeDepart, (Ville)villeArrivee);
-    	
-    	for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
-    		Troncon anEdge = (Troncon) iter.next();
-    		Troncon unTroncon = (Troncon) anEdge;
-    		theResult.addUnTroncon(unTroncon);
+    public void seDecrire(){
+		System.out.println("Nombre de villes : "+this.vertexSet().size());
+		Set<Troncon> lesTroncons=this.edgeSet();
+		for (Troncon theEdge : lesTroncons) {
+				Troncon troncon = (Troncon) theEdge;
+				System.out.println("**************");
+				System.out.println("De :"+this.getEdgeSource(theEdge).toString());
+				System.out.println("A :"+this.getEdgeTarget(theEdge).toString());
+				System.out.println("Dist:"+troncon.getLongueur()+"km");
+				System.out.println("Vit:"+troncon.getVitesse()+"km/h");
 		}
-    	return theResult;
-    }
+	}
     
     public List<Itineraire> trouver3Chemins(
     		Ville villeDepart, 
@@ -163,16 +153,35 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     }
     
 
-	public void seDecrire(){
-		System.out.println("Nombre de villes : "+this.vertexSet().size());
-		Set<Troncon> lesTroncons=this.edgeSet();
-		for (Troncon theEdge : lesTroncons) {
-				Troncon troncon = (Troncon) theEdge;
-				System.out.println("**************");
-				System.out.println("De :"+this.getEdgeSource(theEdge).toString());
-				System.out.println("A :"+this.getEdgeTarget(theEdge).toString());
-				System.out.println("Dist:"+troncon.getLongueur()+"km");
-				System.out.println("Vit:"+troncon.getVitesse()+"km/h");
+	public Itineraire trouverLeChemin(
+    		Ville villeDepart, 
+			Ville villeArrivee,
+			Set<Ville> villesAEviter,
+			Set<Ville> villesEtapes) throws Exception{
+    	
+//    	Vérification qu'une ville étape n'est pas à éviter
+    	if (villesEtapes!=null && villesAEviter!=null) {
+    		for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
+    			Ville uneEtape = (Ville) iter.next();
+    			if(villesAEviter.contains(uneEtape)){
+    				throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
+    			}
+    		}
+    	}
+    	
+//    	 Initialisation
+    	aEviter=villesAEviter;
+    	Itineraire theResult = new Itineraire();
+    	theResult.setVilleDepart(villeDepart);
+    	theResult.setVilleArrivee(villeArrivee);
+    	
+    	List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villeDepart, (Ville)villeArrivee);
+    	
+    	for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
+    		Troncon anEdge = (Troncon) iter.next();
+    		Troncon unTroncon = (Troncon) anEdge;
+    		theResult.addUnTroncon(unTroncon);
 		}
-	}
+    	return theResult;
+    }
 }

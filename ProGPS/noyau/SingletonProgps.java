@@ -1,6 +1,7 @@
 package noyau;
 
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -11,6 +12,7 @@ import java.util.Vector;
 import parser.XmlParser;
 import progps_ihm.FenetreChargement;
 import progps_ihm.FenetrePrincipale;
+import sun.awt.windows.ThemeReader;
 import exceptions.ExceptionGraph;
 import exceptions.ExceptionRecherche;
 
@@ -35,6 +37,7 @@ public class SingletonProgps {
 		lastIdRoute = 0;
 		sesVilles = new LinkedList<Ville>();
 		sesRoutes = new LinkedList<Route>();
+		graph=new MyWeightedMultigraph(Troncon.class);
 	}
 
 	public synchronized static SingletonProgps getInstance() {
@@ -94,19 +97,44 @@ public class SingletonProgps {
 	}
 
 	
-	public static void main(String[] args) throws ExceptionGraph {
+	public static void main(String[] args) throws Exception {
 		SingletonProgps me = getInstance();
+		String urlFichier;
 
+		if (args.length==0){ urlFichier = new String("parser/network.xml");}
+		else{urlFichier=args[0];}
+		
 		// Etape 1 : Création du thread de parsing
-		XmlParser threadDeParsing = new XmlParser(me, );
+		XmlParser threadDeParsing = new XmlParser(me, urlFichier);
 		// Etape 2 : Création de la fenêtre de loading...
-		FenetreChargement chargement = new FenetreChargement();
+		FenetreChargement chargement = new FenetreChargement(new Frame());
+		chargement.setVisible(true);
+		
+		// Etape 3 : Boucle de mise à jour de la barre de progression
+		while((threadDeParsing.isAlive())
+				&&!(threadDeParsing.isExceptionLevee())
+				&&!(threadDeParsing.isParsingtermine())){
+			chargement.setProgressbarValue(threadDeParsing.getAvancement());
+		}
+		// Teste si le thread a bien terminé
+		if(threadDeParsing.isExceptionLevee())
+			throw new Exception("La lecture du fichier XML a échoueé.");
+		// On ferme le thread
+		threadDeParsing.setStop(true);
+		
+		// Etape 4 : destruction de la fenetre de chargement
+		chargement.dispose();
+		me.graph.seDecrire();
+		
+		
+		// Etape 5 : Création de la fenêtre principale
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
 		// TODO Etape 2 : Lancement du chargement XML
 
 		laFenetre.setVisible(true);
 		
 		// TESTS
+		/*
 		me.initialiseGraphComplet(5);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();
 				
@@ -121,7 +149,7 @@ public class SingletonProgps {
 			// Error
 			e.printStackTrace();
 		}
-		
+		*/
 		
 	}
 	
@@ -144,9 +172,54 @@ public class SingletonProgps {
 			sesVilles.add(ville);
 			return true;
 		}else throw new Exception("City already know " + ville.getNomVille());
-	  }
-	  
-	  public boolean ajouterRoute(Route r) throws Exception {
+	}
+	/*
+	 * Modifs d'Olivier pour prendre en compte JGraphT
+	 */
+	public boolean ajouterVille(String name, 
+			boolean dispo, 
+			int typeVille, 
+			boolean touristique){
+		try {
+			Ville newVille = this.graph.ajouterUneVille(name);
+			newVille.setDispoVille(dispo);
+			newVille.setTypeVille(typeVille);
+			newVille.setTouristique(touristique);
+		} catch (ExceptionGraph e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean ajouterTroncon(String v1, 
+			String v2, 
+			Route route,
+			int vitesse,
+			int longueur,
+			List<Etat> etats){
+		Ville ville1;
+		Ville ville2;
+		try {
+			ville1 = this.getVille(v1);
+			ville2 = this.getVille(v2);
+		} catch (Exception e) {
+			return false;
+		}
+		
+		Troncon newTroncon=this.graph.ajouterUnTroncon(ville1, ville2);
+		newTroncon.setSaRoute(route);
+		newTroncon.setSesVilles(ville1, ville2);
+		newTroncon.setVitesse(vitesse);
+		newTroncon.setLongueur(longueur);
+		newTroncon.setSesEtats(etats);
+		return true;
+	}
+	/*
+	 * Fin modifs d'Olivier
+	 */
+	public boolean ajouterRoute(Route r) throws Exception {
 		if(!routeConnue(r)){
 			for (Iterator i = sesRoutes.iterator(); i.hasNext();) {
 				Route routeAccontrole = (Route) i.next();
@@ -157,7 +230,7 @@ public class SingletonProgps {
 			sesRoutes.add(r);
 			return true;
 		}else throw new Exception("Road already know " + r.getNomRoute());
-	  }
+	}
 
 	private boolean routeConnue(Route r) {
 		if(sesRoutes.contains(r)){
@@ -196,11 +269,12 @@ public class SingletonProgps {
 		lastIdRoute++;
 		return lastIdRoute;
 	}
-	public static Ville getVille(String nomVille) throws Exception {
-		for(int i = 0; i < sesVilles.size(); i++){
-			if(sesVilles.get(i).getNomVille().equalsIgnoreCase(nomVille))
-				return sesVilles.get(i);
-		}throw new Exception("Ville " + nomVille + " is unknow by the système");
+	public Ville getVille(String nomVille) throws Exception {
+//		for(int i = 0; i < sesVilles.size(); i++){
+//			if(sesVilles.get(i).getNomVille().equalsIgnoreCase(nomVille))
+//				return sesVilles.get(i);
+//		}throw new Exception("Ville " + nomVille + " is unknow by the système");
+		return this.graph.getVille(nomVille);
 	}
 
 	public Admin getSonAdmin() {

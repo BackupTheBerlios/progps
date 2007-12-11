@@ -17,6 +17,13 @@ public class Route {
 	private int typeRoute;
 	private List<Troncon> sesTroncons = new ArrayList<Troncon>();
 
+	public Route(int idRoute, String nomRoute, int typeRoute) {
+		super();
+		this.idRoute = idRoute;
+		this.nomRoute = nomRoute;
+		this.typeRoute = typeRoute;
+	}
+	
 	/** Constructeur de route
 	 * Ne vérifie pas si une route a déjà le même nom !
 	 * 
@@ -28,7 +35,15 @@ public class Route {
 		this.nomRoute = nomRoute;
 		this.typeRoute = typeRoute;
 	}
-	
+
+	public boolean ajouterTroncon(String ville1, String ville2, int vitesse, boolean touristique, boolean radar, int prix, int longueur) {
+		throw new UnsupportedOperationException();
+	}
+
+//	public void ajouterTroncon(String nomVille, String nomVille2, int intVitesse, int intLongueur, LinkedList<Etat> etats) throws Exception {
+//		sesTroncons.add(new Troncon(intVitesse,intLongueur,true,this,SingletonProgps.getVille(nomVille),SingletonProgps.getVille(nomVille2),etats));
+//	}
+
 	public int getIdRoute() {
 		return idRoute;
 	}
@@ -36,31 +51,16 @@ public class Route {
 	public String getNomRoute() {
 		return nomRoute;
 	}
-
+	
 	public int getTypeRoute() {
 		return typeRoute;
 	}
 
-	public Route(int idRoute, String nomRoute, int typeRoute) {
-		super();
-		this.idRoute = idRoute;
-		this.nomRoute = nomRoute;
-		this.typeRoute = typeRoute;
-	}
-
-	public void ajouterTroncon(String nomVille, String nomVille2, int intVitesse, int intLongueur, LinkedList<Etat> etats) throws Exception {
-		sesTroncons.add(new Troncon(intVitesse,intLongueur,true,this,SingletonProgps.getVille(nomVille),SingletonProgps.getVille(nomVille2),etats));
-	}
-	
-	public boolean ajouterTroncon(String ville1, String ville2, int vitesse, boolean touristique, boolean radar, int prix, int longueur) {
+	public boolean modifierEtatTroncon(String ville1, String ville2, String route) {
 		throw new UnsupportedOperationException();
 	}
 
 	public boolean supprimerTroncon(boolean ville1, String ville2) {
-		throw new UnsupportedOperationException();
-	}
-
-	public boolean modifierEtatTroncon(String ville1, String ville2, String route) {
 		throw new UnsupportedOperationException();
 	}
 
