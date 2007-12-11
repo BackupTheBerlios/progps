@@ -80,7 +80,7 @@ public class FenetreChargement extends JWindow {
 	private JPanel getJPanel_logo() {
 		if (jPanel_logo == null) {
 			jLabel_logo = new JLabel();
-			jLabel_logo.setIcon(new ImageIcon("C://progps_images//logo.jpg"));
+			jLabel_logo.setIcon(new ImageIcon("images//logo.jpg"));
 			
 			jPanel_logo = new JPanel();
 			jPanel_logo.setLayout(new BorderLayout());
