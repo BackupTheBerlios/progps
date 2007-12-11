@@ -3,7 +3,11 @@ package noyau;
 public class Admin {
 	private String nomAdmin;
 	private String mdp;
-	SingletonProgps unnamed_SingletonProgps_;
+	SingletonProgps theProgps;
+	
+	public Admin(SingletonProgps leProGPS){
+		theProgps=leProGPS;
+	}
 
 	private boolean ajouterRoute(String nom, String typeRoute) {
 		throw new UnsupportedOperationException();

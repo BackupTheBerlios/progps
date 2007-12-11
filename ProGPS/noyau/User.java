@@ -8,7 +8,7 @@ import java.util.*;
 public class User {
 	private List<Ville> villeEtapes = new Vector<Ville>();
 	private Ville villeSuivante;
-	private SingletonProgps unnamed_SingletonProgps_;
+	private SingletonProgps theProgps;
 	private Ville villeD;
 	private Ville villeA;
 	private List<Ville> villesAEviter = new Vector<Ville>();
@@ -19,10 +19,9 @@ public class User {
 	private List<Ville> villesTraversees = new Vector<Ville>();
 	
 	
-	public User() {}
-	
-	
-	
+	public User(SingletonProgps leSingleton) {
+		theProgps=leSingleton;
+	}
 	
 	public boolean choisirItineraire(Itineraire iti) {
 		throw new UnsupportedOperationException();

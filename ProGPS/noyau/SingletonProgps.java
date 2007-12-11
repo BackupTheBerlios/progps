@@ -94,12 +94,12 @@ public class SingletonProgps {
 	public static void main(String[] args) throws ExceptionGraph {
 		SingletonProgps me = getInstance();
 
-		// TODO Etape 1 : Lancement de l'interface
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
+		laFenetre.setVisible(true);
 		// TODO Etape 2 : Lancement du chargement XML
-		// TODO Etape 3 : Ouverture de l'interface sur la fenêtre principale
-		//laFenetre.setVisible(true);
 		
+		
+		// TESTS
 		me.initialiseGraphComplet(5);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();
 				
@@ -121,7 +121,7 @@ public class SingletonProgps {
 	/*
 	 * Début modifications pour le parseur
 	 */
-	public boolean ajouterVille(noyau.Ville ville) throws Exception {
+	public boolean ajouterVille(Ville ville) throws Exception {
 		if(!villeConnu(ville)){
 			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
 				Ville villeAccontrole = (Ville) i.next();
