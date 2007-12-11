@@ -11,6 +11,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
+import exceptions.ExceptionRecherche;
 
 public class Troncon 
 	extends DefaultWeightedEdge
@@ -102,7 +103,48 @@ public class Troncon
 		this.sesVilles = lesVilles;
 	}
 	
-	public void addEtat(Etat e) {
+	public void addEtat(Etat e) throws ExceptionRecherche {
+		Iterator<Etat> it = this.setEtats.iterator();
+		Etat et;
+		while (it.hasNext()) {
+			et=(Etat)it.next();
+			if (et.name().equals(e.name()))
+				throw new ExceptionRecherche("Ce tronçon est deja classifié comme "+e.name()+".");
+		}
 		this.setEtats.add(e);
 	}
+	
+	public boolean isPayant() {
+		Iterator<Etat> it = this.setEtats.iterator();
+		Etat et;
+		while (it.hasNext()) {
+			et=(Etat)it.next();
+			if (et.name().equals("Payant"))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isTouristique() {
+		Iterator<Etat> it = this.setEtats.iterator();
+		Etat et;
+		while (it.hasNext()) {
+			et=(Etat)it.next();
+			if (et.name().equals("Touristique"))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isRadar() {
+		Iterator<Etat> it = this.setEtats.iterator();
+		Etat et;
+		while (it.hasNext()) {
+			et=(Etat)it.next();
+			if (et.name().equals("Radar"))
+				return true;
+		}
+		return false;
+	}
+	
 }
