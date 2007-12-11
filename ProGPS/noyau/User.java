@@ -2,9 +2,6 @@ package noyau;
 
 import java.util.*;
 
-
-
-
 public class User {
 	private List<Ville> villeEtapes = new Vector<Ville>();
 	private Ville villeSuivante;

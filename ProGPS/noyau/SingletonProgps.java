@@ -1,6 +1,7 @@
 package noyau;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,9 +96,9 @@ public class SingletonProgps {
 		SingletonProgps me = getInstance();
 
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
-		laFenetre.setVisible(true);
 		// TODO Etape 2 : Lancement du chargement XML
-		
+
+		laFenetre.setVisible(true);
 		
 		// TESTS
 		me.initialiseGraphComplet(5);
@@ -117,6 +118,11 @@ public class SingletonProgps {
 		
 		
 	}
+	
+	public List<Ville> getVilles(){
+		return new ArrayList<Ville>(this.graph.vertexSet());
+	}
+	
 	
 	/*
 	 * Début modifications pour le parseur
