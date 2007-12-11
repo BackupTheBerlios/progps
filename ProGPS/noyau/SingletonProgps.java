@@ -101,7 +101,7 @@ public class SingletonProgps {
 		SingletonProgps me = getInstance();
 		String urlFichier;
 
-		if (args.length==0){ urlFichier = new String("parser/network.xml");}
+		if (args.length==0){ urlFichier = new String("C:\\network.xml");}
 		else{urlFichier=args[0];}
 		
 		// Etape 1 : Création du thread de parsing
@@ -121,9 +121,9 @@ public class SingletonProgps {
 			throw new Exception("La lecture du fichier XML a échoueé.");
 		// On ferme le thread
 		threadDeParsing.setStop(true);
+		chargement.dispose();
 		
 		// Etape 4 : destruction de la fenetre de chargement
-		chargement.dispose();
 		me.graph.seDecrire();
 		
 		
@@ -132,6 +132,7 @@ public class SingletonProgps {
 		// TODO Etape 2 : Lancement du chargement XML
 
 		laFenetre.setVisible(true);
+		laFenetre.dispose();
 		
 		// TESTS
 		/*
@@ -162,6 +163,7 @@ public class SingletonProgps {
 	 * Début modifications pour le parseur
 	 */
 	public boolean ajouterVille(Ville ville) throws Exception {
+		System.out.println("Add ville BAD");
 		if(!villeConnu(ville)){
 			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
 				Ville villeAccontrole = (Ville) i.next();
@@ -180,6 +182,7 @@ public class SingletonProgps {
 			boolean dispo, 
 			int typeVille, 
 			boolean touristique){
+		System.out.println("Add ville OK");
 		try {
 			Ville newVille = this.graph.ajouterUneVille(name);
 			newVille.setDispoVille(dispo);
@@ -199,6 +202,7 @@ public class SingletonProgps {
 			int vitesse,
 			int longueur,
 			List<Etat> etats){
+		System.out.println("Add Tron OK");
 		Ville ville1;
 		Ville ville2;
 		try {
@@ -220,6 +224,7 @@ public class SingletonProgps {
 	 * Fin modifs d'Olivier
 	 */
 	public boolean ajouterRoute(Route r) throws Exception {
+		System.out.println("Add Route OK");
 		if(!routeConnue(r)){
 			for (Iterator i = sesRoutes.iterator(); i.hasNext();) {
 				Route routeAccontrole = (Route) i.next();
