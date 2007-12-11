@@ -18,14 +18,41 @@ public class Itineraire {
 	private Troncon tronconCourant=null;
 	private List<Troncon> lesTroncons = new ArrayList<Troncon>();
 	
+
+
+	public void setVilleArrivee(Ville villeArrivee) {
+		this.villeArrivee = villeArrivee;
+	}
+
+	public void setVilleDepart(Ville villeDepart) {
+		this.villeDepart = villeDepart;
+	}
+
+	public Itineraire refraichirItineraire() {
+		throw new UnsupportedOperationException();
+	}
+
+	public void setTronconCourant(Troncon tronconCourant) {
+		this.tronconCourant = tronconCourant;
+	}
+
+
 	public void addUnTroncon(Troncon unTroncon) {
 		this.lesTroncons.add(unTroncon);
 		//TODO Modifier tous les compteurs !
 		longueurTotal+=unTroncon.getLongueur();
 	}
 
-	public int getDistanceTouristique() {
-		return this.distanceTouristique;
+	public void removeUnTroncon(Troncon unTroncon) {
+		this.lesTroncons.remove(unTroncon);
+		// TODO modifier tous les compteurs
+		longueurTotal-=unTroncon.getLongueur();
+	}
+
+	public Troncon[] toLesTronconsArray() {
+		Troncon[] lLesTroncons_Temp = new Troncon[this.lesTroncons.size()];
+		this.lesTroncons.toArray(lLesTroncons_Temp);
+		return lLesTroncons_Temp;
 	}
 
 	public int getLongueurTotal() {
@@ -40,66 +67,26 @@ public class Itineraire {
 		return this.prix;
 	}
 
-	public Troncon getTronconCourant() {
-		return this.tronconCourant;
+	public int getDistanceTouristique() {
+		return this.distanceTouristique;
 	}
 
-	public Ville getVilleArrivee() {
-		return villeArrivee;
-	}
-
-	public Ville getVilleDepart() {
-		return villeDepart;
-	}
-
-	public Ville getVilleSuivante(Ville derniereVilleTraversé) {
-		throw new UnsupportedOperationException();
-	}
-
-	public int getVitesseMax() {
-		return this.vitesseMax;
+	public void setVitesseMin(int vitesseMin) {
+		this.vitesseMin = vitesseMin;
 	}
 
 	public int getVitesseMin() {
 		return this.vitesseMin;
 	}
 
-	public Itineraire refraichirItineraire() {
-		throw new UnsupportedOperationException();
-	}
-
-	public void removeUnTroncon(Troncon unTroncon) {
-		this.lesTroncons.remove(unTroncon);
-		// TODO modifier tous les compteurs
-		longueurTotal-=unTroncon.getLongueur();
-	}
-
-	public void setTronconCourant(Troncon tronconCourant) {
-		this.tronconCourant = tronconCourant;
-	}
-
-	public void setVilleArrivee(Ville villeArrivee) {
-		this.villeArrivee = villeArrivee;
-	}
-
-	public void setVilleDepart(Ville villeDepart) {
-		this.villeDepart = villeDepart;
-	}
-
 	public void setVitesseMax(int vitesseMax) {
 		this.vitesseMax = vitesseMax;
 	}
+
+	public int getVitesseMax() {
+		return this.vitesseMax;
+	}
 	
-	public void setVitesseMin(int vitesseMin) {
-		this.vitesseMin = vitesseMin;
-	}
-
-	public Troncon[] toLesTronconsArray() {
-		Troncon[] lLesTroncons_Temp = new Troncon[this.lesTroncons.size()];
-		this.lesTroncons.toArray(lLesTroncons_Temp);
-		return lLesTroncons_Temp;
-	}
-
 	public String toString(){
 		// TODO à completer
 		String mess = "---- Description ----";
@@ -127,4 +114,28 @@ public class Itineraire {
 		}
 		return mess;
 	}
+	
+	public Ville getVilleDep() {
+		return this.villeDepart;
+	}
+	
+	public Ville getVilleArr() {
+		return this.villeArrivee;
+	}
+	
+	public List<Troncon> getLesTroncons() {
+		return this.lesTroncons;
+	}
+	
+	public Troncon getTronconCourant() {
+		return this.tronconCourant;
+	}
+	
+	public int getLongueurTotale() {
+		return this.longueurTotal;
+	}
+	
+
+	
+	
 }
