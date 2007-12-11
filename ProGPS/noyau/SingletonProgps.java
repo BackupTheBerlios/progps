@@ -8,6 +8,8 @@ import java.util.*;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.ListeDeKChemins;
 
+import progps_ihm.FenetrePrincipale;
+
 import threads.ThreadOrdonancementVillesEtapes;
 
 import exceptions.ExceptionRecherche;
@@ -76,15 +78,13 @@ public class SingletonProgps {
 		SingletonProgps me = new SingletonProgps();
 
 		// TODO Etape 1 : Lancement de l'interface
+		new FenetrePrincipale();
 		// TODO Etape 2 : Lancement du chargement XML
 		// TODO Etape 3 : Ouverture de l'interface sur la fenêtre principale
 		
 		me.initialiseGraphComplet(5);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();
-		
-		ThreadOrdonancementVillesEtapes<Ville, Troncon> leThread = new ThreadOrdonancementVillesEtapes<Ville, Troncon>(me.graph, (Ville)deuxVilles.get(0), (Ville)deuxVilles.get(1), new HashSet<Ville>(deuxVilles));
-		leThread.start();
-		
+				
 		try {
 			List<Itineraire> lesIti = me.graph.trouver3Chemins((Ville)deuxVilles.get(0), (Ville)deuxVilles.get(1), null, null);
 			for (Iterator iter = lesIti.iterator(); iter.hasNext();) {
@@ -97,12 +97,6 @@ public class SingletonProgps {
 			e.printStackTrace();
 		}
 		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 	}
 
