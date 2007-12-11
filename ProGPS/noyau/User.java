@@ -112,25 +112,15 @@ public class User {
 	//prend un tableau déjà trié de préférences et les ajoute à celles de l'utilisateur
 	//à clément de renvoyer un tableau deja trié avec l'interface
 	public void setSesPreferences(Preference[] sesPreferences) {
-		if (sesPreferences.length>Preference.getNbPreferences()) {
-			// todo : raise exception
-		}
-		else {
 			this.sesPreferences.clear();
 			for (int i=0;i<sesPreferences.length;i++)
 				this.sesPreferences.add(sesPreferences[i]);	
-		}
 	}
 	
 	public void setSesPreferencesCourantes(Preference[] sesPreferences) {
-		if (sesPreferences.length>Preference.getNbPreferences()) {
-			// todo : raise exception
-		}
-		else {
 			this.sesPreferencesCourantes.clear();
 			for (int i=0;i<sesPreferences.length;i++)
 				this.sesPreferencesCourantes.add(sesPreferences[i]);	
-		}
 	}
 
 
