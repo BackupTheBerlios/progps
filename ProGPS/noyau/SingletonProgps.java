@@ -60,10 +60,6 @@ public class SingletonProgps {
 //				Test pour vérifier qu'on essaie pas d'ajouter une route qui parte
 //				et arrive à la même ville
 				if(!uneVille.equals(nouvelleVille)){
-					// Exception
-					graph.seDecrire();
-					graph.addEdge(uneVille, nouvelleVille);
-					//
 					Troncon nouveauTr = graph.ajouterUnTroncon(uneVille, nouvelleVille);
 //					On attribue la route au tronçon
 					nouveauTr.setSaRoute(laRoute);
