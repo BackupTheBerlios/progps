@@ -15,7 +15,7 @@ import org.xml.sax.InputSource;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import exceptions.ExceptionParser;
 
-public class XmlParser {
+public class XmlParser extends Thread{
 	private SingletonProgps myProgps;
 
 	private String filename = null;
@@ -25,7 +25,8 @@ public class XmlParser {
 		this.filename = filename;
 	}
 
-	public void doMain() throws ExceptionParser,Exception {
+	public void run() {
+		try {
 		String nomVille;
 		String nomVille2;
 		String vitesse;
@@ -177,5 +178,9 @@ public class XmlParser {
 			}
 		} else
 			throw new ExceptionParser("Fichier XML indisponible");
+		}
+		catch (Exception e) {
+			return;
+		}
 	}
 }
