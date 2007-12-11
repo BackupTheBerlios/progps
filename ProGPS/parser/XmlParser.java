@@ -13,18 +13,19 @@ import org.w3c.dom.traversal.NodeIterator;
 import org.xml.sax.InputSource;
 
 import com.sun.org.apache.xpath.internal.XPathAPI;
+import exceptions.ExceptionParser;
 
 public class XmlParser {
-	private SingletonProgps progpsAImplenter;
+	private SingletonProgps myProgps;
 
 	private String filename = null;
 
-	public XmlParser(SingletonProgps progpsAImplenter, String filename) {
-		this.progpsAImplenter = progpsAImplenter;
+	public XmlParser(SingletonProgps myProgps, String filename) {
+		this.myProgps = myProgps;
 		this.filename = filename;
 	}
 
-	public void doMain() throws Exception {
+	public void doMain() throws ExceptionParser,Exception {
 		String nomVille;
 		String nomVille2;
 		String vitesse;
@@ -45,7 +46,7 @@ public class XmlParser {
 		Route r;
 
 		if ((filename != null) && (filename.length() > 0)) {
-			System.out.println("Loading classes, parsing " + filename);
+			System.out.println("Chargement des classes, lecture du fichier " + filename+"...");
 			InputSource in = new InputSource(new FileInputStream(filename));
 			DocumentBuilderFactory dfactory = DocumentBuilderFactory
 					.newInstance();
@@ -54,7 +55,7 @@ public class XmlParser {
 
 			nl = XPathAPI.selectNodeIterator(doc, "/reseau/ville");
 
-			progpsAImplenter = SingletonProgps.getInstance();
+			myProgps = SingletonProgps.getInstance();
 			while ((n = nl.nextNode()) != null) {
 				nomVille = XPathAPI.selectNodeIterator(n, "nom").nextNode()
 						.getTextContent();
@@ -68,8 +69,8 @@ public class XmlParser {
 				} else if (touristique.equalsIgnoreCase("non")) {
 					boolT = false;
 				} else
-					throw new Exception(
-							"XML Error : Unknow city tourism state for "
+					throw new ExceptionParser(
+							"Etat inconnu pour "
 									+ nomVille);
 
 				if (type.equalsIgnoreCase("petite")) {
@@ -79,10 +80,10 @@ public class XmlParser {
 				} else if (type.equalsIgnoreCase("grande")) {
 					intT = 3;
 				} else
-					throw new Exception("XML Error : Unknow city type for "
-							+ nomVille);
+					throw new ExceptionParser("Type de ville inconnu pour "
+							+ nomVille+".");
 
-				progpsAImplenter.ajouterVille(new Ville(progpsAImplenter
+				myProgps.ajouterVille(new Ville(myProgps
 						.getNewIdVille(), nomVille, true, intT, boolT));
 			}
 
@@ -101,10 +102,10 @@ public class XmlParser {
 				} else if (type.equalsIgnoreCase("departementale")) {
 					intT = Route.DEPARTEMENTALE;
 				} else
-					throw new Exception("Unknow road type for " + nomRoute);
+					throw new ExceptionParser("Type de route inconnu pour " + nomRoute+".");
 
-				r = new Route(progpsAImplenter.getNewIdRoute(), nomRoute, intT);
-				progpsAImplenter.ajouterRoute(r);
+				r = new Route(myProgps.getNewIdRoute(), nomRoute, intT);
+				myProgps.ajouterRoute(r);
 
 				nl2 = XPathAPI.selectNodeIterator(n, "troncon");
 
@@ -124,8 +125,8 @@ public class XmlParser {
 					longueur = XPathAPI.selectNodeIterator(n, "longueur")
 							.nextNode().getTextContent();
 
-					if (progpsAImplenter.existeVille(nomVille)) {
-						if (progpsAImplenter.existeVille(nomVille2)) {
+					if (myProgps.existeVille(nomVille)) {
+						if (myProgps.existeVille(nomVille2)) {
 							try {
 								intVitesse = Integer.parseInt(vitesse);
 								try {
@@ -137,48 +138,44 @@ public class XmlParser {
 											.equalsIgnoreCase("non")) {
 
 									} else
-										throw new Exception(
-												"XML Error : Unknow city tourism state for "
-														+ nomVille);
+										throw new ExceptionParser(
+												"Touristique : type inconnu pour "
+														+ nomVille+".");
 									if (radar.equalsIgnoreCase("oui")) {
 										etats.add(Etat.Radar);
 									} else if (radar.equalsIgnoreCase("non")) {
 									} else
-										throw new Exception(
-												"XML Error : Unknow city radar state for "
-														+ nomVille);
+										throw new ExceptionParser(
+												"Radar : type inconnu pour "
+														+ nomVille+".");
 									if (payant.equalsIgnoreCase("oui")) {
 										etats.add(Etat.Payant);
 									} else if (payant.equalsIgnoreCase("non")) {
 									} else
-										throw new Exception(
-												"XML Error : Unknow city tourism state for "
-														+ nomVille);
+										throw new ExceptionParser(
+												"Etat de ville inconnu pour "
+														+ nomVille+".");
 									r.ajouterTroncon(nomVille, nomVille2,
 											intVitesse, intLongueur, etats);
 								} catch (NumberFormatException e) {
-									throw new Exception(
-											"Non integer value enter as distance between"
-													+ nomVille2 + " : "
-													+ nomVille);
+									throw new ExceptionParser(
+											"La distance entre "+ nomVille2 + " et "+nomVille+" n'est pas un nombre entier.");
+
 								}
 							} catch (NumberFormatException e) {
-								throw new Exception(
-										"Non integer value enter as speed limit "
-												+ nomVille2 + " : " + nomVille);
+								throw new ExceptionParser(
+										"La vitesse limite entre "+ nomVille2 + " et "+nomVille+" n'est pas un nombre entier.");
 							}
 
 						} else
-							throw new Exception(
-									"Try to create a section with a non existant city "
-											+ nomVille2 + " : " + nomVille);
+							throw new ExceptionParser(
+									"Impossible de créer un tronçon entre "+ nomVille2 + " et "+nomVille+" : une des deux villes n'existe pas.");
 					} else
-						throw new Exception(
-								"Try to create a section with a non existant city "
-										+ nomVille + " : " + nomVille2);
+						throw new ExceptionParser(
+								"Impossible de créer un tronçon entre "+ nomVille2 + " et "+nomVille+" : une des deux villes n'existe pas.");
 				}
 			}
 		} else
-			throw new Exception("XML unvalable");
+			throw new ExceptionParser("Fichier XML indisponible");
 	}
 }
