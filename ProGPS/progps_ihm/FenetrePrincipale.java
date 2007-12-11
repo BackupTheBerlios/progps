@@ -1,5 +1,7 @@
 package progps_ihm;
 
+import noyau.*;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -18,13 +20,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
-import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.JPasswordField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -45,7 +42,13 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
-	FenetrePreferences fenPrefs = null;
+	private FenetrePreferences fenPrefs = null;
+	
+	//private SingletonProgps progps = null;
+	
+	//private Admin admin = null;
+	
+	//private User utilisateur = null;
 	
 	private javax.swing.JPanel jFrameContentPane = null;
 
@@ -1118,6 +1121,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jComboBox_villeDepart.setPreferredSize(new Dimension(200,20));
 			jComboBox_villeDepart.setBackground(Color.WHITE);
 			jComboBox_villeDepart.setForeground(Color.BLUE);
+			jComboBox_villeDepart.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					System.out.println("itemStateChanged()"); // TODO Auto-generated Event stub itemStateChanged()
+				}
+			});
 		}
 		return jComboBox_villeDepart;
 	}
@@ -1135,6 +1143,16 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jComboBox_villeArrivee.setPreferredSize(new Dimension(200,20));
 			jComboBox_villeArrivee.setBackground(Color.WHITE);
 			jComboBox_villeArrivee.setForeground(Color.BLUE);
+			jComboBox_villeArrivee.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
+			jComboBox_villeArrivee.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					System.out.println("itemStateChanged()"); // TODO Auto-generated Event stub itemStateChanged()
+				}
+			});
 		}
 		return jComboBox_villeArrivee;
 	}
@@ -1233,6 +1251,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_versEtapes == null) {
 			jButton_versEtapes = new JButton();
 			jButton_versEtapes.setText("<<");
+			jButton_versEtapes.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
 		}
 		return jButton_versEtapes;
 	}
@@ -1246,6 +1269,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_enleverEtape == null) {
 			jButton_enleverEtape = new JButton();
 			jButton_enleverEtape.setText(">>");
+			jButton_enleverEtape.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
 		}
 		return jButton_enleverEtape;
 	}
@@ -1286,6 +1314,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jButton_versEviter == null) {
 			jButton_versEviter = new JButton();
 			jButton_versEviter.setText(">>");
+			jButton_versEviter.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+				}
+			});
 		}
 		return jButton_versEviter;
 	}
@@ -1514,6 +1547,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jComboBox_limitations == null) {
 			java.util.Vector<String> limitations = new Vector<String>();
 			limitations.add("50 km/h");
+			limitations.add("70 km/h");
 			limitations.add("90 km/h");
 			limitations.add("110 km/h");
 			limitations.add("130 km/h");

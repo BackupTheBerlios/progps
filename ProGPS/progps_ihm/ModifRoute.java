@@ -21,8 +21,10 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 
+import noyau.Ville;
 
-public class ModifVille extends JWindow {
+
+public class ModifRoute extends JWindow {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -40,37 +42,25 @@ public class ModifVille extends JWindow {
 
 	private JPanel jPanel_center = null;
 
-	private JLabel jLabel_nomVille = null;
+	private JLabel jLabel_nomRoute = null;
 
-	private JTextField jTextField_nomVille = null;
+	private JTextField jTextField_nomRoute = null;
 
-	private JLabel jLabel_touristique = null;
-	
-	private ButtonGroup radioGroup1 = new ButtonGroup();
+	private JLabel jLabel_typeRoute = null;
 
-	private JRadioButton jRadioButton_yes = null;
-
-	private JRadioButton jRadioButton_no = null;
-
-	private JLabel jLabel_yes = null;
-
-	private JLabel jLabel_no = null;
-
-	private JLabel jLabel_typeVille = null;
-
-	private JComboBox jComboBox_typeVille = null;
+	private JComboBox jComboBox_typeRoute = null;
 
 	/**
 	 * @param owner
 	 */
-	public ModifVille(Frame owner, JButton but) {
+	public ModifRoute(Frame owner, JButton but) {
 		super(owner);
 		ownerButton = but;
 		initialize();
 	}
 	
-	public void remplirChamps(Ville v) {
-		//TODO
+	public void remplirChamps(Route r) {
+		
 	}
 
 	/**
@@ -79,7 +69,7 @@ public class ModifVille extends JWindow {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(270, 148);
+		this.setSize(270, 130);
 		this.setContentPane(getJContentPane());
 	}
 
@@ -108,7 +98,7 @@ public class ModifVille extends JWindow {
 	private JTextField getJTextField_north() {
 		if (jTextField_north == null) {
 			jTextField_north = new JTextField();
-			jTextField_north.setText("Modification d'une ville dans la base");
+			jTextField_north.setText("Modification d'une route dans la base");
 			jTextField_north.setFont(new Font("Arial",Font.BOLD,12));
 			jTextField_north.setOpaque(false);
 			jTextField_north.setHorizontalAlignment(JTextField.CENTER);
@@ -165,6 +155,7 @@ public class ModifVille extends JWindow {
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// TODO
+					
 					ownerButton.setEnabled(true);
 					dispose();
 				}
@@ -181,94 +172,53 @@ public class ModifVille extends JWindow {
 	 */
 	private JPanel getJPanel_center() {
 		if (jPanel_center == null) {
-			jLabel_typeVille = new JLabel();
-			jLabel_typeVille.setText("Type de la ville : ");
-			jLabel_typeVille.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_no = new JLabel();
-			jLabel_no.setText("Non");
-			jLabel_no.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_yes = new JLabel();
-			jLabel_yes.setText("Oui");
-			jLabel_yes.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_touristique = new JLabel();
-			jLabel_touristique.setText("Ville touristique : ");
-			jLabel_touristique.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_nomVille = new JLabel();
-			jLabel_nomVille.setText("Nom de la ville : ");
-			jLabel_nomVille.setFont(new Font("Arial",Font.PLAIN,12));
+			jLabel_typeRoute = new JLabel();
+			jLabel_typeRoute.setText("Type de la route : ");
+			jLabel_typeRoute.setFont(new Font("Arial",Font.PLAIN,12));
+			jLabel_nomRoute = new JLabel();
+			jLabel_nomRoute.setText("Nom de la route : ");
+			jLabel_nomRoute.setFont(new Font("Arial",Font.PLAIN,12));
 			jPanel_center = new JPanel();
 			jPanel_center.setLayout(new FlowLayout());
-			jPanel_center.add(jLabel_nomVille, null);
-			jPanel_center.add(getJTextField_nomVille(), null);
-			jPanel_center.add(jLabel_typeVille, null);
-			jPanel_center.add(getJComboBox_typeVille(), null);
-			jPanel_center.add(jLabel_touristique, null);
-			jPanel_center.add(getJRadioButton_yes(), null);
-			jPanel_center.add(jLabel_yes, null);
-			jPanel_center.add(getJRadioButton_no(), null);
-			jPanel_center.add(jLabel_no, null);
-			
-			radioGroup1.add(jRadioButton_yes);
-			radioGroup1.add(jRadioButton_no);
-			
+			jPanel_center.add(jLabel_nomRoute, null);
+			jPanel_center.add(getJTextField_nomRoute(), null);
+			jPanel_center.add(jLabel_typeRoute, null);
+			jPanel_center.add(getJComboBox_typeRoute(), null);
 			
 		}
 		return jPanel_center;
 	}
 
 	/**
-	 * This method initializes jTextField_nomVille	
+	 * This method initializes jTextField_nomRoute	
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getJTextField_nomVille() {
-		if (jTextField_nomVille == null) {
-			jTextField_nomVille = new JTextField();
-			jTextField_nomVille.setPreferredSize(new Dimension(150,18));
-			jTextField_nomVille.setText("");
+	private JTextField getJTextField_nomRoute() {
+		if (jTextField_nomRoute == null) {
+			jTextField_nomRoute = new JTextField();
+			jTextField_nomRoute.setPreferredSize(new Dimension(150,18));
+			jTextField_nomRoute.setText("");
 		}
-		return jTextField_nomVille;
+		return jTextField_nomRoute;
 	}
 
 	/**
-	 * This method initializes jRadioButton_yes	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getJRadioButton_yes() {
-		if (jRadioButton_yes == null) {
-			jRadioButton_yes = new JRadioButton();
-		}
-		return jRadioButton_yes;
-	}
-
-	/**
-	 * This method initializes jRadioButton_no	
-	 * 	
-	 * @return javax.swing.JRadioButton	
-	 */
-	private JRadioButton getJRadioButton_no() {
-		if (jRadioButton_no == null) {
-			jRadioButton_no = new JRadioButton();
-		}
-		return jRadioButton_no;
-	}
-
-	/**
-	 * This method initializes jComboBox_typeVille	
+	 * This method initializes jComboBox_typeRoute	
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private JComboBox getJComboBox_typeVille() {
-		if (jComboBox_typeVille == null) {
-			jComboBox_typeVille = new JComboBox();
-			jComboBox_typeVille.setBackground(Color.WHITE);
-			jComboBox_typeVille.setPreferredSize(new Dimension(150,20));
-			jComboBox_typeVille.addItem("Petite");
-			jComboBox_typeVille.addItem("Moyenne");
-			jComboBox_typeVille.addItem("Grande");
+	private JComboBox getJComboBox_typeRoute() {
+		if (jComboBox_typeRoute == null) {
+			jComboBox_typeRoute = new JComboBox();
+			jComboBox_typeRoute.setBackground(Color.WHITE);
+			jComboBox_typeRoute.setPreferredSize(new Dimension(150,20));
+			jComboBox_typeRoute.addItem("Départementale");
+			jComboBox_typeRoute.addItem("Nationale");
+			jComboBox_typeRoute.addItem("Autoroute");
+			jComboBox_typeRoute.addItem("Autre");
 		}
-		return jComboBox_typeVille;
+		return jComboBox_typeRoute;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

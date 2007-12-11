@@ -233,7 +233,6 @@ public class AjoutVille extends JWindow {
 	private JRadioButton getJRadioButton_yes() {
 		if (jRadioButton_yes == null) {
 			jRadioButton_yes = new JRadioButton();
-			jRadioButton_yes.setSelected(true);
 		}
 		return jRadioButton_yes;
 	}
@@ -259,7 +258,7 @@ public class AjoutVille extends JWindow {
 		if (jComboBox_typeVille == null) {
 			jComboBox_typeVille = new JComboBox();
 			jComboBox_typeVille.setBackground(Color.WHITE);
-			jComboBox_typeVille.setPreferredSize(new Dimension(100,20));
+			jComboBox_typeVille.setPreferredSize(new Dimension(150,20));
 			jComboBox_typeVille.addItem("Petite");
 			jComboBox_typeVille.addItem("Moyenne");
 			jComboBox_typeVille.addItem("Grande");

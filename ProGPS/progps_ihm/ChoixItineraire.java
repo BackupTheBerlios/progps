@@ -28,6 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 
+import noyau.*;
+
 public class ChoixItineraire extends JPanel {
 
 	private JPanel jPanel_Gauche;
@@ -142,6 +144,10 @@ public class ChoixItineraire extends JPanel {
         StyleConstants.setForeground(s, Color.RED);
 	}
 
+	public void remplirTree(Itineraire iti) {
+		
+	}
+	
 	private void initComponents() {
 		jPanel_Droite = new JPanel();
 		jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
@@ -236,7 +242,7 @@ public class ChoixItineraire extends JPanel {
 	}
 	
 	public void initArbres() {
-//		Construction du noeud racine.
+		// Construction du noeud racine.
 		DefaultMutableTreeNode myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
 
 //		Construction des différents noeuds de l'arbre.
@@ -341,7 +347,7 @@ public class ChoixItineraire extends JPanel {
 		DefaultTreeCellRenderer myRenderer = new DefaultTreeCellRenderer();
 
 //		Changement de l'icône pour les feuilles de l'arbre.
-		myRenderer.setLeafIcon(new ImageIcon("C://progps_images//pas.png"));
+		myRenderer.setLeafIcon(new ImageIcon("C://progps_images//route_icone.png"));
 //		Changement de l'icône pour les noeuds fermés.
 		myRenderer.setClosedIcon(new ImageIcon("C://progps_images//route_icone.png"));
 //		Changement de l'icône pour les noeuds ouverts.

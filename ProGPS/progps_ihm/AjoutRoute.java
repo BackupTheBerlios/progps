@@ -36,13 +36,13 @@ public class AjoutRoute extends JWindow {
 
 	private JPanel jPanel_center = null;
 
-	private JLabel jLabel_nomVille = null;
+	private JLabel jLabel_nomRoute = null;
 
-	private JTextField jTextField_nomVille = null;
+	private JTextField jTextField_nomRoute = null;
 
-	private JLabel jLabel_typeVille = null;
+	private JLabel jLabel_typeRoute = null;
 
-	private JComboBox jComboBox_typeVille = null;
+	private JComboBox jComboBox_typeRoute = null;
 
 	/**
 	 * @param owner
@@ -163,51 +163,51 @@ public class AjoutRoute extends JWindow {
 	 */
 	private JPanel getJPanel_center() {
 		if (jPanel_center == null) {
-			jLabel_typeVille = new JLabel();
-			jLabel_typeVille.setFont(new Font("Arial",Font.PLAIN,12));
-			jLabel_typeVille.setText("Type de la route : ");
-			jLabel_nomVille = new JLabel();
-			jLabel_nomVille.setText("Nom de la route : ");
-			jLabel_nomVille.setFont(new Font("Arial",Font.PLAIN,12));
+			jLabel_typeRoute = new JLabel();
+			jLabel_typeRoute.setFont(new Font("Arial",Font.PLAIN,12));
+			jLabel_typeRoute.setText("Type de la route : ");
+			jLabel_nomRoute = new JLabel();
+			jLabel_nomRoute.setText("Nom de la route : ");
+			jLabel_nomRoute.setFont(new Font("Arial",Font.PLAIN,12));
 			jPanel_center = new JPanel();
 			jPanel_center.setLayout(new FlowLayout());
-			jPanel_center.add(jLabel_nomVille, null);
-			jPanel_center.add(getJTextField_nomVille(), null);
-			jPanel_center.add(jLabel_typeVille, null);
-			jPanel_center.add(getJComboBox_typeVille(), null);
+			jPanel_center.add(jLabel_nomRoute, null);
+			jPanel_center.add(getJTextField_nomRoute(), null);
+			jPanel_center.add(jLabel_typeRoute, null);
+			jPanel_center.add(getJComboBox_typeRoute(), null);
 		}
 		return jPanel_center;
 	}
 
 	/**
-	 * This method initializes jTextField_nomVille	
+	 * This method initializes jTextField_nomRoute	
 	 * 	
 	 * @return javax.swing.JTextField	
 	 */
-	private JTextField getJTextField_nomVille() {
-		if (jTextField_nomVille == null) {
-			jTextField_nomVille = new JTextField();
-			jTextField_nomVille.setPreferredSize(new Dimension(150,18));
+	private JTextField getJTextField_nomRoute() {
+		if (jTextField_nomRoute == null) {
+			jTextField_nomRoute = new JTextField();
+			jTextField_nomRoute.setPreferredSize(new Dimension(150,18));
 		}
-		return jTextField_nomVille;
+		return jTextField_nomRoute;
 	}
 
 	/**
-	 * This method initializes jComboBox_typeVille	
+	 * This method initializes jComboBox_typeRoute	
 	 * 	
 	 * @return javax.swing.JComboBox	
 	 */
-	private JComboBox getJComboBox_typeVille() {
-		if (jComboBox_typeVille == null) {
-			jComboBox_typeVille = new JComboBox();
-			jComboBox_typeVille.setBackground(Color.WHITE);
-			jComboBox_typeVille.setPreferredSize(new Dimension(150,20));
-			jComboBox_typeVille.addItem("Départementale");
-			jComboBox_typeVille.addItem("Nationale");
-			jComboBox_typeVille.addItem("Autoroute");
-			jComboBox_typeVille.addItem("Autre");
+	private JComboBox getJComboBox_typeRoute() {
+		if (jComboBox_typeRoute == null) {
+			jComboBox_typeRoute = new JComboBox();
+			jComboBox_typeRoute.setBackground(Color.WHITE);
+			jComboBox_typeRoute.setPreferredSize(new Dimension(150,20));
+			jComboBox_typeRoute.addItem("Départementale");
+			jComboBox_typeRoute.addItem("Nationale");
+			jComboBox_typeRoute.addItem("Autoroute");
+			jComboBox_typeRoute.addItem("Autre");
 		}
-		return jComboBox_typeVille;
+		return jComboBox_typeRoute;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

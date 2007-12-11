@@ -1,5 +1,7 @@
 package progps_ihm;
 
+import noyau.*;
+
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -86,6 +88,14 @@ public class AdminPanel extends JPanel {
 	private JPanel jPanel_detailsTroncon = null;
 	private JScrollPane jScrollPane_detailsTroncon = null;
 	private JTextPane jTextPane_detailsTroncon = null;
+	private JPanel jPanel_detailsRoute = null;
+	private JLabel jLabel_empty13 = null;
+	private JScrollPane jScrollPane_detailsRoute = null;
+	private JTextPane jTextPane_detailsRoute = null;
+	private JPanel jPanel_detailsVille = null;
+	private JScrollPane jScrollPane_detailsVille = null;
+	private JTextPane jTextPane_detailsVille = null;
+	private JLabel jLabel_empty14 = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -121,16 +131,49 @@ public class AdminPanel extends JPanel {
 		jButton_adminAddVille.setEnabled(false);
 	}
 	
+	private void nouvelleRoute() {
+		AjoutRoute ajV = new AjoutRoute((Frame)(this.getTopLevelAncestor()),jButton_adminAddRoute);
+		PointerInfo pointer = MouseInfo.getPointerInfo();
+		Point location = pointer.getLocation();
+		ajV.setLocation(location);
+		ajV.setVisible(true);
+		jButton_adminAddRoute.setEnabled(false);
+	}
+	
+	private void nouveauTroncon() {
+		AjoutTroncon ajT = new AjoutTroncon((Frame)(this.getTopLevelAncestor()),jButton_adminAddTroncon, (String)jComboBox_adminRoutesTroncons.getSelectedItem());
+		PointerInfo pointer = MouseInfo.getPointerInfo();
+		Point location = pointer.getLocation();
+		ajT.setLocation(location);
+		ajT.setVisible(true);
+		jButton_adminAddTroncon.setEnabled(false);
+	}
+	
 	private void modificationVille() {
 		ModifVille modV = new ModifVille((Frame)(this.getTopLevelAncestor()), jButton_adminModifVille);
 		PointerInfo pointer = MouseInfo.getPointerInfo();
 		Point location = pointer.getLocation();
-		//System.out.println((location.getX()+modV.getWidth()) + "     " + (this.getLocation().getX()+this.getWidth()));
-		//if ((location.getX()+modV.getWidth()) > (this.getLocation().getX()+this.getWidth()))
-			//location.setLocation((location.getX()-modV.getWidth()), location.getY());
 		modV.setLocation(location);
 		modV.setVisible(true);
 		jButton_adminModifVille.setEnabled(false);
+	}
+	
+	private void modificationRoute() {
+		ModifRoute modR = new ModifRoute((Frame)(this.getTopLevelAncestor()), jButton_adminModifRoute);
+		PointerInfo pointer = MouseInfo.getPointerInfo();
+		Point location = pointer.getLocation();
+		modR.setLocation(location);
+		modR.setVisible(true);
+		jButton_adminModifRoute.setEnabled(false);
+	}
+	
+	private void modificationTroncon() {
+		ModifTroncon modT = new ModifTroncon((Frame)(this.getTopLevelAncestor()), jButton_adminModifTroncon);
+		PointerInfo pointer = MouseInfo.getPointerInfo();
+		Point location = pointer.getLocation();
+		modT.setLocation(location);
+		modT.setVisible(true);
+		jButton_adminModifTroncon.setEnabled(false);
 	}
 
 	
@@ -310,6 +353,15 @@ public class AdminPanel extends JPanel {
 	 */
 	private JPanel getJPanel_adminVilles() {
 		if (jPanel_adminVilles == null) {
+			GridBagConstraints gridBagConstraints52 = new GridBagConstraints();
+			gridBagConstraints52.gridx = 1;
+			gridBagConstraints52.gridy = 3;
+			jLabel_empty14 = new JLabel();
+			jLabel_empty14.setPreferredSize(new Dimension(100, 10));
+			jLabel_empty14.setText(" ");
+			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+			gridBagConstraints51.gridx = 1;
+			gridBagConstraints51.gridy = 4;
 			GridBagConstraints gridBagConstraints28 = new GridBagConstraints();
 			gridBagConstraints28.gridx = 0;
 			gridBagConstraints28.gridy = 1;
@@ -330,7 +382,7 @@ public class AdminPanel extends JPanel {
 			gridBagConstraints24.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints24.gridy = 2;
 			gridBagConstraints24.weightx = 1.0;
-			gridBagConstraints24.gridheight = 2;
+			gridBagConstraints24.gridheight = 1;
 			gridBagConstraints24.gridx = 1;
 			GridBagConstraints gridBagConstraints23 = new GridBagConstraints();
 			gridBagConstraints23.gridx = 1;
@@ -343,6 +395,8 @@ public class AdminPanel extends JPanel {
 			jPanel_adminVilles.add(getJButton_adminIndispoVille(), gridBagConstraints26);
 			jPanel_adminVilles.add(jLabel_empty6, gridBagConstraints27);
 			jPanel_adminVilles.add(jLabel_empty7, gridBagConstraints28);
+			jPanel_adminVilles.add(getJPanel_detailsVille(), gridBagConstraints51);
+			jPanel_adminVilles.add(jLabel_empty14, gridBagConstraints52);
 		}
 		return jPanel_adminVilles;
 	}
@@ -454,6 +508,13 @@ public class AdminPanel extends JPanel {
 			villes.add("Orsay");
 			jComboBox_adminVilles = new JComboBox(villes);
 			jComboBox_adminVilles.setPreferredSize(new Dimension(200,10));
+			jComboBox_adminVilles.setBackground(Color.WHITE);
+			jComboBox_adminVilles.setForeground(Color.BLUE);
+			jComboBox_adminVilles.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					// TODO
+				}
+			});
 		}
 		return jComboBox_adminVilles;
 	}
@@ -490,7 +551,7 @@ public class AdminPanel extends JPanel {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
 							int rep = JOptionPane.showConfirmDialog(new Frame(), "Voulez-vous vraiment rendre la ville " + jComboBox_adminVilles.getSelectedItem() + " indisponible ?", "Confirmation", JOptionPane.YES_NO_OPTION);
 							if (rep == JOptionPane.YES_OPTION) {
-								
+								// TODO
 							}
 						}
 					});
@@ -505,31 +566,40 @@ public class AdminPanel extends JPanel {
 	 */
 	private JPanel getJPanel_adminRoutes() {
 		if (jPanel_adminRoutes == null) {
+			GridBagConstraints gridBagConstraints50 = new GridBagConstraints();
+			gridBagConstraints50.gridx = 1;
+			gridBagConstraints50.gridy = 4;
+			jLabel_empty13 = new JLabel();
+			jLabel_empty13.setPreferredSize(new Dimension(100, 10));
+			jLabel_empty13.setText(" ");
+			GridBagConstraints gridBagConstraints49 = new GridBagConstraints();
+			gridBagConstraints49.gridx = 1;
+			gridBagConstraints49.gridy = 5;
 			GridBagConstraints gridBagConstraints34 = new GridBagConstraints();
 			gridBagConstraints34.gridx = 0;
-			gridBagConstraints34.gridy = 1;
+			gridBagConstraints34.gridy = 2;
 			jLabel_empty9 = new JLabel();
 			jLabel_empty9.setText("                                  ");
 			GridBagConstraints gridBagConstraints33 = new GridBagConstraints();
 			gridBagConstraints33.gridx = 3;
-			gridBagConstraints33.gridy = 1;
+			gridBagConstraints33.gridy = 2;
 			jLabel_empty8 = new JLabel();
 			jLabel_empty8.setText("                                  ");
 			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
 			gridBagConstraints32.gridx = 2;
-			gridBagConstraints32.gridy = 2;
+			gridBagConstraints32.gridy = 3;
 			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
 			gridBagConstraints31.gridx = 2;
-			gridBagConstraints31.gridy = 1;
+			gridBagConstraints31.gridy = 2;
 			GridBagConstraints gridBagConstraints30 = new GridBagConstraints();
 			gridBagConstraints30.fill = GridBagConstraints.VERTICAL;
 			gridBagConstraints30.gridx = 1;
-			gridBagConstraints30.gridy = 2;
+			gridBagConstraints30.gridy = 3;
 			gridBagConstraints30.weightx = 1.0;
-			gridBagConstraints30.gridheight = 2;
+			gridBagConstraints30.gridheight = 1;
 			GridBagConstraints gridBagConstraints29 = new GridBagConstraints();
 			gridBagConstraints29.gridx = 1;
-			gridBagConstraints29.gridy = 0;
+			gridBagConstraints29.gridy = 1;
 			jPanel_adminRoutes = new JPanel();
 			jPanel_adminRoutes.setLayout(new GridBagLayout());
 			jPanel_adminRoutes.add(getJButton_adminAddRoute(), gridBagConstraints29);
@@ -538,6 +608,8 @@ public class AdminPanel extends JPanel {
 			jPanel_adminRoutes.add(getJButton_adminIndispoRoute(), gridBagConstraints32);
 			jPanel_adminRoutes.add(jLabel_empty8, gridBagConstraints33);
 			jPanel_adminRoutes.add(jLabel_empty9, gridBagConstraints34);
+			jPanel_adminRoutes.add(getJPanel_detailsRoute(), gridBagConstraints49);
+			jPanel_adminRoutes.add(jLabel_empty13, gridBagConstraints50);
 		}
 		return jPanel_adminRoutes;
 	}
@@ -551,6 +623,11 @@ public class AdminPanel extends JPanel {
 		if (jButton_adminAddRoute == null) {
 			jButton_adminAddRoute = new JButton();
 			jButton_adminAddRoute.setText("Ajouter une route");
+			jButton_adminAddRoute.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					nouvelleRoute();
+				}
+			});
 		}
 		return jButton_adminAddRoute;
 	}
@@ -567,6 +644,13 @@ public class AdminPanel extends JPanel {
 			routes.add("N118");
 			jComboBox_adminRoutes = new JComboBox(routes);
 			jComboBox_adminRoutes.setPreferredSize(new Dimension(200, 10));
+			jComboBox_adminRoutes.setBackground(Color.WHITE);
+			jComboBox_adminRoutes.setForeground(Color.BLUE);
+			jComboBox_adminRoutes.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					// TODO
+				}
+			});
 		}
 		return jComboBox_adminRoutes;
 	}
@@ -580,6 +664,11 @@ public class AdminPanel extends JPanel {
 		if (jButton_adminModifRoute == null) {
 			jButton_adminModifRoute = new JButton();
 			jButton_adminModifRoute.setText("Modifier cette route");
+			jButton_adminModifRoute.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					modificationRoute();
+				}
+			});
 		}
 		return jButton_adminModifRoute;
 	}
@@ -593,6 +682,15 @@ public class AdminPanel extends JPanel {
 		if (jButton_adminIndispoRoute == null) {
 			jButton_adminIndispoRoute = new JButton();
 			jButton_adminIndispoRoute.setText("Rendre cette route indisponible");
+			jButton_adminIndispoRoute
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							int rep = JOptionPane.showConfirmDialog(new Frame(), "Voulez-vous vraiment rendre la route " + jComboBox_adminRoutes.getSelectedItem() + " (et tous ses tronçons) indisponible ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+							if (rep == JOptionPane.YES_OPTION) {
+								// TODO
+							}
+						}
+					});
 		}
 		return jButton_adminIndispoRoute;
 	}
@@ -694,6 +792,11 @@ public class AdminPanel extends JPanel {
 		if (jButton_adminAddTroncon == null) {
 			jButton_adminAddTroncon = new JButton();
 			jButton_adminAddTroncon.setText("Ajouter un troncon");
+			jButton_adminAddTroncon.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					nouveauTroncon();
+				}
+			});
 		}
 		return jButton_adminAddTroncon;
 	}
@@ -706,10 +809,12 @@ public class AdminPanel extends JPanel {
 	private JComboBox getJComboBox_adminTroncons() {
 		if (jComboBox_adminTroncons == null) {
 			Vector<String> troncons = new Vector<String>();
-			troncons.add("N118 - Orsay <-> Les Ulis");
+			troncons.add("Orsay <-> Les Ulis");
 			troncons.add("Les Ulis <-> Courtaboeuf");
 			jComboBox_adminTroncons = new JComboBox(troncons);
-			//jComboBox_adminTroncons.setPreferredSize(new Dimension(200, 18));
+			jComboBox_adminTroncons.setPreferredSize(new Dimension(200, 20));
+			jComboBox_adminTroncons.setBackground(Color.WHITE);
+			jComboBox_adminTroncons.setForeground(Color.BLUE);
 			jComboBox_adminTroncons.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					//TODO
@@ -729,6 +834,12 @@ public class AdminPanel extends JPanel {
 		if (jButton_adminModifTroncon == null) {
 			jButton_adminModifTroncon = new JButton();
 			jButton_adminModifTroncon.setText("Modifier ce tronçon");
+			jButton_adminModifTroncon
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							modificationTroncon();
+						}
+					});
 		}
 		return jButton_adminModifTroncon;
 	}
@@ -742,6 +853,15 @@ public class AdminPanel extends JPanel {
 		if (jButton_adminIndispoTroncon == null) {
 			jButton_adminIndispoTroncon = new JButton();
 			jButton_adminIndispoTroncon.setText("Rendre ce tronçon indisponible");
+			jButton_adminIndispoTroncon
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							int rep = JOptionPane.showConfirmDialog(new Frame(), "Voulez-vous vraiment rendre le tronçon [" + jComboBox_adminTroncons.getSelectedItem() + "] de la route " + jComboBox_adminRoutesTroncons.getSelectedItem() + " indisponible ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+							if (rep == JOptionPane.YES_OPTION) {
+								// TODO
+							}
+						}
+					});
 		}
 		return jButton_adminIndispoTroncon;
 	}
@@ -757,6 +877,8 @@ public class AdminPanel extends JPanel {
 			routes.add("N118");
 			routes.add("A6");
 			jComboBox_adminRoutesTroncons = new JComboBox(routes);
+			jComboBox_adminRoutesTroncons.setBackground(Color.WHITE);
+			jComboBox_adminRoutesTroncons.setForeground(Color.BLUE);
 			jComboBox_adminRoutesTroncons.setPreferredSize(new Dimension(200, 20));
 			jComboBox_adminRoutesTroncons
 					.addItemListener(new java.awt.event.ItemListener() {
@@ -889,7 +1011,7 @@ public class AdminPanel extends JPanel {
 		if (jPanel_detailsTroncon == null) {
 			jPanel_detailsTroncon = new JPanel();
 			jPanel_detailsTroncon.setLayout(new FlowLayout());
-			jPanel_detailsTroncon.setPreferredSize(new Dimension(300,150));
+			jPanel_detailsTroncon.setPreferredSize(new Dimension(250,110));
 			jPanel_detailsTroncon.add(getJScrollPane_detailsTroncon(), null);
 		}
 		return jPanel_detailsTroncon;
@@ -918,9 +1040,95 @@ public class AdminPanel extends JPanel {
 		if (jTextPane_detailsTroncon == null) {
 			jTextPane_detailsTroncon = new JTextPane();
 			jTextPane_detailsTroncon.setEditable(false);
-			jTextPane_detailsTroncon.setBackground(this.getBackground());
+			jTextPane_detailsTroncon.setBackground(Color.WHITE);
 		}
 		return jTextPane_detailsTroncon;
+	}
+
+	/**
+	 * This method initializes jPanel_detailsRoute	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel_detailsRoute() {
+		if (jPanel_detailsRoute == null) {
+			jPanel_detailsRoute = new JPanel();
+			jPanel_detailsRoute.setLayout(new FlowLayout());
+			jPanel_detailsRoute.setPreferredSize(new Dimension(250,110));
+			jPanel_detailsRoute.add(getJScrollPane_detailsRoute(), null);
+		}
+		return jPanel_detailsRoute;
+	}
+
+	/**
+	 * This method initializes jScrollPane_detailsRoute	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane_detailsRoute() {
+		if (jScrollPane_detailsRoute == null) {
+			jScrollPane_detailsRoute = new JScrollPane();
+			jScrollPane_detailsRoute.setPreferredSize(new Dimension(250, 100));
+			jScrollPane_detailsRoute.setViewportView(getJTextPane_detailsRoute());
+		}
+		return jScrollPane_detailsRoute;
+	}
+
+	/**
+	 * This method initializes jTextPane_detailsRoute	
+	 * 	
+	 * @return javax.swing.JTextPane	
+	 */
+	private JTextPane getJTextPane_detailsRoute() {
+		if (jTextPane_detailsRoute == null) {
+			jTextPane_detailsRoute = new JTextPane();
+			jTextPane_detailsRoute.setBackground(Color.WHITE);
+			jTextPane_detailsRoute.setEditable(false);
+		}
+		return jTextPane_detailsRoute;
+	}
+
+	/**
+	 * This method initializes jPanel_detailsVille	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanel_detailsVille() {
+		if (jPanel_detailsVille == null) {
+			jPanel_detailsVille = new JPanel();
+			jPanel_detailsVille.setLayout(new FlowLayout());
+			jPanel_detailsVille.setPreferredSize(new Dimension(250, 110));
+			jPanel_detailsVille.add(getJScrollPane_detailsVille(), null);
+		}
+		return jPanel_detailsVille;
+	}
+
+	/**
+	 * This method initializes jScrollPane_detailsVille	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPane_detailsVille() {
+		if (jScrollPane_detailsVille == null) {
+			jScrollPane_detailsVille = new JScrollPane();
+			jScrollPane_detailsVille.setPreferredSize(new Dimension(250, 100));
+			jScrollPane_detailsVille.setViewportView(getJTextPane_detailsVille());
+		}
+		return jScrollPane_detailsVille;
+	}
+
+	/**
+	 * This method initializes jTextPane_detailsVille	
+	 * 	
+	 * @return javax.swing.JTextPane	
+	 */
+	private JTextPane getJTextPane_detailsVille() {
+		if (jTextPane_detailsVille == null) {
+			jTextPane_detailsVille = new JTextPane();
+			jTextPane_detailsVille.setBackground(Color.WHITE);
+			jTextPane_detailsVille.setEditable(false);
+		}
+		return jTextPane_detailsVille;
 	}
 
 

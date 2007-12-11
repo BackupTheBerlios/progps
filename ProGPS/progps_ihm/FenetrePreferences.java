@@ -55,10 +55,6 @@ public class FenetrePreferences extends JFrame {
 
 	private JSlider jSlider_opt6 = null;
 
-	private JLabel jLabel_opt7 = null;
-
-	private JSlider jSlider_opt7 = null;
-
 	private JCheckBox jCheckBox_opt1 = null;
 
 	private JCheckBox jCheckBox_opt2 = null;
@@ -70,8 +66,6 @@ public class FenetrePreferences extends JFrame {
 	private JCheckBox jCheckBox_opt5 = null;
 
 	private JCheckBox jCheckBox_opt6 = null;
-
-	private JCheckBox jCheckBox_opt7 = null;
 
 	/**
 	 * This is the default constructor
@@ -87,7 +81,7 @@ public class FenetrePreferences extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(400, 458);
+		this.setSize(400, 410);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Préférences");
 		this.setIconImage(this.getToolkit().getImage("C://progps_images//gps_small.png"));
@@ -124,21 +118,17 @@ public class FenetrePreferences extends JFrame {
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
 			gridBagConstraints.gridy = 0;*/
-			jLabel_opt7 = new JLabel();
-			jLabel_opt7.setPreferredSize(new Dimension(150, 30));
-			jLabel_opt7.setText("Itinéraire touristique : ");
-			jLabel_opt7.setHorizontalAlignment(JLabel.RIGHT);
 			jLabel_opt6 = new JLabel();
 			jLabel_opt6.setPreferredSize(new Dimension(150, 30));
-			jLabel_opt6.setText("Limites de vitesses : ");
+			jLabel_opt6.setText("Itinéraire touristique : ");
 			jLabel_opt6.setHorizontalAlignment(JLabel.RIGHT);
 			jLabel_opt5 = new JLabel();
 			jLabel_opt5.setPreferredSize(new Dimension(150, 30));
-			jLabel_opt5.setText("Routes payantes : ");
+			jLabel_opt5.setText("Limites de vitesses : ");
 			jLabel_opt5.setHorizontalAlignment(JLabel.RIGHT);
 			jLabel_opt4 = new JLabel();
 			jLabel_opt4.setPreferredSize(new Dimension(150, 30));
-			jLabel_opt4.setText("Type de route : ");
+			jLabel_opt4.setText("Routes payantes : ");
 			jLabel_opt4.setHorizontalAlignment(JLabel.RIGHT);
 			jLabel_opt3 = new JLabel();
 			jLabel_opt3.setPreferredSize(new Dimension(150, 30));
@@ -151,7 +141,7 @@ public class FenetrePreferences extends JFrame {
 			jTextPane_opt0 = new JTextPane();
 			jTextPane_opt0.setEditable(false);
 			jTextPane_opt0.setPreferredSize(new Dimension(350,40));
-			jTextPane_opt0.setText("Choisissez pour chaque préférence le taux de priorité que vous lui accordez (chaque priorité doit être unique):");
+			jTextPane_opt0.setText("Vous pouvez choisir pour chaque préférence le taux de priorité que vous lui accordez (chaque priorité doit être unique):");
 			jLabel_opt1 = new JLabel();
 			jLabel_opt1.setText("Villes à éviter : ");
 			jLabel_opt1.setHorizontalAlignment(JLabel.RIGHT);
@@ -177,9 +167,6 @@ public class FenetrePreferences extends JFrame {
 			jPanel_preferences.add(jLabel_opt6, null);
 			jPanel_preferences.add(getJSlider_opt6(), null);
 			jPanel_preferences.add(getJCheckBox_opt6(), null);
-			jPanel_preferences.add(jLabel_opt7, null);
-			jPanel_preferences.add(getJSlider_opt7(), null);
-			jPanel_preferences.add(getJCheckBox_opt7(), null);
 			jTextPane_opt0.setBackground(jPanel_preferences.getBackground());
 		}
 		return jPanel_preferences;
@@ -194,13 +181,14 @@ public class FenetrePreferences extends JFrame {
 		if (jSlider_opt1 == null) {
 			jSlider_opt1 = new JSlider();
 			jSlider_opt1.setMinimum(0);
-			jSlider_opt1.setMaximum(8);
+			jSlider_opt1.setMaximum(6);
 			jSlider_opt1.setMajorTickSpacing(1);
 			jSlider_opt1.createStandardLabels(1);
 			jSlider_opt1.setSnapToTicks(true);
 			jSlider_opt1.setPaintTicks(true);
 			jSlider_opt1.setPaintLabels(true);
 			jSlider_opt1.setPaintTrack(true);
+			jSlider_opt1.setValue(5);
 		}
 		return jSlider_opt1;
 	}
@@ -232,6 +220,7 @@ public class FenetrePreferences extends JFrame {
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//TODO
+					
 					dispose();
 				}
 			});
@@ -267,11 +256,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt2 = new JSlider();
 			jSlider_opt2.setMajorTickSpacing(1);
 			jSlider_opt2.setMinimum(0);
+			jSlider_opt2.setMaximum(6);
 			jSlider_opt2.setPaintLabels(true);
 			jSlider_opt2.setPaintTicks(true);
 			jSlider_opt2.setPaintTrack(true);
 			jSlider_opt2.setSnapToTicks(true);
-			jSlider_opt2.setMaximum(8);
+			jSlider_opt2.setValue(6);
 		}
 		return jSlider_opt2;
 	}
@@ -286,11 +276,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt3 = new JSlider();
 			jSlider_opt3.setMajorTickSpacing(1);
 			jSlider_opt3.setMinimum(0);
+			jSlider_opt3.setMaximum(6);
 			jSlider_opt3.setPaintLabels(true);
 			jSlider_opt3.setPaintTicks(true);
 			jSlider_opt3.setPaintTrack(true);
 			jSlider_opt3.setSnapToTicks(true);
-			jSlider_opt3.setMaximum(8);
+			jSlider_opt3.setValue(1);
 		}
 		return jSlider_opt3;
 	}
@@ -305,11 +296,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt4 = new JSlider();
 			jSlider_opt4.setMajorTickSpacing(1);
 			jSlider_opt4.setMinimum(0);
+			jSlider_opt4.setMaximum(6);
 			jSlider_opt4.setPaintLabels(true);
 			jSlider_opt4.setPaintTicks(true);
 			jSlider_opt4.setPaintTrack(true);
 			jSlider_opt4.setSnapToTicks(true);
-			jSlider_opt4.setMaximum(8);
+			jSlider_opt4.setValue(2);
 		}
 		return jSlider_opt4;
 	}
@@ -324,11 +316,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt5 = new JSlider();
 			jSlider_opt5.setMajorTickSpacing(1);
 			jSlider_opt5.setMinimum(0);
+			jSlider_opt5.setMaximum(6);
 			jSlider_opt5.setPaintLabels(true);
 			jSlider_opt5.setPaintTicks(true);
 			jSlider_opt5.setPaintTrack(true);
 			jSlider_opt5.setSnapToTicks(true);
-			jSlider_opt5.setMaximum(8);
+			jSlider_opt5.setValue(3);
 		}
 		return jSlider_opt5;
 	}
@@ -343,32 +336,14 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt6 = new JSlider();
 			jSlider_opt6.setMajorTickSpacing(1);
 			jSlider_opt6.setMinimum(0);
+			jSlider_opt6.setMaximum(6);
 			jSlider_opt6.setPaintLabels(true);
 			jSlider_opt6.setPaintTicks(true);
 			jSlider_opt6.setPaintTrack(true);
 			jSlider_opt6.setSnapToTicks(true);
-			jSlider_opt6.setMaximum(8);
+			jSlider_opt6.setValue(4);
 		}
 		return jSlider_opt6;
-	}
-
-	/**
-	 * This method initializes jSlider_opt7	
-	 * 	
-	 * @return javax.swing.JSlider	
-	 */
-	private JSlider getJSlider_opt7() {
-		if (jSlider_opt7 == null) {
-			jSlider_opt7 = new JSlider();
-			jSlider_opt7.setMajorTickSpacing(1);
-			jSlider_opt7.setMinimum(0);
-			jSlider_opt7.setPaintLabels(true);
-			jSlider_opt7.setPaintTicks(true);
-			jSlider_opt7.setPaintTrack(true);
-			jSlider_opt7.setSnapToTicks(true);
-			jSlider_opt7.setMaximum(8);
-		}
-		return jSlider_opt7;
 	}
 
 	/**
@@ -516,30 +491,6 @@ public class FenetrePreferences extends JFrame {
 			}
 		});
 		return jCheckBox_opt6;
-	}
-
-	/**
-	 * This method initializes jCheckBox_opt7	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getJCheckBox_opt7() {
-		if (jCheckBox_opt7 == null) {
-			jCheckBox_opt7 = new JCheckBox();
-		}
-		if (jSlider_opt7.isEnabled()) {
-			jCheckBox_opt7.setSelected(true);
-		}
-		else jCheckBox_opt7.setSelected(false);
-		jCheckBox_opt7.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (jSlider_opt7.isEnabled()) {
-					jSlider_opt7.setEnabled(false);
-				}
-				else jSlider_opt7.setEnabled(true);
-			}
-		});
-		return jCheckBox_opt7;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
