@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import progps_ihm.FenetrePrincipale;
+import exceptions.ExceptionGraph;
 import exceptions.ExceptionRecherche;
 
 
@@ -20,9 +21,11 @@ public class SingletonProgps {
 	MyWeightedMultigraph<Ville, Troncon> graph;
 	private List<Route> sesRoutes = new Vector<Route>();
 	private static LinkedList<Ville> sesVilles = new LinkedList<Ville>();
-	private static SingletonProgps instance;
+	private static SingletonProgps instance=null;
 	private int lastIdVille;
 	private int lastIdRoute;
+	private Admin sonAdmin;
+	private User sonUser;
 	
 	private SingletonProgps() {
 		lastIdVille = 0;
@@ -38,7 +41,7 @@ public class SingletonProgps {
 		return instance;
 	}
 
-	private void initialiseGraphComplet(int nbVilles){
+	private void initialiseGraphComplet(int nbVilles) throws ExceptionGraph{
 		sesRoutes = new Vector<Route>();
 		graph = new MyWeightedMultigraph<Ville, Troncon>( Troncon.class );
 
@@ -57,7 +60,8 @@ public class SingletonProgps {
 //				Test pour vérifier qu'on essaie pas d'ajouter une route qui parte
 //				et arrive à la même ville
 				if(!uneVille.equals(nouvelleVille)){
-					Troncon nouveauTr = graph.addEdge(uneVille, nouvelleVille);
+					// EXception
+					Troncon nouveauTr = graph.ajouterUnTroncon(uneVille, nouvelleVille);
 //					On attribue la route au tronçon
 					nouveauTr.setSaRoute(laRoute);
 //					On indique les 2 villes qui encadrent le troncon
@@ -88,14 +92,14 @@ public class SingletonProgps {
 	}
 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ExceptionGraph {
 		SingletonProgps me = getInstance();
 
 		// TODO Etape 1 : Lancement de l'interface
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
 		// TODO Etape 2 : Lancement du chargement XML
 		// TODO Etape 3 : Ouverture de l'interface sur la fenêtre principale
-		laFenetre.setVisible(true);
+		//laFenetre.setVisible(true);
 		
 		me.initialiseGraphComplet(5);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();
@@ -186,6 +190,22 @@ public class SingletonProgps {
 			if(sesVilles.get(i).getNomVille().equalsIgnoreCase(nomVille))
 				return sesVilles.get(i);
 		}throw new Exception("Ville " + nomVille + " is unknow by the système");
+	}
+
+	public Admin getSonAdmin() {
+		return sonAdmin;
+	}
+
+	public void setSonAdmin(Admin sonAdmin) {
+		this.sonAdmin = sonAdmin;
+	}
+
+	public User getSonUser() {
+		return sonUser;
+	}
+
+	public void setSonUser(User sonUser) {
+		this.sonUser = sonUser;
 	}
 
 	public boolean existeVille(String nomVille) {
