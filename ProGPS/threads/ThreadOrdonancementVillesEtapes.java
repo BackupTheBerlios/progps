@@ -81,6 +81,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	}
 	
 	public void triCheminsAPartirDe(Ville v) {
+		collection.clear();
 		for (Ville uneVilleEtape : this.nonOrdonnees) {
 			try {
 				Itineraire leChemin = graph.trouverLeChemin(v, uneVilleEtape, null, null);
