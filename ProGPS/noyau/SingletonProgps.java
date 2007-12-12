@@ -269,7 +269,7 @@ public class SingletonProgps {
 	
 	public boolean routeConnue(String s) {
 		for (Route r: this.sesRoutes) {
-			if (r.getNomRoute().equals(s))
+			if (r.getNomRoute().equalsIgnoreCase(s))
 				return true;
 		}
 		return false;
@@ -278,7 +278,7 @@ public class SingletonProgps {
 	public Troncon getTroncon(String r, String v1, String v2) throws Exception {
 
 		for (Route rou : this.sesRoutes) {
-			if (rou.getNomRoute().equals(r)) {
+			if (rou.getNomRoute().equalsIgnoreCase(r)) {
 				for (Troncon tr : rou.getSesTroncons()) {
 					if (tr.isRelieVille(this.getVille(v1)) && tr.isRelieVille(this.getVille(v2)))
 						return tr;
