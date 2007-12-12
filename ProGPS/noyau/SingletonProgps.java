@@ -225,32 +225,16 @@ public class SingletonProgps {
 	/*
 	 * Fin modifs d'Olivier
 	 */
-	public boolean ajouterRoute(Route r) throws Exception {
-		if(!routeConnue(r)){
-			for (Iterator i = sesRoutes.iterator(); i.hasNext();) {
-				Route routeAccontrole = (Route) i.next();
-				if(r.getIdRoute()==routeAccontrole.getIdRoute()){
-					throw new Exception("Impossible d'ajouter deux routes avec le même id : " + r.getNomRoute() + " : " + routeAccontrole.getNomRoute());
-				}
-			}
+	public void ajouterRoute(Route r)  {
 			sesRoutes.add(r);
-			return true;
-		}else throw new Exception("Route déja connue " + r.getNomRoute());
+	}
+	
+	public void ajouterRoute(String nom, int type) {
+		Route r = new Route(this.getNewIdRoute(), nom, type);
+		this.ajouterRoute(r);
 	}
 
-	private boolean routeConnue(Route r) {
-		if(sesRoutes.contains(r)){
-			return true;
-		}else {
-			for (Iterator i = sesRoutes.iterator(); i.hasNext();) {
-				Route RouteAccontrole = (Route) i.next();
-				if(r.getNomRoute()==RouteAccontrole.getNomRoute()){
-					return true;
-				}
-			}
-			return false;
-		}
-	}
+
 
 	// Modif Olivier
 	private boolean villeConnue(Ville ville) {

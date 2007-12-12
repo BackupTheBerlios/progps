@@ -57,6 +57,14 @@ public class Route {
 		return !(cpt==this.sesTroncons.size());
 	}
 	
+	
+	public void setType(int t) {
+		this.typeRoute=t;
+	}
+	
+	public void setNom(String n) {
+		this.nomRoute=n;
+	}
 	public void setDispoRoute(boolean b) {
 		for (Troncon t : this.sesTroncons) {
 			t.setDispo(b);
