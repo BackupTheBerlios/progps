@@ -55,10 +55,6 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 		this.nonOrdonnees = nonOrdonnees;
 		upToDate=false;
 	}
-	
-	public void ordonne(){
-		
-	}
 
 	public void run() {
 		while( !isInterrupted()) {
