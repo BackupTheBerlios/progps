@@ -283,6 +283,14 @@ public class SingletonProgps {
 		return this.sesRoutes;
 	}
 	
+	public boolean routeConnue(String s) {
+		for (Route r: this.sesRoutes) {
+			if (r.getNomRoute().equals(s))
+				return true;
+		}
+		return false;
+	}
+	
 	public Troncon getTroncon(String r, String v1, String v2) throws Exception {
 
 		for (Route rou : this.sesRoutes) {
