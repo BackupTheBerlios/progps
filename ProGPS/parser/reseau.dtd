@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/reseau.dtd
+
+--><!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE reseau SYSTEM "reseau.dtd">
+
+    <reseau>
+    ...
+    </reseau>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT reseau (route|ville)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT ville (touristique|type|nom)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT nom (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT type (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT touristique (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT route (troncon|type|nom)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT troncon (longueur|payant|radar|touristique|vitesse|ville2|ville1)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT ville1 (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT ville2 (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT vitesse (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT radar (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT payant (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT longueur (#PCDATA)>

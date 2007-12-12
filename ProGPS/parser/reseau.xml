@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE mmedia SYSTEM "reseau.dtd">
+<reseau>
+	<ville>
+		<nom>paris</nom>
+		<type>grande</type>
+		<touristique>oui</touristique>
+	</ville>
+	
+	<ville>
+		<nom>wissous</nom>
+		<type>petite</type>
+		<touristique>non</touristique>
+	</ville>
+	
+	<ville>
+		<nom>evry</nom>
+		<type>moyenne</type>
+		<touristique>non</touristique>
+	</ville>
+	<ville>
+		<nom>auxerre</nom>
+		<type>moyenne</type>
+		<touristique>oui</touristique>
+	</ville>
+	
+	<ville>
+		<nom>lyon</nom>
+		<type>grande</type>
+		<touristique>oui</touristique>
+	</ville>
+	
+	<ville>
+		<nom>montpellier</nom>
+		<type>grande</type>
+		<touristique>oui</touristique>
+	</ville>
+	
+	<ville>
+		<nom>ceyras</nom>
+		<type>petite</type>
+		<touristique>oui</touristique>
+	</ville>
+	
+	<ville>
+		<nom>clermont-ferrand</nom>
+		<type>moyenne</type>
+		<touristique>non</touristique>
+	</ville>
+	
+	<route>
+		<nom>a6</nom>
+		<type>autoroute</type>
+		
+		<troncon>
+			<ville1>paris</ville1>
+			<ville2>wissous</ville2>
+			<vitesse>110</vitesse>
+			<touristique>non</touristique>
+			<radar>non</radar>
+			<payant>non</payant>
+			<longueur>20</longueur>
+		</troncon>
+		
+		<troncon>
+			<ville1>wissous</ville1>
+			<ville2>evry</ville2>
+			<vitesse>110</vitesse>
+			<touristique>non</touristique>
+			<radar>non</radar>
+			<payant>non</payant>
+			<longueur>15</longueur>
+		</troncon>
+		
+		<troncon>
+			<ville1>evry</ville1>
+			<ville2>auxerre</ville2>
+			<vitesse>130</vitesse>
+			<touristique>non</touristique>
+			<radar>oui</radar>
+			<payant>oui</payant>
+			<longueur>300</longueur>
+		</troncon>
+		
+		<troncon>
+			<ville1>auxerre</ville1>
+			<ville2>lyon</ville2>
+			<vitesse>130</vitesse>
+			<touristique>non</touristique>
+			<radar>oui</radar>
+			<payant>oui</payant>
+			<longueur>300</longueur>
+		</troncon>
+		
+	</route>
+	
+	<route>
+		<nom>n7</nom>
+		<type>nationale</type>
+		
+		<troncon>
+			<ville1>paris</ville1>
+			<ville2>evry</ville2>
+			<vitesse>70</vitesse>
+			<touristique>non</touristique>
+			<radar>non</radar>
+			<payant>non</payant>
+			<longueur>32</longueur>
+		</troncon>
+		
+		<troncon>
+			<ville1>evry</ville1>
+			<ville2>lyon</ville2>
+			<vitesse>80</vitesse>
+			<touristique>oui</touristique>
+			<radar>oui</radar>
+			<payant>non</payant>
+			<longueur>452</longueur>
+		</troncon>
+	</route>
+	
+	<route>
+		<nom>a7</nom>
+		<type>autoroute</type>
+		
+		<troncon>
+			<ville1>lyon</ville1>
+			<ville2>orange</ville2>
+			<vitesse>130</vitesse>
+			<touristique>non</touristique>
+			<radar>non</radar>
+			<payant>oui</payant>
+			<longueur>200</longueur>
+		</troncon>
+	</route>
+	
+	<route>
+		<nom>a9</nom>
+		<type>autoroute</type>
+		
+		<troncon>
+			<ville1>orange</ville1>
+			<ville2>montpellier</ville2>
+			<vitesse>130</vitesse>
+			<touristique>non</touristique>
+			<radar>oui</radar>
+			<payant>non</payant>
+			<longueur>100</longueur>
+		</troncon>
+	</route>
+	
+	<route>
+		<nom>a10</nom>
+		<type>autoroute</type>
+		
+		<troncon>
+			<ville1>wissous</ville1>
+			<ville2>clermont-ferrand</ville2>
+			<vitesse>110</vitesse>
+			<touristique>non</touristique>
+			<radar>oui</radar>
+			<payant>oui</payant>
+			<longueur>400</longueur>
+		</troncon>
+	</route>
+	
+	<route>
+		<nom>a75</nom>
+		<type>autoroute</type>
+		
+		<troncon>
+			<ville1>clermont-ferrand</ville1>
+			<ville2>ceyras</ville2>
+			<vitesse>130</vitesse>
+			<touristique>non</touristique>
+			<radar>oui</radar>
+			<payant>oui</payant>
+			<longueur>400</longueur>
+		</troncon>
+	</route>
+	
+	<route>
+		<nom>n109</nom>
+		<type>nationale</type>
+		
+		<troncon>
+			<ville1>ceyras</ville1>
+			<ville2>montpellier</ville2>
+			<vitesse>90</vitesse>
+			<touristique>oui</touristique>
+			<radar>non</radar>
+			<payant>non</payant>
+			<longueur>40</longueur>
+		</troncon>
+	</route>
+</reseau>
