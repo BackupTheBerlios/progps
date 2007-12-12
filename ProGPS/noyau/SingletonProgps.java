@@ -275,6 +275,16 @@ public class SingletonProgps {
 		return false;
 	}
 	
+	public boolean tronconConnu(String route, String v1, String v2) throws Exception {
+		for (Route r : this.sesRoutes) {
+			for (Troncon t : r.getSesTroncons()) {
+				if (t.isRelieVille(this.getVille(v1)) && t.isRelieVille(this.getVille(v2)) && t.getSaRoute().getNomRoute().equalsIgnoreCase(route))
+					return true;
+			}
+		}
+		return false;
+	}
+	
 	public Troncon getTroncon(String r, String v1, String v2) throws Exception {
 
 		for (Route rou : this.sesRoutes) {
@@ -287,6 +297,7 @@ public class SingletonProgps {
 		}
 		return null;
 	}
+
 	
 	public Route getRoute(String s) {
 		for (Route r : this.sesRoutes) {
