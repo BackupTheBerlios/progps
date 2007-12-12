@@ -110,6 +110,7 @@ public class SingletonProgps {
 		// Etape 2 : Création de la fenêtre de loading...
 		FenetreChargement chargement = new FenetreChargement(new Frame());
 		chargement.setVisible(true);
+		chargement.setAlwaysOnTop(true);
 		
 		// Etape 3 : Boucle de mise à jour de la barre de progression
 		while((threadDeParsing.isAlive())

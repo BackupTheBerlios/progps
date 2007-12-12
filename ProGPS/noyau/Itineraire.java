@@ -131,10 +131,6 @@ public class Itineraire {
 		return this.tronconCourant;
 	}
 	
-	public int getLongueurTotale() {
-		return this.longueurTotal;
-	}
-	
 	public Ville getVilleSuivante(Ville lastVilleTrav) {
 		int i=0;
 		Ville v1 = (Ville)lesTroncons.get(0).getSesVilles().toArray()[0];
@@ -170,6 +166,21 @@ public class Itineraire {
 		}
 		return null;
 		
+	}
+	
+	public String getTempsTotal() {
+		String temps = "";
+		int time = 0;
+		for (int i=0; i < lesTroncons.size(); i++) {
+			time += (((float)lesTroncons.get(i).getLongueur()/(float)lesTroncons.get(i).getVitesse())*3600);
+		}
+		int h = time/3600;
+		int m = (time%3600)/60;
+		int s = (time%3600)%60;
+		
+		temps += h + "h" + m + "m" + s + "s";
+		
+		return temps;
 	}
 	
 	
