@@ -81,8 +81,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     }
     
     public boolean villeExiste(String nom){
-    	for (Iterator iter = this.vertexSet().iterator(); iter.hasNext();) {
-			Ville uneVille = (Ville) iter.next();
+    	for (Ville uneVille : this.vertexSet()) {
 			if(uneVille.getNomVille().equalsIgnoreCase(nom))
 				return true;
 		}
