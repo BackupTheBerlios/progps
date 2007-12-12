@@ -49,11 +49,18 @@ public class Route {
 	}
 	
 	public boolean isDispoRoute() {
+		int cpt=0;
 		for (Troncon t : this.sesTroncons) {
 			if (!t.isDispo())
-				return false;
+				cpt++;
 		}
-		return true;
+		return !(cpt==this.sesTroncons.size());
+	}
+	
+	public void setDispoRoute(boolean b) {
+		for (Troncon t : this.sesTroncons) {
+			t.setDispo(b);
+		}
 	}
 
 	public String getNomRoute() {
