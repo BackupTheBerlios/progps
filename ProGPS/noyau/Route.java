@@ -47,6 +47,14 @@ public class Route {
 	public int getIdRoute() {
 		return idRoute;
 	}
+	
+	public boolean isDispoRoute() {
+		for (Troncon t : this.sesTroncons) {
+			if (!t.isDispo())
+				return false;
+		}
+		return true;
+	}
 
 	public String getNomRoute() {
 		return nomRoute;

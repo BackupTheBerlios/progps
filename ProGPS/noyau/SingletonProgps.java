@@ -283,17 +283,17 @@ public class SingletonProgps {
 		return this.sesRoutes;
 	}
 	
-	public List<Troncon> getTroncons(String r, String v1, String v2) throws Exception {
-		List<Troncon> sesTron = new Vector<Troncon>();
+	public Troncon getTroncon(String r, String v1, String v2) throws Exception {
+
 		for (Route rou : this.sesRoutes) {
 			if (rou.getNomRoute().equals(r)) {
 				for (Troncon tr : rou.getSesTroncons()) {
 					if (tr.isRelieVille(this.getVille(v1)) && tr.isRelieVille(this.getVille(v2)))
-						sesTron.add(tr);
+						return tr;
 				}
 			}
 		}
-		return sesTron;
+		return null;
 	}
 	
 	public Route getRoute(String s) {
