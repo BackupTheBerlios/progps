@@ -25,7 +25,6 @@ public class SingletonProgps {
 	// Objet qui contient la représentation du graph  
 	MyWeightedMultigraph graph;
 	private List<Route> sesRoutes = new Vector<Route>();
-	private static LinkedList<Ville> sesVilles = new LinkedList<Ville>();
 	private static SingletonProgps instance=null;
 	private int lastIdVille;
 	private int lastIdRoute;
@@ -35,13 +34,12 @@ public class SingletonProgps {
 	private SingletonProgps() {
 		lastIdVille = 0;
 		lastIdRoute = 0;
-		sesVilles = new LinkedList<Ville>();
 		sesRoutes = new LinkedList<Route>();
 		graph=new MyWeightedMultigraph(Troncon.class);
 	}
 
 	public synchronized static SingletonProgps getInstance() {
-		if (null == instance) {
+		if (instance==null) {
 			instance = new SingletonProgps();
 		}
 		return instance;
@@ -168,19 +166,19 @@ public class SingletonProgps {
 	/*
 	 * Début modifications pour le parseur
 	 */
-	public boolean ajouterVille(Ville ville) throws Exception {
-		System.out.println("Add ville BAD");
-		if(!villeConnue(ville)){
-			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
-				Ville villeAccontrole = (Ville) i.next();
-				if(ville.getIdVille()==villeAccontrole.getIdVille()){
-					throw new Exception("Impossible d'ajouter deux villes avec le même id : " + ville.getNomVille() + " : " + villeAccontrole.getNomVille());
-				}
-			}
-			sesVilles.add(ville);
-			return true;
-		}else throw new Exception("Ville déjà connue " + ville.getNomVille());
-	}
+//	public boolean ajouterVille(Ville ville) throws Exception {
+//		System.out.println("Add ville BAD");
+//		if(!villeConnue(ville)){
+//			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
+//				Ville villeAccontrole = (Ville) i.next();
+//				if(ville.getIdVille()==villeAccontrole.getIdVille()){
+//					throw new Exception("Impossible d'ajouter deux villes avec le même id : " + ville.getNomVille() + " : " + villeAccontrole.getNomVille());
+//				}
+//			}
+//			sesVilles.add(ville);
+//			return true;
+//		}else throw new Exception("Ville déjà connue " + ville.getNomVille());
+//	}
 	/*
 	 * Modifs d'Olivier pour prendre en compte JGraphT
 	 */
