@@ -69,5 +69,9 @@ public class Route {
 		this.sesTroncons.toArray(lSesTroncons_Temp);
 		return lSesTroncons_Temp;
 	}
+	
+	public List<Troncon> getSesTroncons() {
+		return this.sesTroncons;
+	}
 
 }

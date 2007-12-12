@@ -276,6 +276,39 @@ public class SingletonProgps {
 //		return false;
 	}
 	
+	public List<Route> getRoutes() {
+		return this.sesRoutes;
+	}
+	
+	public List<Troncon> getTroncons(String r, String v1, String v2) throws Exception {
+		Iterator<Route> itR = this.sesRoutes.iterator();
+		Iterator<Troncon> itT;
+		Route rou;
+		Troncon tr;
+		List<Troncon> sesTron = new Vector<Troncon>();
+		while (itR.hasNext()) {
+			rou=(Route)itR.next();
+			if (rou.getNomRoute().equals(r)) {
+				itT=rou.getSesTroncons().iterator();
+				while (itT.hasNext()) {
+					tr=(Troncon)itT.next();
+					if (tr.isRelieVille(this.getVille(v1)) && tr.isRelieVille(this.getVille(v2))) {
+						sesTron.add(tr);
+					}
+				}
+			}
+		}
+		return sesTron;
+	}
+	
+	public Route getRoute(String s) {
+		for (Route r : this.sesRoutes) {
+			if (r.getNomRoute().equals(s))
+				return r;
+		}
+		return null;
+	}
+	
 	public int getNewIdVille(){
 		lastIdVille++;
 		return lastIdVille;
