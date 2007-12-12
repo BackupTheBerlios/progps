@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -278,6 +279,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		leProgps.setSonAdmin(lAdmin);
 		leProgps.setSonUser(lUser);
 		initialize();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		chargerVillesListe();
 		chargerVillesComboDepart();
