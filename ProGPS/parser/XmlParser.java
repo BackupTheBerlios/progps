@@ -91,13 +91,13 @@ public class XmlParser extends Thread{
 								throw new ExceptionParser(
 										"Etat inconnu pour "
 										+ nomVille);
-
+							//modif ju
 							if (type.equalsIgnoreCase("petite")) {
-								intT = 1;
+								intT = 0;
 							} else if (type.equalsIgnoreCase("moyenne")) {
-								intT = 2;
+								intT = 1;
 							} else if (type.equalsIgnoreCase("grande")) {
-								intT = 3;
+								intT = 2;
 							} else
 								throw new ExceptionParser("Type de ville inconnu pour "
 										+ nomVille+".");

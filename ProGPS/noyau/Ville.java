@@ -1,11 +1,17 @@
 package noyau;
 
 public class Ville {
+	public static final int PETITE = 0;
+	public static final int MOYENNE = 1;
+	public static final int GRANDE = 2;
+	
 	private int idVille;
 	private String nomVille;
 	private boolean dispoVille;
 	private int typeVille;
 	private boolean touristique;
+
+	
 
 	/** Constructeur de ville
 	 * 
