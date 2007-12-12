@@ -104,13 +104,15 @@ public class SingletonProgps {
 		if (args.length==0){ urlFichier = new String("parser/network.xml");}
 		else{urlFichier=args[0];}
 		
-		// Etape 1 : Création du thread de parsing
-		XmlParser threadDeParsing = new XmlParser(me, urlFichier);
-		threadDeParsing.start();
-		// Etape 2 : Création de la fenêtre de loading...
+		// Etape 1 : Création de la fenêtre de loading...
 		FenetreChargement chargement = new FenetreChargement(new Frame());
 		chargement.setVisible(true);
 		chargement.setAlwaysOnTop(true);
+		
+		// Etape 2 : Création du thread de parsing
+		XmlParser threadDeParsing = new XmlParser(me, urlFichier);
+		threadDeParsing.start();
+
 		
 		// Etape 3 : Boucle de mise à jour de la barre de progression
 		while((threadDeParsing.isAlive())
@@ -281,20 +283,12 @@ public class SingletonProgps {
 	}
 	
 	public List<Troncon> getTroncons(String r, String v1, String v2) throws Exception {
-		Iterator<Route> itR = this.sesRoutes.iterator();
-		Iterator<Troncon> itT;
-		Route rou;
-		Troncon tr;
 		List<Troncon> sesTron = new Vector<Troncon>();
-		while (itR.hasNext()) {
-			rou=(Route)itR.next();
+		for (Route rou : this.sesRoutes) {
 			if (rou.getNomRoute().equals(r)) {
-				itT=rou.getSesTroncons().iterator();
-				while (itT.hasNext()) {
-					tr=(Troncon)itT.next();
-					if (tr.isRelieVille(this.getVille(v1)) && tr.isRelieVille(this.getVille(v2))) {
+				for (Troncon tr : rou.getSesTroncons()) {
+					if (tr.isRelieVille(this.getVille(v1)) && tr.isRelieVille(this.getVille(v2)))
 						sesTron.add(tr);
-					}
 				}
 			}
 		}
@@ -340,6 +334,14 @@ public class SingletonProgps {
 
 	public void setSonUser(User sonUser) {
 		this.sonUser = sonUser;
+	}
+	
+	public int getNbTronconsTotal() {
+		int cpt=0;
+		for (Route rou : this.sesRoutes) {
+			cpt+=rou.getSesTroncons().size();
+		}
+		return cpt;
 	}
 
 	// Modif Olive : Renommée en villeConnue
