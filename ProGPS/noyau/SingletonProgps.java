@@ -113,7 +113,6 @@ public class SingletonProgps {
 		XmlParser threadDeParsing = new XmlParser(me, urlFichier);
 		threadDeParsing.start();
 
-		
 		// Etape 3 : Boucle de mise à jour de la barre de progression
 		while((threadDeParsing.isAlive())
 				&&!(threadDeParsing.isExceptionLevee())
@@ -122,6 +121,7 @@ public class SingletonProgps {
 			// Pause de 500ms
 			Thread.sleep(500);
 		}
+		chargement.setProgressbarValue(100);
 		// Teste si le thread a bien terminé
 		if(threadDeParsing.isExceptionLevee()){
 			threadDeParsing.setStop(true);
@@ -131,12 +131,12 @@ public class SingletonProgps {
 		// On ferme le thread
 		threadDeParsing.setStop(true);
 		
-		// Etape 4 : destruction de la fenetre de chargement
+//		// Etape 4 : destruction de la fenetre de chargement
 		chargement.dispose();
 		me.graph.seDecrire();
-		
-		
-		// Etape 5 : Création de la fenêtre principale
+//		
+//		
+//		// Etape 5 : Création de la fenêtre principale
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
 		laFenetre.setVisible(true);
 		

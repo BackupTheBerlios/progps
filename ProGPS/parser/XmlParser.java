@@ -33,6 +33,10 @@ public class XmlParser extends Thread{
 	// Permet de quitter le thread proprement
 	private boolean stop=false;
 
+	public int getNbrNoeuds(){
+		return nbrNoeuds;
+	}
+	
 	public XmlParser(SingletonProgps myProgps, String filename) {
 		this.myProgps = myProgps;
 		this.filename = filename;
@@ -69,8 +73,9 @@ public class XmlParser extends Thread{
 						dfactory.setNamespaceAware(true);
 						Document doc = dfactory.newDocumentBuilder().parse(in);
 
-						nbrNoeuds=XPathAPI.selectNodeList(doc, "/reseau/child::node()").getLength();
-
+						//nbrNoeuds=XPathAPI.selectNodeList(doc, "count(/reseau/*)").getLength();
+						nbrNoeuds=((Double)XPathAPI.eval(doc, "count(/reseau/*)").num()).intValue();
+						
 						nl = XPathAPI.selectNodeIterator(doc, "/reseau/ville");
 
 						myProgps = SingletonProgps.getInstance();
