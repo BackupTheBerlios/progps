@@ -169,12 +169,12 @@ public class SingletonProgps {
 			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
 				Ville villeAccontrole = (Ville) i.next();
 				if(ville.getIdVille()==villeAccontrole.getIdVille()){
-					throw new Exception("Try to add too city with the same id : " + ville.getNomVille() + " : " + villeAccontrole.getNomVille());
+					throw new Exception("Impossible d'ajouter deux villes avec le même id : " + ville.getNomVille() + " : " + villeAccontrole.getNomVille());
 				}
 			}
 			sesVilles.add(ville);
 			return true;
-		}else throw new Exception("City already know " + ville.getNomVille());
+		}else throw new Exception("Ville déjà connue " + ville.getNomVille());
 	}
 	/*
 	 * Modifs d'Olivier pour prendre en compte JGraphT
@@ -227,12 +227,12 @@ public class SingletonProgps {
 			for (Iterator i = sesRoutes.iterator(); i.hasNext();) {
 				Route routeAccontrole = (Route) i.next();
 				if(r.getIdRoute()==routeAccontrole.getIdRoute()){
-					throw new Exception("Try to add too city with the same id : " + r.getNomRoute() + " : " + routeAccontrole.getNomRoute());
+					throw new Exception("Impossible d'ajouter deux routes avec le même id : " + r.getNomRoute() + " : " + routeAccontrole.getNomRoute());
 				}
 			}
 			sesRoutes.add(r);
 			return true;
-		}else throw new Exception("Road already know " + r.getNomRoute());
+		}else throw new Exception("Route déja connue " + r.getNomRoute());
 	}
 
 	private boolean routeConnue(Route r) {
