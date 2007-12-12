@@ -49,10 +49,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private SingletonProgps progps = null;
 	private User lUser = null;
 	private Admin lAdmin = null;
-	
-	private Admin admin = null;
-	
-	private User utilisateur = null;
+	private AdminPanel adminPanel = null;
 	
 	private javax.swing.JPanel jFrameContentPane = null;
 
@@ -1008,12 +1005,15 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private void setAdminPanel() {
 		jPanel_admin.removeAll();
 		//jPanel_admin.repaint();
-		jPanel_admin.add(new AdminPanel(),null);
+		if (adminPanel == null) {
+			adminPanel = new AdminPanel(progps);
+			adminPanel.remplirChamps();
+		}
+		jPanel_admin.add(adminPanel,null);
 		JButton jButton_logout = new JButton();
 		jButton_logout.setText("Se déconnecter");
 		jButton_logout.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				//resetAdminPanel();
 				jPanel_admin.removeAll();
 				jPanel_admin = null;
 				jTabbedPane_global.removeTabAt(3);
@@ -1025,18 +1025,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			}
 		});
 		jPanel_admin.add(jButton_logout);
-		jPanel_admin.repaint();
-	}
-	
-	/**
-	 * This method reinitializes the admin panel after	
-	 * the admin has logged out
-	 * 
-	 */
-	private void resetAdminPanel() {
-		jPanel_admin.removeAll();
-		//jPanel_admin.repaint();
-		jPanel_admin.add(new AdminPanel(),null);
 		jPanel_admin.repaint();
 	}
 	
