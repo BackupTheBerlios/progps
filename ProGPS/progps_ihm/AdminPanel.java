@@ -14,12 +14,17 @@ import java.awt.PointerInfo;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import java.awt.GridBagConstraints;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
@@ -32,6 +37,9 @@ import javax.swing.text.StyledDocument;
 public class AdminPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	private SingletonProgps progps = null;
+	
 	private JTabbedPane jTabbedPane_adminTabs = null;
 	private JPanel jPanel_adminInfos = null;
 	private JPanel jPanel_adminVilles = null;
@@ -99,8 +107,9 @@ public class AdminPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public AdminPanel() {
+	public AdminPanel(SingletonProgps pro) {
 		super();
+		progps = pro;
 		initialize();
 	}
 
@@ -120,6 +129,40 @@ public class AdminPanel extends JPanel {
 		this.setSize(770, 480);
 		this.setLayout(new GridBagLayout());
 		this.add(getJTabbedPane_adminTabs(), gridBagConstraints);
+	}
+	
+	/**
+	 * Remplit tous les champs lors de l'instanciation du panel
+	 */
+	public void remplirChamps() {
+		// Liste des villes
+		DefaultComboBoxModel modVilles = new DefaultComboBoxModel();
+		ArrayList<String> lesVilles = new ArrayList<String>();
+		for (int i=0; i < progps.getVilles().size(); i++) {
+			lesVilles.add(progps.getVilles().get(i).getNomVille());
+		}
+		Collections.sort(lesVilles);
+		for (int i=0; i < lesVilles.size(); i++) {
+			modVilles.addElement(lesVilles.get(i));
+		}
+		jComboBox_adminVilles.setModel(modVilles);
+		
+		// Listes des routes
+		DefaultComboBoxModel modRoutes = new DefaultComboBoxModel();
+		ArrayList<String> lesRoutes = new ArrayList<String>();
+		for (int i=0; i < progps.getRoutes().size(); i++) {
+			lesRoutes.add(progps.getRoutes().get(i).getNomRoute());
+		}
+		Collections.sort(lesVilles);
+		for (int i=0; i < lesRoutes.size(); i++) {
+			modRoutes.addElement(lesRoutes.get(i));
+		}
+		jComboBox_adminRoutes.setModel(modRoutes);
+		
+		// Liste des routes pour les troncons
+		jComboBox_adminRoutesTroncons.setModel(modRoutes);
+		
+		
 	}
 	
 	private void nouvelleVille() {
@@ -310,20 +353,20 @@ public class AdminPanel extends JPanel {
 			jLabel_adminInfos4.setText(" tronçons dans la base.");
 			jLabel_adminNbTroncons = new JLabel();
 			jLabel_adminNbTroncons.setForeground(new Color(0,176,52));
-			jLabel_adminNbTroncons.setText("43599");
+			jLabel_adminNbTroncons.setText(progps.getNbTronconsTotal() + "");
 			jLabel_adminNbTroncons.setHorizontalAlignment(JLabel.RIGHT);
 			jLabel_adminNbTroncons.setPreferredSize(new Dimension(60,16));
 			jLabel_adminInfos3 = new JLabel();
 			jLabel_adminInfos3.setText(" routes, et ");
 			jLabel_adminNbRoutes = new JLabel();
 			jLabel_adminNbRoutes.setForeground(new Color(0,176,52));
-			jLabel_adminNbRoutes.setText("564");
+			jLabel_adminNbRoutes.setText(progps.getRoutes().size() + " ");
 			jLabel_adminNbRoutes.setHorizontalAlignment(JLabel.RIGHT);
 			jLabel_adminNbRoutes.setPreferredSize(new Dimension(60,16));
 			jLabel_adminInfos2 = new JLabel();
 			jLabel_adminInfos2.setText(" villes, ");
 			jLabel_adminNbVilles = new JLabel();
-			jLabel_adminNbVilles.setText("3456");
+			jLabel_adminNbVilles.setText(progps.getVilles().size()+ " ");
 			jLabel_adminNbVilles.setForeground(new Color(0,176,52));
 			jLabel_adminNbVilles.setPreferredSize(new Dimension(60,16));
 			jLabel_adminNbVilles.setHorizontalAlignment(JLabel.RIGHT);
@@ -808,10 +851,7 @@ public class AdminPanel extends JPanel {
 	 */
 	private JComboBox getJComboBox_adminTroncons() {
 		if (jComboBox_adminTroncons == null) {
-			Vector<String> troncons = new Vector<String>();
-			troncons.add("Orsay <-> Les Ulis");
-			troncons.add("Les Ulis <-> Courtaboeuf");
-			jComboBox_adminTroncons = new JComboBox(troncons);
+			jComboBox_adminTroncons = new JComboBox();
 			jComboBox_adminTroncons.setPreferredSize(new Dimension(200, 20));
 			jComboBox_adminTroncons.setBackground(Color.WHITE);
 			jComboBox_adminTroncons.setForeground(Color.BLUE);
