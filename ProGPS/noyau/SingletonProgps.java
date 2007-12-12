@@ -123,8 +123,11 @@ public class SingletonProgps {
 			Thread.sleep(500);
 		}
 		// Teste si le thread a bien terminé
-		if(threadDeParsing.isExceptionLevee())
-			throw new Exception("La lecture du fichier XML a échoueé.");
+		if(threadDeParsing.isExceptionLevee()){
+			threadDeParsing.setStop(true);
+			chargement.dispose();
+			throw new Exception("La lecture du fichier XML a échouée.");
+		}
 		// On ferme le thread
 		threadDeParsing.setStop(true);
 		
