@@ -69,7 +69,7 @@ public class XmlParser extends Thread{
 						dfactory.setNamespaceAware(true);
 						Document doc = dfactory.newDocumentBuilder().parse(in);
 
-						nbrNoeuds=XPathAPI.selectNodeList(doc, "/reseau/*").getLength();
+						nbrNoeuds=XPathAPI.selectNodeList(doc, "/reseau/child::node()").getLength();
 
 						nl = XPathAPI.selectNodeIterator(doc, "/reseau/ville");
 
@@ -108,6 +108,7 @@ public class XmlParser extends Thread{
 						nl = XPathAPI.selectNodeIterator(doc, "/reseau/route");
 
 						while ((n = nl.nextNode()) != null) {
+							nbrNoeudsVisites++;
 							nomRoute = XPathAPI.selectNodeIterator(n, "nom").nextNode()
 							.getTextContent();
 							type = XPathAPI.selectNodeIterator(n, "type").nextNode()
