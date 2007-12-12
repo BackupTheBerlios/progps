@@ -7,6 +7,7 @@
 package progps_ihm;
 
 import java.awt.*;
+import noyau.*;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -29,8 +30,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
-
-import noyau.*;
 
 public class ChoixItineraire extends JPanel {
 
@@ -65,9 +64,12 @@ public class ChoixItineraire extends JPanel {
 	private JScrollPane jScrollPane_recap_1 = null;
 	private JTextPane jTextPane_recap1 = null;   
 	
+	private FenetrePrincipale laFenetre = null;
 	private ArrayList<Itineraire> lesItis = null;  //  @jve:decl-index=0:
+	private SingletonProgps sys = null;
 
-	public ChoixItineraire() {
+	public ChoixItineraire(FenetrePrincipale fen) {
+		laFenetre = fen;
 		initComponents();
 	}
 
@@ -163,27 +165,91 @@ public class ChoixItineraire extends JPanel {
 	}
 
 	private void remplirTree(int num, Itineraire iti) {
+		
+		DefaultMutableTreeNode tree = new DefaultMutableTreeNode("Ville de départ : " + iti.getVilleDep().getNomVille());
+		
+		Troncon tmp = iti.getLesTroncons().get(0);
+		Ville lastVille = iti.getVilleDep();
+		Route lastRoute = tmp.getSaRoute();
+		
+		DefaultMutableTreeNode etape = new DefaultMutableTreeNode(lastRoute.getNomRoute());
+		tree.add(etape);
+		
+		DefaultMutableTreeNode troncon = null;
+		if (tmp.getSesVilles().toArray()[0] == lastVille) {
+			troncon = new DefaultMutableTreeNode(lastVille.getNomVille() + " -> " + ((Ville)tmp.getSesVilles().toArray()[1]).getNomVille());
+			etape.add(troncon);
+			lastVille = ((Ville)tmp.getSesVilles().toArray()[1]);
+		}
+		else {
+			troncon = new DefaultMutableTreeNode(lastVille.getNomVille() + " -> " + ((Ville)tmp.getSesVilles().toArray()[0]).getNomVille());
+			etape.add(troncon);
+			lastVille = ((Ville)tmp.getSesVilles().toArray()[0]);
+		}
+		etape.add(troncon);
+		
+		
+		for (int i=1;i<iti.getLesTroncons().size(); i++) {
+			tmp = iti.getLesTroncons().get(i);
+			lastRoute = tmp.getSaRoute();
+			
+			if (tmp.getSaRoute() == lastRoute) {
+				if (tmp.getSesVilles().toArray()[0] == lastVille) {
+					troncon = new DefaultMutableTreeNode(lastVille.getNomVille() + " -> " + ((Ville)tmp.getSesVilles().toArray()[1]).getNomVille());
+					etape.add(troncon);
+					lastVille = ((Ville)tmp.getSesVilles().toArray()[1]);
+				}
+				else {
+					troncon = new DefaultMutableTreeNode(lastVille.getNomVille() + " -> " + ((Ville)tmp.getSesVilles().toArray()[0]).getNomVille());
+					etape.add(troncon);
+					lastVille = ((Ville)tmp.getSesVilles().toArray()[0]);
+				}
+			}
+			else {
+				etape = new DefaultMutableTreeNode(lastRoute.getNomRoute());
+				tree.add(etape);
+				if (tmp.getSesVilles().toArray()[0] == lastVille) {
+					troncon = new DefaultMutableTreeNode(lastVille.getNomVille() + " -> " + ((Ville)tmp.getSesVilles().toArray()[1]).getNomVille());
+					etape.add(troncon);
+					lastVille = ((Ville)tmp.getSesVilles().toArray()[1]);
+				}
+				else {
+					troncon = new DefaultMutableTreeNode(lastVille.getNomVille() + " -> " + ((Ville)tmp.getSesVilles().toArray()[0]).getNomVille());
+					etape.add(troncon);
+					lastVille = ((Ville)tmp.getSesVilles().toArray()[0]);
+				}
+			}
+			
+		}
+		
+		etape = new DefaultMutableTreeNode("Ville d'arrivée : " + lastVille.getNomVille());
+		tree.add(etape);
+		
+		DefaultTreeModel myModel = new DefaultTreeModel(tree);
+		
 		switch (num) {
 			case 1: 
 				
+				jTree_Itineraire_3.setModel(myModel);
 				
-				jTree_Itineraire_1.addMouseListener(new java.awt.event.MouseAdapter() {
+				jTree_Itineraire_3.addMouseListener(new java.awt.event.MouseAdapter() {
 					public void mouseClicked(java.awt.event.MouseEvent e) {
+						jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
+						jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+						jTree_Itineraire_1.setEnabled(false);
 						jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
 						jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 						jTree_Itineraire_2.setEnabled(false);
-						jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
-						jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-						jTree_Itineraire_3.setEnabled(false);
-						jTree_Itineraire_1.setBackground(Color.WHITE);
-						jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-						jTree_Itineraire_1.setEnabled(true);
+						jTree_Itineraire_3.setBackground(Color.WHITE);
+						jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_3.setEnabled(true);
 					}
-				});
+				});		
 				
 				break;
 			case 2:
 				
+				jTree_Itineraire_2.setModel(myModel);
 
 				jTree_Itineraire_2.addMouseListener(new java.awt.event.MouseAdapter() {
 					public void mouseClicked(java.awt.event.MouseEvent e) {
@@ -202,23 +268,26 @@ public class ChoixItineraire extends JPanel {
 				break;
 			case 3:
 				
-				jTree_Itineraire_3.addMouseListener(new java.awt.event.MouseAdapter() {
+				jTree_Itineraire_1.setModel(myModel);
+				
+				jTree_Itineraire_1.addMouseListener(new java.awt.event.MouseAdapter() {
 					public void mouseClicked(java.awt.event.MouseEvent e) {
-						jTree_Itineraire_1.setBackground(Color.LIGHT_GRAY);
-						jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-						jTree_Itineraire_1.setEnabled(false);
 						jTree_Itineraire_2.setBackground(Color.LIGHT_GRAY);
 						jPanel_Milieu.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 						jTree_Itineraire_2.setEnabled(false);
-						jTree_Itineraire_3.setBackground(Color.WHITE);
-						jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-						jTree_Itineraire_3.setEnabled(true);
+						jTree_Itineraire_3.setBackground(Color.LIGHT_GRAY);
+						jPanel_Gauche.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+						jTree_Itineraire_3.setEnabled(false);
+						jTree_Itineraire_1.setBackground(Color.WHITE);
+						jPanel_Droite.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+						jTree_Itineraire_1.setEnabled(true);
 					}
 				});
 				
 				break;
 		}
 		
+		/*
 //		 Construction du noeud racine.
 		DefaultMutableTreeNode myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
 
@@ -257,8 +326,8 @@ public class ChoixItineraire extends JPanel {
 		troncon = new DefaultMutableTreeNode("Dijon -> Besançon");
 		etape.add(troncon);
 		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
-		
 		myRoot.add(etape);
+		
 		myModel = new DefaultTreeModel(myRoot);
 
 		myRoot = new DefaultMutableTreeNode("Ville de départ : Paris");
@@ -273,7 +342,7 @@ public class ChoixItineraire extends JPanel {
 		etape = new DefaultMutableTreeNode("Ville d'arrivée : Aix-en-Provence");
 		myRoot.add(etape);
 		myModel = new DefaultTreeModel(myRoot);
-		
+		*/
 		
 	}
 	
@@ -385,8 +454,6 @@ public class ChoixItineraire extends JPanel {
 	
 	public void initArbres() {
 		
-
-		
 	}
 
 	/**
@@ -451,7 +518,15 @@ public class ChoixItineraire extends JPanel {
 			jButton_Choix.setText("Choisir cet itinéraire");
 			jButton_Choix.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// TODO
+					if (jTree_Itineraire_1.isEnabled()){
+						laFenetre.initItineraire(lesItis.get(0));
+					}
+					else if (jTree_Itineraire_2.isEnabled()) {
+						laFenetre.initItineraire(lesItis.get(1));
+					}
+					else if (jTree_Itineraire_3.isEnabled()) {
+						laFenetre.initItineraire(lesItis.get(2));
+					}
 				}
 			});
 		}

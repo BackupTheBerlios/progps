@@ -44,8 +44,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private FenetrePreferences fenPrefs = null;
-	
 	private SingletonProgps progps = null;
+	private User lUser = null;
+	private Admin lAdmin = null;
 	
 	private Admin admin = null;
 	
@@ -273,8 +274,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	public FenetrePrincipale(SingletonProgps leProgps) {
 		super();
 		progps = leProgps;
-		Admin lAdmin = new Admin(leProgps);
-		User lUser = new User(leProgps);
+		lAdmin = new Admin(leProgps);
+		lUser = new User(leProgps);
 		leProgps.setSonAdmin(lAdmin);
 		leProgps.setSonUser(lUser);
 		initialize();
@@ -386,21 +387,24 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		nbEtapes = 4;
 	}
 	
-	/*public void initItineraire(Itineraire iti) {
-		for (int i=0;i<nbEtapes; i++) {
-			tabEtapesModele.removeRow(0);
-		}
+	public void initItineraire(Itineraire iti) {
+		
+		resetAllItineraire();
+		lUser.setItineraireCourant(iti);
 		
 		Vector<String> line = new Vector<String>();
 		int num = 1;
 		
-		Ville villeDep = iti.getVilleDepart();
-		Ville villeArr = iti.getVilleArrivee();
+		Ville villeDep = iti.getVilleDep();
+		Ville villeArr = iti.getVilleArr();
 		Ville derniereVilleTrav = villeDep;
 		Ville tmp;
 		String infos = "";
 		
-		for(Iterator iter = iti.getTroncons().iterator(); iter.hasNext();) {
+		jLabel_itineraireDepart.setText(villeDep.getNomVille());
+		jLabel_itineraireArrivee.setText(villeArr.getNomVille());
+		
+		for(Iterator iter = iti.getLesTroncons().iterator(); iter.hasNext();) {
 			Troncon tronc = (Troncon)iter.next();
 			line.add("" + num);												// Numero de l'etape
 			line.add(derniereVilleTrav.getNomVille());						// Ville départ troncon			
@@ -409,10 +413,17 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			line.add(tronc.getSaRoute().getNomRoute());						// Nom de la route
 			infos += tronc.getVitesse();
 			
-			for(Iterator iter2 = iti.getTronconCourant().getSesEtats().iterator(); iter2.hasNext();) {
-				Etat e = (Etat)iter2.hasNext()
+			if (iti.getTronconCourant().isPayant()) {
 				infos += "/";
-				infos += e.toString();
+				infos += "payant";
+			}
+			if (iti.getTronconCourant().isRadar()) {
+				infos += "/";
+				infos += "radar";
+			}
+			if (iti.getTronconCourant().isTouristique()) {
+				infos += "/";
+				infos += "touristique";
 			}
 			line.add(infos);
 			
@@ -423,7 +434,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		
 		nbEtapes = --num;
 		//jTable_etapes.repaint();
-	}*/
+	}
 	
 	public void setVillesCourantesPoss(Vector<String> villes) {
 		jComboBox_villeCourante.removeAllItems();
@@ -716,14 +727,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JPanel getJPanel_itineraireNorth() {
 		if (jPanel_itineraireNorth == null) {
 			jLabel_itineraireArrivee = new JLabel();
-			jLabel_itineraireArrivee.setText("Aix-en-Provence");
+			jLabel_itineraireArrivee.setText(" ");
 			jLabel_itineraireArrivee.setForeground(Color.BLUE);
 			jLabel_itineraireArrivee.setHorizontalAlignment(JLabel.CENTER);
 			jLabel_itineraireArrivee.setPreferredSize(new Dimension(150,18));
 			jLabel_itineraireTo = new JLabel();
 			jLabel_itineraireTo.setText(" à ");
 			jLabel_itineraireDepart = new JLabel();
-			jLabel_itineraireDepart.setText("Paris");
+			jLabel_itineraireDepart.setText(" ");
 			jLabel_itineraireDepart.setForeground(Color.BLUE);
 			jLabel_itineraireDepart.setHorizontalAlignment(JLabel.CENTER);
 			jLabel_itineraireDepart.setPreferredSize(new Dimension(150,18));
@@ -731,7 +742,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_itineraireFrom.setText("Itinéraire de ");
 			jPanel_itineraireNorth = new JPanel();
 			jPanel_itineraireNorth.setLayout(new FlowLayout());
-			//jPanel_itineraireNorth.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 			jPanel_itineraireNorth.add(jLabel_itineraireFrom, null);
 			jPanel_itineraireNorth.add(jLabel_itineraireDepart, null);
 			jPanel_itineraireNorth.add(jLabel_itineraireTo, null);
@@ -1011,7 +1021,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JPanel getJPanel_choixItineraire() {
 		if (jPanel_choixItineraire == null) {
-			jPanel_choixItineraire = new ChoixItineraire();
+			jPanel_choixItineraire = new ChoixItineraire(this);
 		}
 		return jPanel_choixItineraire;
 	}

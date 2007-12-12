@@ -135,7 +135,42 @@ public class Itineraire {
 		return this.longueurTotal;
 	}
 	
-
+	public Ville getVilleSuivante(Ville lastVilleTrav) {
+		int i=0;
+		Ville v1 = (Ville)lesTroncons.get(0).getSesVilles().toArray()[0];
+		Ville v2 = (Ville)lesTroncons.get(0).getSesVilles().toArray()[1];
+		while (lastVilleTrav != v1 && lastVilleTrav != v2) {
+			i++;
+			v1 = (Ville)lesTroncons.get(i).getSesVilles().toArray()[0];
+			v2 = (Ville)lesTroncons.get(i).getSesVilles().toArray()[1];
+		}
+		
+		if (i == lesTroncons.size()) {		// On est sur le dernier troncon, la prochaine ville traversée est donc la ville d'arrivée
+			if (lastVilleTrav == v1) {
+				return v2;
+			}
+			else return v1;
+		}
+		else {
+			Troncon troncSuiv = lesTroncons.get(i+1);
+			// Si la dernière ville traversée est sur le troncon suivant, alors la prochaine ville est l'autre ville du troncon suivant
+			if (lastVilleTrav == (Ville)troncSuiv.getSesVilles().toArray()[0]) {
+				return (Ville)troncSuiv.getSesVilles().toArray()[1]; 
+			}
+			else if (lastVilleTrav == (Ville)troncSuiv.getSesVilles().toArray()[1]) {
+				return (Ville)troncSuiv.getSesVilles().toArray()[0]; 
+			}
+			// Sinon la prochaine ville est l'autre ville du troncon courant
+			else if (lastVilleTrav == v1) {
+				return v2;
+			}
+			else if (lastVilleTrav == v2) {
+				return v1;
+			}
+		}
+		return null;
+		
+	}
 	
 	
 }
