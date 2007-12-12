@@ -106,6 +106,7 @@ public class SingletonProgps {
 		
 		// Etape 1 : Création du thread de parsing
 		XmlParser threadDeParsing = new XmlParser(me, urlFichier);
+		threadDeParsing.start();
 		// Etape 2 : Création de la fenêtre de loading...
 		FenetreChargement chargement = new FenetreChargement(new Frame());
 		chargement.setVisible(true);
@@ -115,24 +116,23 @@ public class SingletonProgps {
 				&&!(threadDeParsing.isExceptionLevee())
 				&&!(threadDeParsing.isParsingtermine())){
 			chargement.setProgressbarValue(threadDeParsing.getAvancement());
+			// Pause de 500ms
+			Thread.sleep(500);
 		}
 		// Teste si le thread a bien terminé
 		if(threadDeParsing.isExceptionLevee())
 			throw new Exception("La lecture du fichier XML a échoueé.");
 		// On ferme le thread
 		threadDeParsing.setStop(true);
-		chargement.dispose();
 		
 		// Etape 4 : destruction de la fenetre de chargement
+		chargement.dispose();
 		me.graph.seDecrire();
 		
 		
 		// Etape 5 : Création de la fenêtre principale
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
-		// TODO Etape 2 : Lancement du chargement XML
-
 		laFenetre.setVisible(true);
-		laFenetre.dispose();
 		
 		// TESTS
 		/*
@@ -164,7 +164,7 @@ public class SingletonProgps {
 	 */
 	public boolean ajouterVille(Ville ville) throws Exception {
 		System.out.println("Add ville BAD");
-		if(!villeConnu(ville)){
+		if(!villeConnue(ville)){
 			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
 				Ville villeAccontrole = (Ville) i.next();
 				if(ville.getIdVille()==villeAccontrole.getIdVille()){
@@ -182,7 +182,6 @@ public class SingletonProgps {
 			boolean dispo, 
 			int typeVille, 
 			boolean touristique){
-		System.out.println("Add ville OK");
 		try {
 			Ville newVille = this.graph.ajouterUneVille(name);
 			newVille.setDispoVille(dispo);
@@ -202,7 +201,6 @@ public class SingletonProgps {
 			int vitesse,
 			int longueur,
 			List<Etat> etats){
-		System.out.println("Add Tron OK");
 		Ville ville1;
 		Ville ville2;
 		try {
@@ -224,7 +222,6 @@ public class SingletonProgps {
 	 * Fin modifs d'Olivier
 	 */
 	public boolean ajouterRoute(Route r) throws Exception {
-		System.out.println("Add Route OK");
 		if(!routeConnue(r)){
 			for (Iterator i = sesRoutes.iterator(); i.hasNext();) {
 				Route routeAccontrole = (Route) i.next();
@@ -251,18 +248,31 @@ public class SingletonProgps {
 		}
 	}
 
-	private boolean villeConnu(noyau.Ville ville) {
-		if(sesVilles.contains(ville)){
-			return true;
-		}else {
-			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
-				Ville villeAccontrole = (Ville) i.next();
-				if(ville.getNomVille()==villeAccontrole.getNomVille()){
-					return true;
-				}
-			}
-			return false;
-		}
+	// Modif Olivier
+	private boolean villeConnue(Ville ville) {
+		return this.graph.containsVertex(ville);
+//		if(sesVilles.contains(ville)){
+//			return true;
+//		}else {
+//			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
+//				Ville villeAccontrole = (Ville) i.next();
+//				if(ville.getNomVille()==villeAccontrole.getNomVille()){
+//					return true;
+//				}
+//			}
+//			return false;
+//		}
+	}
+	
+	//Modif Olivier
+	public boolean villeConnue(String nomVille) {
+		return this.graph.villeExiste(nomVille);
+//		for (Iterator iter = sesVilles.iterator(); iter.hasNext();) {
+//			Ville v = (Ville) iter.next();
+//			if(v.getNomVille().equalsIgnoreCase(nomVille))
+//				return true;
+//		}
+//		return false;
 	}
 	
 	public int getNewIdVille(){
@@ -298,14 +308,15 @@ public class SingletonProgps {
 		this.sonUser = sonUser;
 	}
 
-	public boolean existeVille(String nomVille) {
-		for (Iterator iter = sesVilles.iterator(); iter.hasNext();) {
-			Ville v = (Ville) iter.next();
-			if(v.getNomVille().equalsIgnoreCase(nomVille))
-				return true;
-		}
-		return false;
-	}
+	// Modif Olive : Renommée en villeConnue
+//	public boolean existeVille(String nomVille) {
+//		for (Iterator iter = sesVilles.iterator(); iter.hasNext();) {
+//			Ville v = (Ville) iter.next();
+//			if(v.getNomVille().equalsIgnoreCase(nomVille))
+//				return true;
+//		}
+//		return false;
+//	}
 	/*
 	 * Fin modifications pour le parseur
 	 */

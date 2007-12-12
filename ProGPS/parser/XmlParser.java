@@ -143,8 +143,8 @@ public class XmlParser extends Thread{
 								longueur = XPathAPI.selectNodeIterator(n, "longueur")
 								.nextNode().getTextContent();
 
-								if (myProgps.existeVille(nomVille)) {
-									if (myProgps.existeVille(nomVille2)) {
+								if (myProgps.villeConnue(nomVille)) {
+									if (myProgps.villeConnue(nomVille2)) {
 										try {
 											intVitesse = Integer.parseInt(vitesse);
 											try {
@@ -201,6 +201,7 @@ public class XmlParser extends Thread{
 				catch (Exception e) {
 					// On note que le thead a levé une exception
 					exceptionLevee=true;
+					System.out.println(e.toString());
 				}
 				// Si aucune exception n'a été levée, on indique que le parsing est fini
 				if (!exceptionLevee)
@@ -214,6 +215,7 @@ public class XmlParser extends Thread{
 	 * @return l'avancement en % [de 0 à 100]
 	 */
 	public int getAvancement() {
+		if (this.nbrNoeuds==0) return 0;
 		return (this.nbrNoeudsVisites/this.nbrNoeuds);
 	}
 

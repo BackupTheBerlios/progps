@@ -80,6 +80,15 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     	throw new ExceptionGraph("La ville "+nom+" n'est pas dans le graph.");
     }
     
+    public boolean villeExiste(String nom){
+    	for (Iterator iter = this.vertexSet().iterator(); iter.hasNext();) {
+			Ville uneVille = (Ville) iter.next();
+			if(uneVille.getNomVille().equalsIgnoreCase(nom))
+				return true;
+		}
+    	return false;
+    }
+    
     public double getEdgeWeight(Troncon e)
     {
     	if (e instanceof Troncon) {
