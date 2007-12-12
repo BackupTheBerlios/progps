@@ -7,15 +7,14 @@ import exceptions.ExceptionRecherche;
 
 import noyau.*;
 
-public class ThreadOrdonancementVillesEtapes<V, T> extends Thread implements Comparator<Double> {
+public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	private MyWeightedMultigraph graph=null;
 	private Ville villeDep = null;
 	private Ville villeArr = null;
 	private Set<Ville> nonOrdonnees = null;
 	private List<Ville> ordonnees = null;
-	private List cles = null;
 	private boolean upToDate = false;
-	private TreeMap<Double, Ville> collection;
+	private TreeMap<Integer, Ville> collection;
 	
 	public ThreadOrdonancementVillesEtapes(
 			MyWeightedMultigraph graph,
@@ -65,40 +64,43 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread implements Com
 		while( !isInterrupted()) {
 			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonnees!=null) {
 				ordonnees = new ArrayList<Ville>();
-
-				collection = new TreeMap<Double, Ville>();
+				int minVille;
+				collection = new TreeMap<Integer, Ville>();
+				this.triCheminsAPartirDe(villeDep);
 				// Liste toutes les villes etape
-				for (Iterator<Ville> iter = nonOrdonnees.iterator(); iter.hasNext();) {
-					Ville uneVilleEtape = (Ville) iter.next();
-
-					Itineraire leChemin;
-					try {
-						leChemin = graph.trouverLeChemin(villeDep, uneVilleEtape, null, null);
-						collection.put((double)leChemin.getLongueurTotal(), uneVilleEtape);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				while (!this.nonOrdonnees.isEmpty()) {
+					minVille=collection.firstKey();
+					this.ordonnees.add(collection.get(minVille));
+					this.nonOrdonnees.remove(minVille);
+					this.triCheminsAPartirDe(collection.get(minVille));
 				}
-				//Collections.sort(collection, collection.comparator());
-				
-
-		
 			}
 		}
 		
 
 	}
-	public int compare(Double d1, Double d2) {
-		List<Double> cles = new ArrayList<Double>(collection.keySet());
-		Double v1, v2;
-		v1=cles.get(d1.intValue());
-		v2=cles.get(d2.intValue());
+	
+	public void triCheminsAPartirDe(Ville v) {
+		for (Ville uneVilleEtape : this.nonOrdonnees) {
+			try {
+				Itineraire leChemin = graph.trouverLeChemin(v, uneVilleEtape, null, null);
+				collection.put(leChemin.getLongueurTotal(), uneVilleEtape);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	/*public int compare(Integer d1, Integer d2) {
+		List<Integer> cles = new ArrayList<Integer>(collection.keySet());
+		Integer v1, v2;
+		v1=cles.get(d1);
+		v2=cles.get(d2);
 		if (v1>v2)
 			return 1;
 		else if (v2==v1)
 			return 0;
 		else return -1;
 	}
-	
+	*/
 }
