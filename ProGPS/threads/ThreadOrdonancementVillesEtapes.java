@@ -74,6 +74,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 					this.nonOrdonnees.remove(minVille);
 					this.triCheminsAPartirDe(collection.get(minVille));
 				}
+				upToDate=true;
 			}
 		}
 		
