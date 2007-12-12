@@ -1,6 +1,8 @@
 package parser;
 
 import java.io.FileInputStream;
+import java.sql.Time;
+import java.util.Date;
 import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -73,8 +75,10 @@ public class XmlParser extends Thread{
 						dfactory.setNamespaceAware(true);
 						Document doc = dfactory.newDocumentBuilder().parse(in);
 
-						//nbrNoeuds=XPathAPI.selectNodeList(doc, "count(/reseau/*)").getLength();
-						nbrNoeuds=((Double)XPathAPI.eval(doc, "count(/reseau/*)").num()).intValue();
+						long debut=System.currentTimeMillis();
+//						nbrNoeuds=((Double)XPathAPI.eval(doc, "count(/reseau/*)").num()).intValue();
+						long finCharge=System.currentTimeMillis();
+						System.out.println("Temps pour déterminer nombre de noeuds : "+(finCharge-debut)+"ms");
 						
 						nl = XPathAPI.selectNodeIterator(doc, "/reseau/ville");
 
@@ -111,7 +115,10 @@ public class XmlParser extends Thread{
 						}
 
 						nl = XPathAPI.selectNodeIterator(doc, "/reseau/route");
-
+						
+						long finVilles=System.currentTimeMillis();
+						System.out.println("Temps pour créer les villes : "+(finVilles-finCharge)+"ms");
+						
 						while ((n = nl.nextNode()) != null) {
 							nbrNoeudsVisites++;
 							nomRoute = XPathAPI.selectNodeIterator(n, "nom").nextNode()
@@ -201,6 +208,8 @@ public class XmlParser extends Thread{
 											"Impossible de créer un tronçon entre "+ nomVille2 + " et "+nomVille+" : une des deux villes n'existe pas.");
 							}
 						}
+						long finTroncon=System.currentTimeMillis();
+						System.out.println("Temps pour créer les Troncons : "+(finTroncon-finVilles)+"ms");
 					} else
 						throw new ExceptionParser("Fichier XML indisponible");
 				}
