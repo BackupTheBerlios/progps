@@ -257,7 +257,7 @@ public class AdminPanel extends JPanel {
 		Route tmp = progps.getRoute((String)jComboBox_adminRoutesTroncons.getSelectedItem());
 		DefaultComboBoxModel mod = new DefaultComboBoxModel();
 		for (int i=0; i < tmp.getSesTroncons().size(); i++) {
-			mod.addElement((String)tmp.getSesTroncons().get(i).getSesVilles().toArray()[0] + " <-> " + (String)tmp.getSesTroncons().get(i).getSesVilles().toArray()[1]);
+			mod.addElement((String)((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[0]).getNomVille() + " <-> " + (String)((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[1]).getNomVille());
 		}
 		jComboBox_adminTroncons.setModel(mod);
 	}
@@ -396,6 +396,24 @@ public class AdminPanel extends JPanel {
         
         s = doc.addStyle("green", regular);
         StyleConstants.setForeground(s, Color.GREEN);
+	}
+	
+	
+	private void verifRoute(String nom) {
+		Route r = progps.getRoute(nom);
+		int i=0;
+		while (i < r.getSesTroncons().size() && !r.getSesTroncons().get(i).isDispo()) {
+			i++;
+		}
+		if (i == r.getSesTroncons().size()) {
+			routesIndispo.add(r.getNomRoute());
+			Collections.sort(routesIndispo);
+			DefaultListModel mod = new DefaultListModel();
+			for (int j=0; j < routesIndispo.size(); j++) {
+				mod.addElement(routesIndispo.get(j));
+			}
+			jList_adminRoutesIndispo.setModel(mod);
+		}
 	}
 	
 	/**
@@ -1020,6 +1038,16 @@ public class AdminPanel extends JPanel {
 									}
 									jList_adminRoutesIndispo.setModel(mod);
 									
+									for (int i=0; i < tmp.getSesTroncons().size(); i++) {
+										tronconsIndispo.add((String)jComboBox_adminRoutes.getSelectedItem() + " : [" + (String)((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[0]).getNomVille() + " <-> " + (String)((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[1]).getNomVille() + "]");
+									}
+									Collections.sort(tronconsIndispo);
+									DefaultListModel mod2 = new DefaultListModel();
+									for (int i=0; i < tronconsIndispo.size(); i++) {
+										mod2.addElement(tronconsIndispo.get(i));
+									}
+									jList_adminTronconsIndispo.setModel(mod2);
+									
 								}
 							}
 							else {
@@ -1061,6 +1089,16 @@ public class AdminPanel extends JPanel {
 										mod.addElement(routesIndispo.get(i));
 									}
 									jList_adminRoutesIndispo.setModel(mod);
+									
+									for (int i=0; i < tmp.getSesTroncons().size(); i++) {
+										tronconsIndispo.remove((String)jComboBox_adminRoutes.getSelectedItem() + " : [" + (String)((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[0]).getNomVille() + " <-> " + (String)((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[1]).getNomVille() + "]");
+									}
+									Collections.sort(tronconsIndispo);
+									DefaultListModel mod2 = new DefaultListModel();
+									for (int i=0; i < tronconsIndispo.size(); i++) {
+										mod2.addElement(tronconsIndispo.get(i));
+									}
+									jList_adminTronconsIndispo.setModel(mod2);
 								}
 							}
 						}
@@ -1221,8 +1259,12 @@ public class AdminPanel extends JPanel {
 					
 					if (tmp.isDispo()) {
 						inf[5] = "disponible";
+						jButton_adminIndispoTroncon.setText("Rendre ce tronçon indisponible");
 					}
-					else inf[5] = "indisponible";
+					else {
+						inf[5] = "indisponible";
+						jButton_adminIndispoTroncon.setText("Rendre ce tronçon disponible");
+					}
 					
 					remplirDetailsTroncon(inf);
 				}
@@ -1262,10 +1304,120 @@ public class AdminPanel extends JPanel {
 			jButton_adminIndispoTroncon
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-							int rep = JOptionPane.showConfirmDialog(new Frame(), "Voulez-vous vraiment rendre le tronçon [" + jComboBox_adminTroncons.getSelectedItem() + "] de la route " + jComboBox_adminRoutesTroncons.getSelectedItem() + " indisponible ?", "Confirmation", JOptionPane.YES_NO_OPTION);
-							if (rep == JOptionPane.YES_OPTION) {
-								// TODO
+							if (jButton_adminIndispoTroncon.getText().equals("Rendre ce tronçon indisponible")) {
+								int rep = JOptionPane.showConfirmDialog(new Frame(), "Voulez-vous vraiment rendre le tronçon [" + (String)jComboBox_adminTroncons.getSelectedItem() + "] de la route " + jComboBox_adminRoutesTroncons.getSelectedItem() + " indisponible ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+								if (rep == JOptionPane.YES_OPTION) {
+									Troncon tmp = null;
+									try {
+										String res[] = ((String)jComboBox_adminTroncons.getSelectedItem()).split(" ");
+										tmp = progps.getTroncon((String)jComboBox_adminRoutesTroncons.getSelectedItem(), res[0], res[2]);
+										tmp.setDispo(false);
+									}
+									catch (Exception exc) {
+										exc.printStackTrace();
+									}
+								
+									String inf[] = new String[6];
+									
+									inf[0] = "" + tmp.getLongueur();
+									
+									if (tmp.isTouristique()) {
+										inf[1] = "oui";
+									}
+									else inf[1] = "non";
+									
+									if (tmp.isPayant()) {
+										inf[2] = "oui";
+									}
+									else inf[2] = "non";
+									
+									if (tmp.isRadar()) {
+										inf[3] = "oui";
+									}
+									else inf[3] = "non";
+									
+									inf[4] = "" + tmp.getVitesse();
+									
+									if (tmp.isDispo()) {
+										inf[5] = "disponible";
+										jButton_adminIndispoTroncon.setText("Rendre ce tronçon indisponible");
+									}
+									else {
+										inf[5] = "indisponible";
+										jButton_adminIndispoTroncon.setText("Rendre ce tronçon disponible");
+									}
+									
+									remplirDetailsTroncon(inf);
+									
+									
+									tronconsIndispo.add((String)jComboBox_adminRoutesTroncons.getSelectedItem() + " : [" + (String)jComboBox_adminTroncons.getSelectedItem() + "]");
+									Collections.sort(tronconsIndispo);
+									DefaultListModel mod = new DefaultListModel();
+									for (int i=0; i < tronconsIndispo.size(); i++) {
+										mod.addElement(tronconsIndispo.get(i));
+									}
+									jList_adminTronconsIndispo.setModel(mod);
+									
+								}
 							}
+							else {
+								int rep = JOptionPane.showConfirmDialog(new Frame(), "Voulez-vous vraiment rendre le tronçon [" + (String)jComboBox_adminTroncons.getSelectedItem() + "] de la route " + jComboBox_adminRoutesTroncons.getSelectedItem() + " disponible ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+								if (rep == JOptionPane.YES_OPTION) {
+									Troncon tmp = null;
+									try {
+										String res[] = ((String)jComboBox_adminTroncons.getSelectedItem()).split(" ");
+										tmp = progps.getTroncon((String)jComboBox_adminRoutesTroncons.getSelectedItem(), res[0], res[2]);
+										tmp.setDispo(true);
+									}
+									catch (Exception exc) {
+										exc.printStackTrace();
+									}
+								
+									String inf[] = new String[6];
+									
+									inf[0] = "" + tmp.getLongueur();
+									
+									if (tmp.isTouristique()) {
+										inf[1] = "oui";
+									}
+									else inf[1] = "non";
+									
+									if (tmp.isPayant()) {
+										inf[2] = "oui";
+									}
+									else inf[2] = "non";
+									
+									if (tmp.isRadar()) {
+										inf[3] = "oui";
+									}
+									else inf[3] = "non";
+									
+									inf[4] = "" + tmp.getVitesse();
+									
+									if (tmp.isDispo()) {
+										inf[5] = "disponible";
+										jButton_adminIndispoTroncon.setText("Rendre ce tronçon indisponible");
+									}
+									else {
+										inf[5] = "indisponible";
+										jButton_adminIndispoTroncon.setText("Rendre ce tronçon disponible");
+									}
+									
+									remplirDetailsTroncon(inf);
+									
+									
+									tronconsIndispo.remove((String)jComboBox_adminRoutesTroncons.getSelectedItem() + " : [" + (String)jComboBox_adminTroncons.getSelectedItem() + "]");
+									Collections.sort(tronconsIndispo);
+									DefaultListModel mod = new DefaultListModel();
+									for (int i=0; i < tronconsIndispo.size(); i++) {
+										mod.addElement(tronconsIndispo.get(i));
+									}
+									jList_adminTronconsIndispo.setModel(mod);
+								}
+							}
+							
+							verifRoute((String)jComboBox_adminRoutesTroncons.getSelectedItem());
+							
 						}
 					});
 		}
@@ -1291,9 +1443,46 @@ public class AdminPanel extends JPanel {
 							Route tmp = progps.getRoute((String)jComboBox_adminRoutesTroncons.getSelectedItem());
 							DefaultComboBoxModel mod = new DefaultComboBoxModel();
 							for (int i=0; i < tmp.getSesTroncons().size(); i++) {
-								mod.addElement((String)tmp.getSesTroncons().get(i).getSesVilles().toArray()[0] + " <-> " + (String)tmp.getSesTroncons().get(i).getSesVilles().toArray()[1]);
+								mod.addElement(((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[0]).getNomVille() + " <-> " + ((Ville)tmp.getSesTroncons().get(i).getSesVilles().toArray()[1]).getNomVille());
 							}
 							jComboBox_adminTroncons.setModel(mod);
+							
+							Troncon t = null;
+							String[] result = ((String)jComboBox_adminTroncons.getSelectedItem()).split(" ");
+							try {
+								t = progps.getTroncon((String)jComboBox_adminRoutesTroncons.getSelectedItem(), result[0], result[2]);
+							}
+							catch (Exception exc) {
+								exc.printStackTrace();
+							}
+							
+							String inf[] = new String[6];
+							
+							inf[0] = "" + t.getLongueur();
+							
+							if (t.isTouristique()) {
+								inf[1] = "oui";
+							}
+							else inf[1] = "non";
+							
+							if (t.isPayant()) {
+								inf[2] = "oui";
+							}
+							else inf[2] = "non";
+							
+							if (t.isRadar()) {
+								inf[3] = "oui";
+							}
+							else inf[3] = "non";
+							
+							inf[4] = "" + t.getVitesse();
+							
+							if (t.isDispo()) {
+								inf[5] = "disponible";
+							}
+							else inf[5] = "indisponible";
+							
+							remplirDetailsTroncon(inf);
 						}
 					});
 		}
@@ -1409,7 +1598,7 @@ public class AdminPanel extends JPanel {
 	 * 	
 	 * @return javax.swing.JList	
 	 */
-	private JList getJList_adminTronconsIndispo() {
+	public JList getJList_adminTronconsIndispo() {
 		if (jList_adminTronconsIndispo == null) {
 			jList_adminTronconsIndispo = new JList(getTronconsIndispo());
 			jList_adminTronconsIndispo.setForeground(Color.RED);
@@ -1544,6 +1733,10 @@ public class AdminPanel extends JPanel {
 			jTextPane_detailsVille.setEditable(false);
 		}
 		return jTextPane_detailsVille;
+	}
+	
+	public Vector<String> getListeTronconsIndispo() {
+		return tronconsIndispo;
 	}
 
 

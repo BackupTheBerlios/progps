@@ -1344,6 +1344,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					}
 					
 					// TODO event()
+					
 				}
 			});
 		}
@@ -1939,7 +1940,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						fenPrefs.setVisible(true);
 					}
 					else {
-						fenPrefs = new FenetrePreferences();
+						fenPrefs = new FenetrePreferences(progps);
 						fenPrefs.setVisible(true);
 					}
 				}
@@ -1978,7 +1979,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						fenPrefs.setVisible(true);
 					}
 					else {
-						fenPrefs = new FenetrePreferences();
+						fenPrefs = new FenetrePreferences(progps);
 						fenPrefs.setVisible(true);
 					}
 				}

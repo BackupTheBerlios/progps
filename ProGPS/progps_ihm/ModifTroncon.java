@@ -13,6 +13,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JWindow;
 import javax.swing.JTextField;
@@ -21,6 +23,9 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 
 
@@ -122,11 +127,14 @@ public class ModifTroncon extends JWindow {
 		}
 		ownerButton = but;
 		initialize();
+		initComboVille1();
+		jComboBox_ville1.setSelectedItem(((Ville)leTroncon.getSesVilles().toArray()[0]).getNomVille());
+		initComboVille2();
+		jComboBox_ville2.setSelectedItem(((Ville)leTroncon.getSesVilles().toArray()[1]).getNomVille());
+		initComboRoutes();
+		jComboBox_route.setSelectedItem(leTroncon.getSaRoute().getNomRoute());
 	}
 	
-	public void remplirChamps(Troncon t) {
-		//TODO
-	}
 
 	/**
 	 * This method initializes this
@@ -135,9 +143,53 @@ public class ModifTroncon extends JWindow {
 	 */
 	private void initialize() {
 		this.setSize(270, 300);
-		this.setContentPane(getJContentPane());//getJContentPane());
+		this.setContentPane(getJContentPane());
 	}
 
+	private void initComboVille1() {
+		DefaultComboBoxModel modVilles = new DefaultComboBoxModel();
+		ArrayList<String> lesVilles = new ArrayList<String>();
+		for (int i=0; i < progps.getVilles().size(); i++) {
+			lesVilles.add(progps.getVilles().get(i).getNomVille());
+		}
+		Collections.sort(lesVilles);
+		//modVilles.addElement("Sélectionnez...");
+		for (int i=0; i < lesVilles.size(); i++) {
+			modVilles.addElement(lesVilles.get(i));
+		}
+		jComboBox_ville1.setModel(modVilles);
+		
+	}
+	
+	private void initComboVille2() {
+		DefaultComboBoxModel modVilles = new DefaultComboBoxModel();
+		ArrayList<String> lesVilles = new ArrayList<String>();
+		for (int i=0; i < progps.getVilles().size(); i++) {
+			if (!progps.getVilles().get(i).getNomVille().equals((String)jComboBox_ville1.getSelectedItem())) {
+				lesVilles.add(progps.getVilles().get(i).getNomVille());
+			}
+		}
+		Collections.sort(lesVilles);
+		//modVilles.addElement("Sélectionnez...");
+		for (int i=0; i < lesVilles.size(); i++) {
+			modVilles.addElement(lesVilles.get(i));
+		}
+		jComboBox_ville2.setModel(modVilles);
+	}
+	
+	private void initComboRoutes() {
+		DefaultComboBoxModel modRoutes = new DefaultComboBoxModel();
+		Vector<String> lesRoutes = new Vector<String>();
+		for (int i=0; i < progps.getRoutes().size(); i++) {
+			lesRoutes.add(progps.getRoutes().get(i).getNomRoute());
+		}
+		Collections.sort(lesRoutes);
+		for (int i=0; i < lesRoutes.size(); i++) {
+			modRoutes.addElement(lesRoutes.get(i));
+		}
+		jComboBox_route.setModel(modRoutes);
+	}
+	
 	/**
 	 * This method initializes jContentPane
 	 * 
@@ -252,7 +304,14 @@ public class ModifTroncon extends JWindow {
 								lesEtats.add(Etat.Radar);
 							}
 							//progps.ajouterTroncon((String)jComboBox_ville1.getSelectedItem(), (String)jComboBox_ville2.getSelectedItem(), progps.getRoute((String)jComboBox_route.getSelectedItem()), (new Integer((String)jComboBox_limitations.getSelectedItem())).intValue(), (new Integer(jTextField_longueur.getText())).intValue(), lesEtats);
+							
+							Route tmpRoute = leTroncon.getSaRoute();
+							Ville v1 = ((Ville)leTroncon.getSesVilles().toArray()[0]);
+							Ville v2 = ((Ville)leTroncon.getSesVilles().toArray()[1]);
+							
 							leTroncon.setSaRoute(progps.getRoute((String)jComboBox_route.getSelectedItem()));
+							tmpRoute.supprimerTroncon(leTroncon);
+							ownerFrame.getAdminPanel().refreshListeTroncons();
 							try {
 								leTroncon.setSesVilles(progps.getVille((String)jComboBox_ville1.getSelectedItem()),progps.getVille((String)jComboBox_ville2.getSelectedItem()));
 							}
@@ -263,6 +322,18 @@ public class ModifTroncon extends JWindow {
 							leTroncon.setVitesse((new Integer((String)jComboBox_limitations.getSelectedItem())).intValue());
 							leTroncon.setSesEtats(lesEtats);
 						
+							if (!leTroncon.isDispo()) {
+								ownerFrame.getAdminPanel().getListeTronconsIndispo().remove(tmpRoute.getNomRoute() + " : [" + (String)v1.getNomVille() + " <-> " + (String)v2.getNomVille() + "]");
+								ownerFrame.getAdminPanel().getListeTronconsIndispo().add(leTroncon.getSaRoute().getNomRoute() + " : [" + (String)((Ville)leTroncon.getSesVilles().toArray()[0]).getNomVille() + " <-> " + (String)((Ville)leTroncon.getSesVilles().toArray()[1]).getNomVille() + "]");
+								
+								Collections.sort(ownerFrame.getAdminPanel().getListeTronconsIndispo());
+								DefaultListModel mod = new DefaultListModel();
+								for (int i=0; i < ownerFrame.getAdminPanel().getListeTronconsIndispo().size(); i++) {
+									mod.addElement(ownerFrame.getAdminPanel().getListeTronconsIndispo().get(i));
+								}
+								ownerFrame.getAdminPanel().getJList_adminTronconsIndispo().setModel(mod);
+							}
+							
 							ownerFrame.getAdminPanel().refreshListeTroncons();
 							ownerButton.setEnabled(true);
 							dispose();
@@ -434,7 +505,6 @@ public class ModifTroncon extends JWindow {
 			jComboBox_route.setBackground(Color.WHITE);
 			jComboBox_route.setForeground(Color.BLUE);
 			jComboBox_route.setPreferredSize(new Dimension(100, 20));
-			jComboBox_route.setSelectedItem(leTroncon.getSaRoute().getNomRoute());
 		}
 		return jComboBox_route;
 	}
@@ -450,7 +520,11 @@ public class ModifTroncon extends JWindow {
 			jComboBox_ville1.setBackground(Color.WHITE);
 			jComboBox_ville1.setForeground(Color.BLUE);
 			jComboBox_ville1.setPreferredSize(new Dimension(150, 20));
-			jComboBox_ville1.setSelectedItem(leTroncon.getSesVilles().toArray()[0]);
+			jComboBox_ville1.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					initComboVille2();
+				}
+			});
 		}
 		return jComboBox_ville1;
 	}
@@ -466,7 +540,6 @@ public class ModifTroncon extends JWindow {
 			jComboBox_ville2.setBackground(Color.WHITE);
 			jComboBox_ville2.setForeground(Color.BLUE);
 			jComboBox_ville2.setPreferredSize(new Dimension(150, 20));
-			jComboBox_ville2.setSelectedItem(leTroncon.getSesVilles().toArray()[1]);
 		}
 		return jComboBox_ville2;
 	}
@@ -505,11 +578,11 @@ public class ModifTroncon extends JWindow {
 	private JComboBox getJComboBox_limitations() {
 		if (jComboBox_limitations == null) {
 			Vector<String> limitations = new Vector<String>();
-			limitations.add("50 km/h");
-			limitations.add("70 km/h");
-			limitations.add("90 km/h");
-			limitations.add("110 km/h");
-			limitations.add("130 km/h");
+			limitations.add("50");
+			limitations.add("70");
+			limitations.add("90");
+			limitations.add("110");
+			limitations.add("130");
 			jComboBox_limitations = new JComboBox(limitations);
 			jComboBox_limitations.setBackground(Color.WHITE);
 			jComboBox_limitations.setForeground(Color.RED);

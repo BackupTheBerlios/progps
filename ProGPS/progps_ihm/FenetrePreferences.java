@@ -2,6 +2,8 @@ package progps_ihm;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.JFrame;
@@ -11,14 +13,32 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
+import java.util.Collections;
+import java.util.Vector;
+
 import javax.swing.JSlider;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.plaf.SliderUI;
+
+import noyau.Preference;
+import noyau.SingletonProgps;
 
 public class FenetrePreferences extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private SingletonProgps progps = null;
+	
+	private static final int VILLES_EVITER = 0;
+	private static final int VILLES_ETAPES = 1;
+	private static final int RADARS = 2;
+	private static final int PAYANT = 3;
+	private static final int VITESSE = 4;
+	private static final int TOURISTIQUE = 5;
+	
+	private Vector<Integer> valuesInit = new Vector<Integer>();  //  @jve:decl-index=0:
+	
 	private JPanel jContentPane = null;
 
 	private JPanel jPanel_preferences = null;
@@ -66,13 +86,17 @@ public class FenetrePreferences extends JFrame {
 	private JCheckBox jCheckBox_opt5 = null;
 
 	private JCheckBox jCheckBox_opt6 = null;
+	
+	private Vector<JSlider> lesSliders = new Vector<JSlider>();  //  @jve:decl-index=0:
 
 	/**
 	 * This is the default constructor
 	 */
-	public FenetrePreferences() {
+	public FenetrePreferences(SingletonProgps sys) {
 		super();
+		progps = sys;
 		initialize();
+		refreshInitValues();
 	}
 
 	/**
@@ -86,6 +110,54 @@ public class FenetrePreferences extends JFrame {
 		this.setTitle("Préférences");
 		this.setIconImage(this.getToolkit().getImage("C://progps_images//gps_small.png"));
 		this.setResizable(false);
+	}
+	
+	public void refreshInitValues() {
+		valuesInit.removeAllElements();
+		for (int i=0; i < lesSliders.size(); i++) {
+			if (!lesSliders.get(i).isEnabled()) {
+				valuesInit.add(0);
+			}
+			else valuesInit.add(new Integer(lesSliders.get(i).getValue()));
+		}
+	}
+	
+	public void setInitValues() {
+		for (int i=0; i < valuesInit.size(); i++) {
+			if (valuesInit.get(i).intValue() == 0) {
+				lesSliders.get(i).setEnabled(false);
+				lesSliders.get(i).setValue(0);
+			}
+			else {
+				lesSliders.get(i).setEnabled(true);
+				lesSliders.get(i).setValue(valuesInit.get(i).intValue());
+			}
+		}
+	}
+	
+	private void commitSliderValue(JSlider slider) {
+		for (int i=0; i<lesSliders.size(); i++) {
+			if (slider != lesSliders.get(i)) {
+				if (lesSliders.get(i).isEnabled()) {
+					if (slider.getValue() == lesSliders.get(i).getValue()) {
+						lesSliders.get(i).setValue(0);
+					}
+				}
+			}
+		}
+	}
+	
+	private boolean checkSliderValues() {
+		for (int i=0; i<lesSliders.size(); i++) {
+			if (lesSliders.get(i).getValue() == 0) {
+				if (lesSliders.get(i).isEnabled()) {
+					JOptionPane.showMessageDialog(null, "Une priorité ne peut pas être égale à 0 !", "Erreur", JOptionPane.ERROR_MESSAGE);
+					lesSliders.get(i).requestFocus();
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -189,6 +261,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt1.setPaintLabels(true);
 			jSlider_opt1.setPaintTrack(true);
 			jSlider_opt1.setValue(5);
+			jSlider_opt1.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+					commitSliderValue(jSlider_opt1);
+				}
+			});
+			lesSliders.add(jSlider_opt1);
 		}
 		return jSlider_opt1;
 	}
@@ -220,8 +298,38 @@ public class FenetrePreferences extends JFrame {
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					//TODO
-					
-					dispose();
+					if (checkSliderValues()) {
+						Vector<Integer> values = new Vector<Integer> ();
+						for (int i=0; i < lesSliders.size(); i++) {
+							if (lesSliders.get(i).isEnabled()) {
+								values.add(new Integer(lesSliders.get(i).getValue()));
+							}
+						}
+						Collections.sort(values);
+						Vector<Preference> pref = new Vector<Preference>();
+						for (int i=0; i < values.size(); i++) {
+							int j=0;
+							while (lesSliders.get(j).getValue() != values.get(i) && j < lesSliders.size()) {
+								j++;
+							}
+							switch (j) {
+								case VILLES_EVITER: pref.add(Preference.VillesAEviter); break;
+								case VILLES_ETAPES: pref.add(Preference.Villes); break;
+								case RADARS: pref.add(Preference.Radars); break;
+								case PAYANT: pref.add(Preference.Payant); break;
+								case VITESSE: pref.add(Preference.Vitesse); break;
+								case TOURISTIQUE: pref.add(Preference.Touristique); break;
+								default: break;
+							}
+							
+							j=0;
+						}
+						
+						progps.setPreferences(pref);
+						refreshInitValues();
+						
+						dispose();
+					}
 				}
 			});
 		}
@@ -239,6 +347,8 @@ public class FenetrePreferences extends JFrame {
 			jButton_cancel.setText("Annuler");
 			jButton_cancel.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					// TODO
+					setInitValues();
 					dispose();
 				}
 			});
@@ -262,6 +372,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt2.setPaintTrack(true);
 			jSlider_opt2.setSnapToTicks(true);
 			jSlider_opt2.setValue(6);
+			jSlider_opt2.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+					commitSliderValue(jSlider_opt2);
+				}
+			});
+			lesSliders.add(jSlider_opt2);
 		}
 		return jSlider_opt2;
 	}
@@ -274,6 +390,11 @@ public class FenetrePreferences extends JFrame {
 	private JSlider getJSlider_opt3() {
 		if (jSlider_opt3 == null) {
 			jSlider_opt3 = new JSlider();
+			jSlider_opt3.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+					commitSliderValue(jSlider_opt3);
+				}
+			});
 			jSlider_opt3.setMajorTickSpacing(1);
 			jSlider_opt3.setMinimum(0);
 			jSlider_opt3.setMaximum(6);
@@ -282,6 +403,7 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt3.setPaintTrack(true);
 			jSlider_opt3.setSnapToTicks(true);
 			jSlider_opt3.setValue(1);
+			lesSliders.add(jSlider_opt3);
 		}
 		return jSlider_opt3;
 	}
@@ -302,6 +424,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt4.setPaintTrack(true);
 			jSlider_opt4.setSnapToTicks(true);
 			jSlider_opt4.setValue(2);
+			jSlider_opt4.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+					commitSliderValue(jSlider_opt4);
+				}
+			});
+			lesSliders.add(jSlider_opt4);
 		}
 		return jSlider_opt4;
 	}
@@ -322,6 +450,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt5.setPaintTrack(true);
 			jSlider_opt5.setSnapToTicks(true);
 			jSlider_opt5.setValue(3);
+			jSlider_opt5.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+					commitSliderValue(jSlider_opt5);
+				}
+			});
+			lesSliders.add(jSlider_opt5);
 		}
 		return jSlider_opt5;
 	}
@@ -342,6 +476,12 @@ public class FenetrePreferences extends JFrame {
 			jSlider_opt6.setPaintTrack(true);
 			jSlider_opt6.setSnapToTicks(true);
 			jSlider_opt6.setValue(4);
+			jSlider_opt6.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+					commitSliderValue(jSlider_opt6);
+				}
+			});
+			lesSliders.add(jSlider_opt6);
 		}
 		return jSlider_opt6;
 	}
@@ -391,7 +531,10 @@ public class FenetrePreferences extends JFrame {
 				if (jSlider_opt2.isEnabled()) {
 					jSlider_opt2.setEnabled(false);
 				}
-				else jSlider_opt2.setEnabled(true);
+				else {
+					jSlider_opt2.setEnabled(true);
+					jSlider_opt2.setValue(0);
+				}
 			}
 		});
 		return jCheckBox_opt2;
@@ -415,7 +558,10 @@ public class FenetrePreferences extends JFrame {
 				if (jSlider_opt3.isEnabled()) {
 					jSlider_opt3.setEnabled(false);
 				}
-				else jSlider_opt3.setEnabled(true);
+				else {
+					jSlider_opt3.setEnabled(true);
+					jSlider_opt3.setValue(0);
+				}
 			}
 		});
 		return jCheckBox_opt3;
@@ -439,7 +585,10 @@ public class FenetrePreferences extends JFrame {
 				if (jSlider_opt4.isEnabled()) {
 					jSlider_opt4.setEnabled(false);
 				}
-				else jSlider_opt4.setEnabled(true);
+				else {
+					jSlider_opt4.setEnabled(true);
+					jSlider_opt4.setValue(0);
+				}
 			}
 		});
 		return jCheckBox_opt4;
@@ -463,7 +612,10 @@ public class FenetrePreferences extends JFrame {
 				if (jSlider_opt5.isEnabled()) {
 					jSlider_opt5.setEnabled(false);
 				}
-				else jSlider_opt5.setEnabled(true);
+				else {
+					jSlider_opt5.setEnabled(true);
+					jSlider_opt5.setValue(0);
+				}
 			}
 		});
 		return jCheckBox_opt5;
@@ -487,7 +639,10 @@ public class FenetrePreferences extends JFrame {
 				if (jSlider_opt6.isEnabled()) {
 					jSlider_opt6.setEnabled(false);
 				}
-				else jSlider_opt6.setEnabled(true);
+				else {
+					jSlider_opt6.setEnabled(true);
+					jSlider_opt2.setValue(0);
+				}
 			}
 		});
 		return jCheckBox_opt6;
