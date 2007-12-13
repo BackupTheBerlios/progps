@@ -10,7 +10,6 @@ public class User {
 	private Ville villeA;
 	private List<Ville> villesAEviter = new Vector<Ville>();
 	private List<Preference> sesPreferences = new Vector<Preference>();
-	private List<Preference> sesPreferencesCourantes = new Vector<Preference>();
 	private Itineraire itineraireCourant;
 	private List<Itineraire> itineraireCalcules = new Vector<Itineraire>();
 	private List<Ville> villesTraversees = new Vector<Ville>();
@@ -107,17 +106,11 @@ public class User {
 	
 	//prend un tableau déjà trié de préférences et les ajoute à celles de l'utilisateur
 	//à clément de renvoyer un tableau deja trié avec l'interface
-	public void setSesPreferences(Preference[] sesPreferences) {
-			this.sesPreferences.clear();
-			for (int i=0;i<sesPreferences.length;i++)
-				this.sesPreferences.add(sesPreferences[i]);	
+	public void setSesPreferences(List<Preference> l) {
+		this.sesPreferences=l;
+		
 	}
-	
-	public void setSesPreferencesCourantes(Preference[] sesPreferences) {
-			this.sesPreferencesCourantes.clear();
-			for (int i=0;i<sesPreferences.length;i++)
-				this.sesPreferencesCourantes.add(sesPreferences[i]);	
-	}
+
 
 
 	public void setItineraireCourant(Itineraire itineraireCourant) {

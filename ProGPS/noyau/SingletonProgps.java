@@ -231,6 +231,7 @@ public class SingletonProgps {
 	
 	public void setPreferences(List<Preference> l) {
 		this.graph.setPreferences(l);
+		this.sonUser.setSesPreferences(l);
 	}
 	
 	public void ajouterRoute(String nom, int type) {
