@@ -229,6 +229,10 @@ public class SingletonProgps {
 			sesRoutes.add(r);
 	}
 	
+	public void setPreferences(List<Preference> l) {
+		this.graph.setPreferences(l);
+	}
+	
 	public void ajouterRoute(String nom, int type) {
 		Route r = new Route(this.getNewIdRoute(), nom, type);
 		this.ajouterRoute(r);

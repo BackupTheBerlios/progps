@@ -75,19 +75,19 @@ public class Route {
 		return typeRoute;
 	}
 
-	public boolean modifierEtatTroncon(String ville1, String ville2, String route) {
-		throw new UnsupportedOperationException();
-	}
+//	public boolean modifierEtatTroncon(String ville1, String ville2, String route) {
+//		throw new UnsupportedOperationException();
+//	}
+//
+//	public boolean supprimerTroncon(boolean ville1, String ville2) {
+//		throw new UnsupportedOperationException();
+//	}
 
-	public boolean supprimerTroncon(boolean ville1, String ville2) {
-		throw new UnsupportedOperationException();
-	}
-
-	public Troncon[] toSesTronconsArray() {
-		Troncon[] lSesTroncons_Temp = new Troncon[this.sesTroncons.size()];
-		this.sesTroncons.toArray(lSesTroncons_Temp);
-		return lSesTroncons_Temp;
-	}
+//	public Troncon[] toSesTronconsArray() {
+//		Troncon[] lSesTroncons_Temp = new Troncon[this.sesTroncons.size()];
+//		this.sesTroncons.toArray(lSesTroncons_Temp);
+//		return lSesTroncons_Temp;
+//	}
 	
 	public List<Troncon> getSesTroncons() {
 		return this.sesTroncons;
