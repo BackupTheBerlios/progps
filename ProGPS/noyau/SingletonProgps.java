@@ -220,6 +220,7 @@ public class SingletonProgps {
 		newTroncon.setVitesse(vitesse);
 		newTroncon.setLongueur(longueur);
 		newTroncon.setSesEtats(etats);
+		newTroncon.setDispo(true);
 		return true;
 	}
 	/*
