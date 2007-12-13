@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import parser.XmlParser;
+import parser.XmlParser2;
 import progps_ihm.FenetreChargement;
 import progps_ihm.FenetrePrincipale;
 import sun.awt.windows.ThemeReader;
@@ -108,7 +109,7 @@ public class SingletonProgps {
 		chargement.setAlwaysOnTop(true);
 		
 		// Etape 2 : Création du thread de parsing
-		XmlParser threadDeParsing = new XmlParser(me, urlFichier);
+		XmlParser2 threadDeParsing = new XmlParser2(me, urlFichier);
 		threadDeParsing.start();
 
 		// Etape 3 : Boucle de mise à jour de la barre de progression
