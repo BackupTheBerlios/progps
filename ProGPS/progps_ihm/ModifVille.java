@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JWindow;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -25,6 +26,12 @@ import javax.swing.JComboBox;
 public class ModifVille extends JWindow {
 
 	private static final long serialVersionUID = 1L;
+	
+	private SingletonProgps progps = null;
+	
+	private FenetrePrincipale ownerFrame = null;
+	
+	private Ville laVille = null;
 	
 	private JButton ownerButton = null;
 
@@ -63,15 +70,20 @@ public class ModifVille extends JWindow {
 	/**
 	 * @param owner
 	 */
-	public ModifVille(Frame owner, JButton but) {
+	public ModifVille(Frame owner, JButton but, SingletonProgps sys, String nom) {
 		super(owner);
+		ownerFrame = (FenetrePrincipale)owner;
 		ownerButton = but;
+		progps = sys;
+		try {
+			laVille = progps.getVille(nom);
+		}
+		catch (Exception exc) {
+			exc.printStackTrace();
+		}
 		initialize();
 	}
 	
-	public void remplirChamps(Ville v) {
-		//TODO
-	}
 
 	/**
 	 * This method initializes this
@@ -164,9 +176,22 @@ public class ModifVille extends JWindow {
 			jButton_ok = new JButton();
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// TODO
-					ownerButton.setEnabled(true);
-					dispose();
+					if (jTextField_nomVille.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "Veuillez entrer un nom pour la ville !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomVille.requestFocus();
+					}
+					else if (!jTextField_nomVille.getText().equals(laVille.getNomVille()) && progps.villeConnue(jTextField_nomVille.getText())) {
+						JOptionPane.showMessageDialog(null, "Cette ville existe déjà !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomVille.requestFocus();
+					}
+					else {
+						laVille.setNomVille(jTextField_nomVille.getText());
+						laVille.setTypeVille(jComboBox_typeVille.getSelectedIndex());
+						laVille.setTouristique(jRadioButton_yes.isSelected());
+						ownerFrame.getAdminPanel().refreshListeVilles();
+						ownerButton.setEnabled(true);
+						dispose();
+					}
 				}
 			});
 			jButton_ok.setText("OK");
@@ -210,8 +235,6 @@ public class ModifVille extends JWindow {
 			
 			radioGroup1.add(jRadioButton_yes);
 			radioGroup1.add(jRadioButton_no);
-			
-			
 		}
 		return jPanel_center;
 	}
@@ -225,7 +248,7 @@ public class ModifVille extends JWindow {
 		if (jTextField_nomVille == null) {
 			jTextField_nomVille = new JTextField();
 			jTextField_nomVille.setPreferredSize(new Dimension(150,18));
-			jTextField_nomVille.setText("");
+			jTextField_nomVille.setText(laVille.getNomVille());
 		}
 		return jTextField_nomVille;
 	}
@@ -238,6 +261,7 @@ public class ModifVille extends JWindow {
 	private JRadioButton getJRadioButton_yes() {
 		if (jRadioButton_yes == null) {
 			jRadioButton_yes = new JRadioButton();
+			jRadioButton_yes.setSelected(laVille.isTouristique());
 		}
 		return jRadioButton_yes;
 	}
@@ -250,6 +274,7 @@ public class ModifVille extends JWindow {
 	private JRadioButton getJRadioButton_no() {
 		if (jRadioButton_no == null) {
 			jRadioButton_no = new JRadioButton();
+			jRadioButton_no.setSelected(!laVille.isTouristique());
 		}
 		return jRadioButton_no;
 	}
@@ -267,6 +292,7 @@ public class ModifVille extends JWindow {
 			jComboBox_typeVille.addItem("Petite");
 			jComboBox_typeVille.addItem("Moyenne");
 			jComboBox_typeVille.addItem("Grande");
+			jComboBox_typeVille.setSelectedIndex(laVille.getTypeVille());
 		}
 		return jComboBox_typeVille;
 	}

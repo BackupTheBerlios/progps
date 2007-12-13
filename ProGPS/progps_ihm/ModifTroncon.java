@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JWindow;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -26,6 +27,12 @@ import java.util.Vector;
 public class ModifTroncon extends JWindow {
 
 	private static final long serialVersionUID = 1L;
+	
+	private SingletonProgps progps = null;
+	
+	private FenetrePrincipale ownerFrame = null;
+	
+	private Troncon leTroncon = null;
 	
 	private JButton ownerButton = null;
 
@@ -79,10 +86,6 @@ public class ModifTroncon extends JWindow {
 
 	private JComboBox jComboBox_ville2 = null;
 
-	private JLabel jLabel_prix = null;
-
-	private JTextField jTextField_prix = null;
-
 	private JLabel jLabel_radars = null;
 
 	private JRadioButton jRadioButton_yesRadars = null;
@@ -99,11 +102,24 @@ public class ModifTroncon extends JWindow {
 
 	private Vector limitations = null;
 
+	private JLabel jLabel_longueur = null;
+
+	private JTextField jTextField_longueur = null;
+
 	/**
 	 * @param owner
 	 */
-	public ModifTroncon(Frame owner, JButton but) {
+	public ModifTroncon(Frame owner, JButton but, SingletonProgps sys, String nomRoute, String troncon) {
 		super(owner);
+		ownerFrame = (FenetrePrincipale)owner;
+		progps = sys;
+		String[] result = troncon.split(" ");
+		try {
+			leTroncon = progps.getTroncon(nomRoute, result[0], result[2]);
+		}
+		catch (Exception exc) {
+			exc.printStackTrace();
+		}
 		ownerButton = but;
 		initialize();
 	}
@@ -118,7 +134,7 @@ public class ModifTroncon extends JWindow {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(270, 310);
+		this.setSize(270, 300);
 		this.setContentPane(getJContentPane());//getJContentPane());
 	}
 
@@ -204,8 +220,54 @@ public class ModifTroncon extends JWindow {
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					// TODO
-					ownerButton.setEnabled(true);
-					dispose();
+					if (jComboBox_ville1.getSelectedIndex() == 0) {
+						JOptionPane.showMessageDialog(null, "Veuillez sélectionner la première ville du tronçon.", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+					else if (jComboBox_ville2.getSelectedIndex() == 0) {
+						JOptionPane.showMessageDialog(null, "Veuillez sélectionner la deuxième ville du tronçon.", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+					else if (jTextField_longueur.getText().equals("") || !jTextField_longueur.getText().matches("[0-9]+")) {
+						JOptionPane.showMessageDialog(null, "Longueur de tronçon incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						boolean b = false;
+						try {
+							b = progps.tronconConnu(((String)jComboBox_route.getToolTipText()),(String)jComboBox_ville1.getSelectedItem(),(String)jComboBox_ville2.getSelectedItem());
+						}
+						catch (Exception exc) {
+							exc.printStackTrace();
+						}
+						if (b && !(leTroncon.getSaRoute().getNomRoute().equals((String)jComboBox_route.getSelectedItem()) && leTroncon.getSesVilles().toArray()[0].equals((String)jComboBox_ville1.getSelectedItem()) && leTroncon.getSesVilles().toArray()[1].equals((String)jComboBox_ville2.getSelectedItem())) && !(leTroncon.getSaRoute().getNomRoute().equals((String)jComboBox_route.getSelectedItem()) && leTroncon.getSesVilles().toArray()[0].equals((String)jComboBox_ville2.getSelectedItem()) && leTroncon.getSesVilles().toArray()[1].equals((String)jComboBox_ville1.getSelectedItem())) ) {
+							 JOptionPane.showMessageDialog(null, "Ce troncon existe déjà.", "Erreur", JOptionPane.ERROR_MESSAGE);
+						}
+						else {
+							Vector<Etat> lesEtats = new Vector<Etat>();
+							if (jRadioButton_yesPayant.isSelected()) {
+								lesEtats.add(Etat.Payant);
+							}
+							if (jRadioButton_yesTouristique.isSelected()) {
+								lesEtats.add(Etat.Touristique);
+							}
+							if (jRadioButton_yesRadars.isSelected()) {
+								lesEtats.add(Etat.Radar);
+							}
+							//progps.ajouterTroncon((String)jComboBox_ville1.getSelectedItem(), (String)jComboBox_ville2.getSelectedItem(), progps.getRoute((String)jComboBox_route.getSelectedItem()), (new Integer((String)jComboBox_limitations.getSelectedItem())).intValue(), (new Integer(jTextField_longueur.getText())).intValue(), lesEtats);
+							leTroncon.setSaRoute(progps.getRoute((String)jComboBox_route.getSelectedItem()));
+							try {
+								leTroncon.setSesVilles(progps.getVille((String)jComboBox_ville1.getSelectedItem()),progps.getVille((String)jComboBox_ville2.getSelectedItem()));
+							}
+							catch (Exception exc) {
+								exc.printStackTrace();
+							}
+							leTroncon.setLongueur((new Integer(jTextField_longueur.getText())).intValue());
+							leTroncon.setVitesse((new Integer((String)jComboBox_limitations.getSelectedItem())).intValue());
+							leTroncon.setSesEtats(lesEtats);
+						
+							ownerFrame.getAdminPanel().refreshListeTroncons();
+							ownerButton.setEnabled(true);
+							dispose();
+						}
+					}
 				}
 			});
 			jButton_ok.setText("OK");
@@ -220,6 +282,9 @@ public class ModifTroncon extends JWindow {
 	 */
 	private JPanel getJPanel_center() {
 		if (jPanel_center == null) {
+			jLabel_longueur = new JLabel();
+			jLabel_longueur.setFont(new Font("Arial", Font.PLAIN, 12));
+			jLabel_longueur.setText("Longueur : ");
 			jLabel_vitesse = new JLabel();
 			jLabel_vitesse.setFont(new Font("Arial", Font.PLAIN, 12));
 			jLabel_vitesse.setText("Limitation de vitesse : ");
@@ -232,9 +297,6 @@ public class ModifTroncon extends JWindow {
 			jLabel_radars = new JLabel();
 			jLabel_radars.setFont(new Font("Arial", Font.PLAIN, 12));
 			jLabel_radars.setText("Radars : ");
-			jLabel_prix = new JLabel();
-			jLabel_prix.setText("Prix : ");
-			jLabel_prix.setFont(new Font("Arial",Font.PLAIN,12));
 			jLabel_ville2 = new JLabel();
 			jLabel_ville2.setFont(new Font("Arial", Font.PLAIN, 12));
 			jLabel_ville2.setText("Ville 2 : ");
@@ -269,13 +331,14 @@ public class ModifTroncon extends JWindow {
 			EmptyLabel empty1 = new EmptyLabel(250,2);
 			EmptyLabel empty2 = new EmptyLabel(250,2);
 			EmptyLabel empty3 = new EmptyLabel(250,2);
-			EmptyLabel empty4 = new EmptyLabel(250,2);
 			jPanel_center.add(empty1, null);
 			jPanel_center.add(jLabel_ville1, null);
 			jPanel_center.add(getJComboBox_ville1(), null);
 			jPanel_center.add(empty2, null);
 			jPanel_center.add(jLabel_ville2, null);
 			jPanel_center.add(getJComboBox_ville2(), null);
+			jPanel_center.add(jLabel_longueur, null);
+			jPanel_center.add(getJTextField_longueur(), null);
 			jPanel_center.add(jLabel_touristique, null);
 			jPanel_center.add(getJRadioButton_yesTouristique(), null);
 			jPanel_center.add(jLabel_yes, null);
@@ -287,9 +350,6 @@ public class ModifTroncon extends JWindow {
 			jPanel_center.add(getJRadioButton_noPayant(), null);
 			jPanel_center.add(jLabel_no1, null);
 			jPanel_center.add(empty3, null);
-			jPanel_center.add(jLabel_prix, null);
-			jPanel_center.add(getJTextField_prix(), null);
-			jPanel_center.add(empty4, null);
 			jPanel_center.add(jLabel_radars, null);
 			jPanel_center.add(getJRadioButton_yesRadars(), null);
 			jPanel_center.add(jLabel_yes2, null);
@@ -319,6 +379,7 @@ public class ModifTroncon extends JWindow {
 	private JRadioButton getJRadioButton_yesTouristique() {
 		if (jRadioButton_yesTouristique == null) {
 			jRadioButton_yesTouristique = new JRadioButton();
+			jRadioButton_yesTouristique.setSelected(leTroncon.isTouristique());
 		}
 		return jRadioButton_yesTouristique;
 	}
@@ -331,6 +392,7 @@ public class ModifTroncon extends JWindow {
 	private JRadioButton getJRadioButton_noTouristique() {
 		if (jRadioButton_noTouristique == null) {
 			jRadioButton_noTouristique = new JRadioButton();
+			jRadioButton_noTouristique.setSelected(!leTroncon.isTouristique());
 		}
 		return jRadioButton_noTouristique;
 	}
@@ -343,7 +405,7 @@ public class ModifTroncon extends JWindow {
 	private JRadioButton getJRadioButton_yesPayant() {
 		if (jRadioButton_yesPayant == null) {
 			jRadioButton_yesPayant = new JRadioButton();
-			jRadioButton_yesPayant.setSelected(true);
+			jRadioButton_yesPayant.setSelected(leTroncon.isPayant());
 		}
 		return jRadioButton_yesPayant;
 	}
@@ -356,12 +418,7 @@ public class ModifTroncon extends JWindow {
 	private JRadioButton getJRadioButton_noPayant() {
 		if (jRadioButton_noPayant == null) {
 			jRadioButton_noPayant = new JRadioButton();
-			jRadioButton_noPayant.addItemListener(new java.awt.event.ItemListener() {
-				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					jLabel_prix.setEnabled(!jLabel_prix.isEnabled());
-					jTextField_prix.setEnabled(!jTextField_prix.isEnabled());
-				}
-			});
+			jRadioButton_noPayant.setSelected(!leTroncon.isPayant());
 		}
 		return jRadioButton_noPayant;
 	}
@@ -377,6 +434,7 @@ public class ModifTroncon extends JWindow {
 			jComboBox_route.setBackground(Color.WHITE);
 			jComboBox_route.setForeground(Color.BLUE);
 			jComboBox_route.setPreferredSize(new Dimension(100, 20));
+			jComboBox_route.setSelectedItem(leTroncon.getSaRoute().getNomRoute());
 		}
 		return jComboBox_route;
 	}
@@ -392,6 +450,7 @@ public class ModifTroncon extends JWindow {
 			jComboBox_ville1.setBackground(Color.WHITE);
 			jComboBox_ville1.setForeground(Color.BLUE);
 			jComboBox_ville1.setPreferredSize(new Dimension(150, 20));
+			jComboBox_ville1.setSelectedItem(leTroncon.getSesVilles().toArray()[0]);
 		}
 		return jComboBox_ville1;
 	}
@@ -407,21 +466,9 @@ public class ModifTroncon extends JWindow {
 			jComboBox_ville2.setBackground(Color.WHITE);
 			jComboBox_ville2.setForeground(Color.BLUE);
 			jComboBox_ville2.setPreferredSize(new Dimension(150, 20));
+			jComboBox_ville2.setSelectedItem(leTroncon.getSesVilles().toArray()[1]);
 		}
 		return jComboBox_ville2;
-	}
-
-	/**
-	 * This method initializes jTextField_prix	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JTextField getJTextField_prix() {
-		if (jTextField_prix == null) {
-			jTextField_prix = new JTextField();
-			jTextField_prix.setPreferredSize(new Dimension(100,20));
-		}
-		return jTextField_prix;
 	}
 
 	/**
@@ -432,6 +479,7 @@ public class ModifTroncon extends JWindow {
 	private JRadioButton getJRadioButton_yesRadars() {
 		if (jRadioButton_yesRadars == null) {
 			jRadioButton_yesRadars = new JRadioButton();
+			jRadioButton_yesRadars.setSelected(leTroncon.isRadar());
 		}
 		return jRadioButton_yesRadars;
 	}
@@ -444,6 +492,7 @@ public class ModifTroncon extends JWindow {
 	private JRadioButton getJRadioButton_noRadars() {
 		if (jRadioButton_noRadars == null) {
 			jRadioButton_noRadars = new JRadioButton();
+			jRadioButton_noRadars.setSelected(!leTroncon.isRadar());
 		}
 		return jRadioButton_noRadars;
 	}
@@ -464,8 +513,23 @@ public class ModifTroncon extends JWindow {
 			jComboBox_limitations = new JComboBox(limitations);
 			jComboBox_limitations.setBackground(Color.WHITE);
 			jComboBox_limitations.setForeground(Color.RED);
+			jComboBox_limitations.setSelectedItem("" + leTroncon.getVitesse());
 		}
 		return jComboBox_limitations;
+	}
+
+	/**
+	 * This method initializes jTextField_longueur	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getJTextField_longueur() {
+		if (jTextField_longueur == null) {
+			jTextField_longueur = new JTextField();
+			jTextField_longueur.setPreferredSize(new Dimension(150, 20));
+			jTextField_longueur.setText("" + leTroncon.getLongueur());
+		}
+		return jTextField_longueur;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JWindow;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -27,6 +28,12 @@ import noyau.Ville;
 public class ModifRoute extends JWindow {
 
 	private static final long serialVersionUID = 1L;
+	
+	private SingletonProgps progps = null;
+	
+	private FenetrePrincipale ownerFrame = null;
+	
+	private Route laRoute = null;
 	
 	private JButton ownerButton = null;
 
@@ -53,15 +60,15 @@ public class ModifRoute extends JWindow {
 	/**
 	 * @param owner
 	 */
-	public ModifRoute(Frame owner, JButton but) {
+	public ModifRoute(Frame owner, JButton but, SingletonProgps sys, String nom) {
 		super(owner);
+		ownerFrame = (FenetrePrincipale)owner;
 		ownerButton = but;
+		progps = sys;
+		laRoute = progps.getRoute(nom);
 		initialize();
 	}
 	
-	public void remplirChamps(Route r) {
-		
-	}
 
 	/**
 	 * This method initializes this
@@ -154,10 +161,21 @@ public class ModifRoute extends JWindow {
 			jButton_ok = new JButton();
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// TODO
-					
-					ownerButton.setEnabled(true);
-					dispose();
+					if (jTextField_nomRoute.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "Veuillez entrer un nom pour la route !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomRoute.requestFocus();
+					}
+					else if (!jTextField_nomRoute.getText().equals(laRoute.getNomRoute()) && progps.routeConnue(jTextField_nomRoute.getText())) {
+						JOptionPane.showMessageDialog(null, "Cette route existe déjà !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomRoute.requestFocus();
+					}
+					else {
+						laRoute.setNom(jTextField_nomRoute.getText());
+						laRoute.setType(jComboBox_typeRoute.getSelectedIndex());
+						ownerButton.setEnabled(true);
+						ownerFrame.getAdminPanel().refreshListeRoutes();
+						dispose();
+					}
 				}
 			});
 			jButton_ok.setText("OK");
@@ -198,7 +216,7 @@ public class ModifRoute extends JWindow {
 		if (jTextField_nomRoute == null) {
 			jTextField_nomRoute = new JTextField();
 			jTextField_nomRoute.setPreferredSize(new Dimension(150,18));
-			jTextField_nomRoute.setText("");
+			jTextField_nomRoute.setText(laRoute.getNomRoute());
 		}
 		return jTextField_nomRoute;
 	}
@@ -213,10 +231,10 @@ public class ModifRoute extends JWindow {
 			jComboBox_typeRoute = new JComboBox();
 			jComboBox_typeRoute.setBackground(Color.WHITE);
 			jComboBox_typeRoute.setPreferredSize(new Dimension(150,20));
-			jComboBox_typeRoute.addItem("Départementale");
-			jComboBox_typeRoute.addItem("Nationale");
 			jComboBox_typeRoute.addItem("Autoroute");
-			jComboBox_typeRoute.addItem("Autre");
+			jComboBox_typeRoute.addItem("Nationale");
+			jComboBox_typeRoute.addItem("Départementale");
+			jComboBox_typeRoute.setSelectedIndex(laRoute.getTypeRoute());
 		}
 		return jComboBox_typeRoute;
 	}

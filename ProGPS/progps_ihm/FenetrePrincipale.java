@@ -1030,7 +1030,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		jPanel_admin.repaint();
 	}
 	
-	
+	public AdminPanel getAdminPanel() {
+		return adminPanel;
+	}
 	
 	/**
 	 * This method initializes jButton_okadmin	

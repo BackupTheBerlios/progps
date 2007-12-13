@@ -11,17 +11,25 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JWindow;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 
+import noyau.Route;
+import noyau.SingletonProgps;
+
 
 public class AjoutRoute extends JWindow {
 
 	private static final long serialVersionUID = 1L;
 
+	private SingletonProgps progps = null;
+	
+	private FenetrePrincipale ownerFrame = null;
+	
 	private JButton ownerButton = null;
 	
 	private JPanel jContentPane = null;
@@ -47,9 +55,11 @@ public class AjoutRoute extends JWindow {
 	/**
 	 * @param owner
 	 */
-	public AjoutRoute(Frame owner, JButton but) {
+	public AjoutRoute(Frame owner, JButton but, SingletonProgps sys) {
 		super(owner);
+		ownerFrame = (FenetrePrincipale)owner;
 		ownerButton = but;
+		progps = sys;
 		initialize();
 	}
 
@@ -145,10 +155,20 @@ public class AjoutRoute extends JWindow {
 			jButton_ok = new JButton();
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//TODO
-					
-					ownerButton.setEnabled(true);
-					dispose();
+					if (jTextField_nomRoute.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "Veuillez entrer un nom pour la route !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomRoute.requestFocus();
+					}
+					else if (progps.routeConnue(jTextField_nomRoute.getText())) {
+						JOptionPane.showMessageDialog(null, "Cette route existe déjà !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomRoute.requestFocus();
+					}
+					else {
+						progps.ajouterRoute(jTextField_nomRoute.getText(),jComboBox_typeRoute.getSelectedIndex());
+						ownerButton.setEnabled(true);
+						ownerFrame.getAdminPanel().refreshListeRoutes();
+						dispose();
+					}
 				}
 			});
 			jButton_ok.setText("OK");
@@ -202,10 +222,10 @@ public class AjoutRoute extends JWindow {
 			jComboBox_typeRoute = new JComboBox();
 			jComboBox_typeRoute.setBackground(Color.WHITE);
 			jComboBox_typeRoute.setPreferredSize(new Dimension(150,20));
-			jComboBox_typeRoute.addItem("Départementale");
-			jComboBox_typeRoute.addItem("Nationale");
 			jComboBox_typeRoute.addItem("Autoroute");
-			jComboBox_typeRoute.addItem("Autre");
+			jComboBox_typeRoute.addItem("Nationale");
+			jComboBox_typeRoute.addItem("Départementale");
+			
 		}
 		return jComboBox_typeRoute;
 	}

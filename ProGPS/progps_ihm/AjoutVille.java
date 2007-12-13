@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.JWindow;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -19,11 +20,19 @@ import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 
+import noyau.Route;
+import noyau.SingletonProgps;
+import noyau.Ville;
+
 
 public class AjoutVille extends JWindow {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private SingletonProgps progps = null;
+	
+	private FenetrePrincipale ownerFrame = null;
+	
 	private JButton ownerButton = null;
 	
 	private JPanel jContentPane = null;
@@ -61,9 +70,11 @@ public class AjoutVille extends JWindow {
 	/**
 	 * @param owner
 	 */
-	public AjoutVille(Frame owner, JButton but) {
+	public AjoutVille(Frame owner, JButton but, SingletonProgps sys) {
 		super(owner);
+		ownerFrame = (FenetrePrincipale)owner;
 		ownerButton = but;
+		progps = sys;
 		initialize();
 	}
 
@@ -159,10 +170,23 @@ public class AjoutVille extends JWindow {
 			jButton_ok = new JButton();
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//TODO
-					
-					ownerButton.setEnabled(true);
-					dispose();
+					if (jTextField_nomVille.getText().equals("")) {
+						JOptionPane.showMessageDialog(null, "Veuillez entrer un nom pour la ville !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomVille.requestFocus();
+					}
+					else if (progps.villeConnue(jTextField_nomVille.getText())) {
+						JOptionPane.showMessageDialog(null, "Cette ville existe déjà !", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jTextField_nomVille.requestFocus();
+					}
+					else if (!jRadioButton_no.isSelected() && !jRadioButton_yes.isSelected()) {
+						JOptionPane.showMessageDialog(null, "Veuillez selectionner si la ville est touristique.", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						progps.ajouterVille(jTextField_nomVille.getText(),true,jComboBox_typeVille.getSelectedIndex(),jRadioButton_yes.isSelected());
+						ownerButton.setEnabled(true);
+						ownerFrame.getAdminPanel().refreshListeVilles();
+						dispose();
+					}
 				}
 			});
 			jButton_ok.setText("OK");
