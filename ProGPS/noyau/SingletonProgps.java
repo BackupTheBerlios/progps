@@ -235,9 +235,10 @@ public class SingletonProgps {
 		this.sonUser.setSesPreferences(l);
 	}
 	
-	public void ajouterRoute(String nom, int type) {
+	public Route ajouterRoute(String nom, int type) {
 		Route r = new Route(this.getNewIdRoute(), nom, type);
 		this.ajouterRoute(r);
+		return r;
 	}
 
 
