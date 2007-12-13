@@ -117,7 +117,9 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     public double getEdgeWeight(Troncon t)
     {
 //  		Méthode de calcul
-    		double poids=0.0;
+    		double poids=t.getLongueur();
+    		if (!this.plusCourt)
+    			poids/=t.getVitesse();
     		int cpt=0;
     		if (!t.isDispo())
     			poids=const_indispo;
