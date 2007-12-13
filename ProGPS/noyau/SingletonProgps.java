@@ -117,7 +117,7 @@ public class SingletonProgps {
 				&&!(threadDeParsing.isParsingtermine())){
 			chargement.setProgressbarValue(threadDeParsing.getAvancement());
 			// Pause de 500ms
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		}
 		chargement.setProgressbarValue(100);
 		// Teste si le thread a bien terminé

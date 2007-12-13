@@ -12,7 +12,7 @@ import noyau.*;
 //import org.apache.xpath.XPathAPI;
 import org.w3c.dom.*;
 import org.w3c.dom.traversal.NodeIterator;
-import org.xml.sax.InputSource;
+import org.xml.sax.*;
 
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import exceptions.ExceptionParser;
@@ -69,6 +69,7 @@ public class XmlParser extends Thread{
 
 					if ((filename != null) && (filename.length() > 0)) {
 						System.out.println("Chargement des classes, lecture du fichier " + filename+"...");
+						
 						InputSource in = new InputSource(new FileInputStream(filename));
 						DocumentBuilderFactory dfactory = DocumentBuilderFactory
 						.newInstance();
@@ -76,7 +77,7 @@ public class XmlParser extends Thread{
 						Document doc = dfactory.newDocumentBuilder().parse(in);
 
 						long debut=System.currentTimeMillis();
-//						nbrNoeuds=((Double)XPathAPI.eval(doc, "count(/reseau/*)").num()).intValue();
+						nbrNoeuds=((Double)XPathAPI.eval(doc, "count(/reseau/*)+count(/reseau/route/*)").num()).intValue();
 						long finCharge=System.currentTimeMillis();
 						System.out.println("Temps pour déterminer nombre de noeuds : "+(finCharge-debut)+"ms");
 						
@@ -113,14 +114,13 @@ public class XmlParser extends Thread{
 							// Modifs d'Olive
 							myProgps.ajouterVille(nomVille, true, intT, boolT);
 						}
+						
+						long finVilles=System.currentTimeMillis();
+						System.out.println("Temps pour créer les villes : "+(finVilles-finCharge)+"ms. Déjà "+this.nbrNoeudsVisites+"noeuds crées sur "+this.nbrNoeuds+".");
 
 						nl = XPathAPI.selectNodeIterator(doc, "/reseau/route");
 						
-						long finVilles=System.currentTimeMillis();
-						System.out.println("Temps pour créer les villes : "+(finVilles-finCharge)+"ms");
-						
 						while ((n = nl.nextNode()) != null) {
-							nbrNoeudsVisites++;
 							nomRoute = XPathAPI.selectNodeIterator(n, "nom").nextNode()
 							.getTextContent();
 							type = XPathAPI.selectNodeIterator(n, "type").nextNode()
@@ -141,6 +141,7 @@ public class XmlParser extends Thread{
 							nl2 = XPathAPI.selectNodeIterator(n, "troncon");
 
 							while ((n = nl2.nextNode()) != null) {
+								nbrNoeudsVisites++;
 								nomVille = XPathAPI.selectNodeIterator(n, "ville1")
 								.nextNode().getTextContent();
 								nomVille2 = XPathAPI.selectNodeIterator(n, "ville2")
@@ -209,7 +210,7 @@ public class XmlParser extends Thread{
 							}
 						}
 						long finTroncon=System.currentTimeMillis();
-						System.out.println("Temps pour créer les Troncons : "+(finTroncon-finVilles)+"ms");
+						System.out.println("Temps pour créer les Troncons : "+(finTroncon-finVilles)+"ms Déjà "+this.nbrNoeudsVisites+"noeuds crées.");
 					} else
 						throw new ExceptionParser("Fichier XML indisponible");
 				}
@@ -231,7 +232,7 @@ public class XmlParser extends Thread{
 	 */
 	public int getAvancement() {
 		if (this.nbrNoeuds==0) return 0;
-		return (this.nbrNoeudsVisites/this.nbrNoeuds);
+		return (100*this.nbrNoeudsVisites/this.nbrNoeuds);
 	}
 
 	public boolean isExceptionLevee() {

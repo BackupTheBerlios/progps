@@ -14,6 +14,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	private Set<Ville> nonOrdonnees = null;
 	private List<Ville> ordonnees = null;
 	private boolean upToDate = false;
+	private boolean aEteModifie = false;
 	private TreeMap<Integer, Ville> collection;
 	
 	public ThreadOrdonancementVillesEtapes(
@@ -33,7 +34,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	 *  	sinon les villes dans le meilleur ordre 
 	 */
 	public List<Ville> getVillesOrdonnees(){
-		if (upToDate) {
+		if (upToDate && !aEteModifie) {
 			return ordonnees;
 		} else {
 			return null;
@@ -54,11 +55,13 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 		this.villeArr = villeArr;
 		this.nonOrdonnees = nonOrdonnees;
 		upToDate=false;
+		aEteModifie=true;
 	}
 
 	public void run() {
 		while( !isInterrupted()) {
 			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonnees!=null) {
+				aEteModifie=false;
 				ordonnees = new ArrayList<Ville>();
 				int minVille;
 				collection = new TreeMap<Integer, Ville>();
@@ -70,7 +73,9 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 					this.nonOrdonnees.remove(minVille);
 					this.triCheminsAPartirDe(collection.get(minVille));
 				}
-				upToDate=true;
+				// Si les paramètres n'ont pas changés, la recherche est à jour
+				if (!aEteModifie)
+					upToDate=true;
 			}
 		}
 		
