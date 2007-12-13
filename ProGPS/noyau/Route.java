@@ -35,6 +35,13 @@ public class Route {
 		this.nomRoute = nomRoute;
 		this.typeRoute = typeRoute;
 	}
+	
+	public void supprimerTroncon(Troncon t) {
+	//	for (Troncon tr : this.sesTroncons) {
+	//		if (t.isRelieVille(tr.getSesVilles()) && t.getSaRoute().getNomRoute().equalsIgnoreCase(tr.getSaRoute().getNomRoute()))
+				this.sesTroncons.remove(t);
+	//	}
+	}
 
 	public boolean ajouterTroncon(Troncon unT){
 		return sesTroncons.add(unT);
