@@ -78,8 +78,6 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 					upToDate=true;
 			}
 		}
-		
-
 	}
 	
 	public void triCheminsAPartirDe(Ville v) {

@@ -83,6 +83,7 @@ public class Troncon
 
 	public void setSaRoute(Route saRoute) {
 		this.saRoute = saRoute;
+		saRoute.ajouterTroncon(this);
 	}
 
 	public boolean isDispo() {

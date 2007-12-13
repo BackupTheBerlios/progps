@@ -36,13 +36,9 @@ public class Route {
 		this.typeRoute = typeRoute;
 	}
 
-	public boolean ajouterTroncon(String ville1, String ville2, int vitesse, boolean touristique, boolean radar, int prix, int longueur) {
-		throw new UnsupportedOperationException();
+	public boolean ajouterTroncon(Troncon unT){
+		return sesTroncons.add(unT);
 	}
-
-//	public void ajouterTroncon(String nomVille, String nomVille2, int intVitesse, int intLongueur, LinkedList<Etat> etats) throws Exception {
-//		sesTroncons.add(new Troncon(intVitesse,intLongueur,true,this,SingletonProgps.getVille(nomVille),SingletonProgps.getVille(nomVille2),etats));
-//	}
 
 	public int getIdRoute() {
 		return idRoute;
