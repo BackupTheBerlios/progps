@@ -56,6 +56,11 @@ public class Troncon
 		return villes;
 	}
 
+	
+	public List<Etat> getSesEtats() {
+		return this.sesEtats;
+	}
+	
 	public void setVitesse(int vitesse) {
 		this.vitesse = vitesse;
 	}

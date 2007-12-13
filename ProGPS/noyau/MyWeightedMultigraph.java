@@ -1,12 +1,12 @@
 package noyau;
 
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -19,14 +19,20 @@ import exceptions.ExceptionGraph;
 import exceptions.ExceptionRecherche;
 
 
-
 public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	// Constantes
-	private double const_indispo=1000000;
-	private double const_ville_a_eviter=1000;
-	
+	private static final double const_indispo=Double.MAX_VALUE;
+	private static final double const_pref1=1000000;
+	private static final double const_pref2=100000;
+	private static final double const_pref3=10000;
+	private static final double const_pref4=1000;
+	private static final double const_pref5=100;
+	private static final double const_pref6=10;
+	private boolean plusCourt=true;
 	private Set<Ville> aEviter=new HashSet<Ville>();
 	private Set<Ville> etapes=new HashSet<Ville>();
+	private List<Preference> preferences = new Vector<Preference>();
+	private ArrayList<Double> tab_const = new ArrayList<Double>();
 
     /** Inherited code
      * Creates a new weighted multigraph.
@@ -46,6 +52,12 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     public MyWeightedMultigraph(EdgeFactory<Ville, Troncon> ef)
     {
         super(ef);
+        tab_const.add(0, const_pref1);
+        tab_const.add(1, const_pref2);
+        tab_const.add(2, const_pref3);
+        tab_const.add(3, const_pref4);
+        tab_const.add(4, const_pref5);
+        tab_const.add(5, const_pref6);
     }
 
     public Ville ajouterUneVille(String nom) throws ExceptionGraph{
@@ -80,6 +92,20 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     	throw new ExceptionGraph("La ville "+nom+" n'est pas dans le graph.");
     }
     
+    //En parametre : soit les préférences courantes, soit globales
+    public void setPreferences(List<Preference> p) {
+    	this.preferences=p;
+    }
+    
+    public void setAEviter(Set<Ville> sv) {
+    	this.aEviter=sv;
+    }
+    
+    public void setEtapes(Set<Ville> sv) {
+    	this.etapes=sv;
+    }
+    
+    
     public boolean villeExiste(String nom){
     	for (Ville uneVille : this.vertexSet()) {
 			if(uneVille.getNomVille().equalsIgnoreCase(nom))
@@ -88,21 +114,29 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     	return false;
     }
     
-    public double getEdgeWeight(Troncon e)
+    public double getEdgeWeight(Troncon t)
     {
-    	if (e instanceof Troncon) {
 //  		Méthode de calcul
     		double poids=0.0;
-
-    		if (!((Troncon) e).isDispo()) poids+=const_indispo;
-    		if (aEviter!=null && ((Troncon) e).isRelieVille(aEviter)){
-    			poids+=const_ville_a_eviter;
+    		int cpt=0;
+    		if (!t.isDispo())
+    			poids=const_indispo;
+    		else {
+    			for (Preference p : this.preferences) {
+    				if (p.name().equalsIgnoreCase("Radar") || p.name().equalsIgnoreCase("Payant") || p.name().equalsIgnoreCase("Touristique")) {
+	    				for (Etat e : t.getSesEtats()) {
+	    					if (e.name().equalsIgnoreCase(p.name()) && !e.name().equalsIgnoreCase("Touristique"))
+	    						poids+=this.tab_const.get(cpt);
+	    				}
+    				}
+    				else if (p.name().equalsIgnoreCase("VillesAEviter")) {
+    					if (t.isRelieVille(this.aEviter))
+    						poids+=this.tab_const.get(cpt);
+    				}
+    				cpt++;
+    			}
     		}
-    		poids+=((Integer)((Troncon) e).getLongueur()).doubleValue()/((Integer)((Troncon) e).getVitesse()).doubleValue();
     		return poids;
-    	} else {
-    		return Double.MAX_VALUE;
-    	}
     }
     
     public void seDecrire(){
