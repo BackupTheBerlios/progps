@@ -228,4 +228,12 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 		}
     	return theResult;
     }
+
+	public boolean addVilleAEviter(Ville v){
+		return aEviter.add(v);
+	}
+	
+	public boolean removeVilleAEviter(Ville v){
+		return aEviter.remove(v);
+	}
 }

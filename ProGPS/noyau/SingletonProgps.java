@@ -132,8 +132,6 @@ public class SingletonProgps {
 		
 //		// Etape 4 : destruction de la fenetre de chargement
 		chargement.dispose();
-		me.graph.seDecrire();
-//		
 //		
 //		// Etape 5 : Création de la fenêtre principale
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);

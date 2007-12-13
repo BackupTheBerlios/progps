@@ -2,21 +2,39 @@ package noyau;
 
 import java.util.*;
 
+import exceptions.ExceptionRecherche;
+
+import threads.ThreadOrdonancementVillesEtapes;
+
 public class User {
-	private List<Ville> villeEtapes = new Vector<Ville>();
 	private Ville villeSuivante;
 	private SingletonProgps theProgps;
+	
+	private ThreadOrdonancementVillesEtapes<Ville, Troncon> threadOrd;
+	
 	private Ville villeD;
 	private Ville villeA;
-	private List<Ville> villesAEviter = new Vector<Ville>();
+	private Set<Ville> villesAEviter = new HashSet<Ville>();
+	private Set<Ville> villesEtapes = new HashSet<Ville>();
 	private List<Preference> sesPreferences = new Vector<Preference>();
 	private Itineraire itineraireCourant;
 	private List<Itineraire> itineraireCalcules = new Vector<Itineraire>();
 	private List<Ville> villesTraversees = new Vector<Ville>();
 	
 	
+	public boolean calculerIti(){
+		try {
+			itineraireCalcules=theProgps.graph.trouver3Chemins(villeD, villeA, villesAEviter, villesEtapes);
+			return true;
+		} catch (ExceptionRecherche e) {
+			System.out.println(e.toString());
+			return false;
+		}
+	}
+
 	public User(SingletonProgps leSingleton) {
 		theProgps=leSingleton;
+		threadOrd=new ThreadOrdonancementVillesEtapes<Ville, Troncon>(theProgps.graph, null, null, null);
 	}
 	
 	public boolean choisirItineraire(Itineraire iti) {
@@ -52,20 +70,21 @@ public class User {
 	}
 
 	public void addVilleEtapes(Ville villeEtapes) {
-		this.villeEtapes.add(villeEtapes);
+		this.villesEtapes.add(villeEtapes);
 	}
 
 	public void removeVilleEtapes(Ville villeEtapes) {
-		this.villeEtapes.remove(villeEtapes);
+		this.villesEtapes.remove(villeEtapes);
 	}
 
 	public Ville[] toVilleEtapesArray() {
-		Ville[] lVilleEtapes_Temp = new Ville[this.villeEtapes.size()];
-		this.villeEtapes.toArray(lVilleEtapes_Temp);
+		Ville[] lVilleEtapes_Temp = new Ville[this.villesEtapes.size()];
+		this.villesEtapes.toArray(lVilleEtapes_Temp);
 		return lVilleEtapes_Temp;
 	}
 
 	public void setVilleSuivante(Ville villeSuivante) {
+		// TODO
 		this.villeSuivante = villeSuivante;
 	}
 
@@ -75,6 +94,7 @@ public class User {
 
 	public void setVilleD(Ville villeD) {
 		this.villeD = villeD;
+		threadOrd.setVillesEtapes(villeD, villeA, villesAEviter);
 	}
 
 	public Ville getVilleD() {
@@ -83,32 +103,34 @@ public class User {
 
 	public void setVilleA(Ville villeA) {
 		this.villeA = villeA;
+		threadOrd.setVillesEtapes(villeD, villeA, villesEtapes);
 	}
 
 	public Ville getVilleA() {
 		return this.villeA;
 	}
 
-	public void addVillesAEviter(Ville villesAEviter) {
-		this.villesAEviter.add(villesAEviter);
+	public void addVilleAEviter(Ville villeAEviter) {
+		this.villesAEviter.add(villeAEviter);
+		theProgps.graph.addVilleAEviter(villeAEviter);
 	}
 
-	public void removeVillesAEviter(Ville villesAEviter) {
-		this.villesAEviter.remove(villesAEviter);
+	public void removeVilleAEviter(Ville villeAEviter) {
+		this.villesAEviter.remove(villeAEviter);
+		theProgps.graph.removeVilleAEviter(villeAEviter);
 	}
 
-	public Ville[] toVillesAEviterArray() {
-		Ville[] lVillesAEviter_Temp = new Ville[this.villesAEviter.size()];
-		this.villesAEviter.toArray(lVillesAEviter_Temp);
-		return lVillesAEviter_Temp;
-	}
+//	public Ville[] toVillesAEviterArray() {
+//		Ville[] lVillesAEviter_Temp = new Ville[this.villesAEviter.size()];
+//		this.villesAEviter.toArray(lVillesAEviter_Temp);
+//		return lVillesAEviter_Temp;
+//	}
 
 	
 	//prend un tableau déjà trié de préférences et les ajoute à celles de l'utilisateur
 	//à clément de renvoyer un tableau deja trié avec l'interface
 	public void setSesPreferences(List<Preference> l) {
 		this.sesPreferences=l;
-		
 	}
 
 
@@ -129,11 +151,11 @@ public class User {
 		this.itineraireCalcules.remove(itineraireCalcules);
 	}
 
-	public Itineraire[] toItineraireCalculesArray() {
-		Itineraire[] lItineraireCalcules_Temp = new Itineraire[this.itineraireCalcules.size()];
-		this.itineraireCalcules.toArray(lItineraireCalcules_Temp);
-		return lItineraireCalcules_Temp;
-	}
+//	public Itineraire[] toItineraireCalculesArray() {
+//		Itineraire[] lItineraireCalcules_Temp = new Itineraire[this.itineraireCalcules.size()];
+//		this.itineraireCalcules.toArray(lItineraireCalcules_Temp);
+//		return lItineraireCalcules_Temp;
+//	}
 
 	public void addVillesTraversees(Ville villesTraversees) {
 		this.villesTraversees.add(villesTraversees);
@@ -147,5 +169,10 @@ public class User {
 		Ville[] lVillesTraversees_Temp = new Ville[this.villesTraversees.size()];
 		this.villesTraversees.toArray(lVillesTraversees_Temp);
 		return lVillesTraversees_Temp;
+	}
+
+	public void setVilleEtapes(Set<Ville> villeEtapes) {
+		this.villesEtapes = villeEtapes;
+		theProgps.graph.setEtapes(villeEtapes);
 	}
 }
