@@ -24,9 +24,16 @@ public class User {
 	
 	public boolean calculerIti(){
 		try {
-			itineraireCalcules=theProgps.graph.trouver3Chemins(villeD, villeA, villesAEviter, villesEtapes);
+			List<Ville> listeVilleEtape=null;
+			listeVilleEtape=threadOrd.getVillesOrdonnees();
+			// Tant que le thread n'a pas fini.
+			while (listeVilleEtape==null) {
+				Thread.sleep(100);
+				listeVilleEtape=threadOrd.getVillesOrdonnees();
+			}
+			itineraireCalcules=theProgps.graph.trouver3Chemins(villeD, villeA, villesAEviter, listeVilleEtape);
 			return true;
-		} catch (ExceptionRecherche e) {
+		} catch (Exception e) {
 			System.out.println(e.toString());
 			return false;
 		}
@@ -35,57 +42,27 @@ public class User {
 	public User(SingletonProgps leSingleton) {
 		theProgps=leSingleton;
 		threadOrd=new ThreadOrdonancementVillesEtapes<Ville, Troncon>(theProgps.graph, null, null, null);
-	}
-	
-	public boolean choisirItineraire(Itineraire iti) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void demandeItineraire() {
-		throw new UnsupportedOperationException();
-	}
-
-	public void calculItineraire() {
-		throw new UnsupportedOperationException();
-	}
-
-	public String localisation(String ville) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void finItineraire() {
-		throw new UnsupportedOperationException();
-	}
-
-	public void rafraichirItineraire(Troncon t) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void rafraichirItineraire(Ville v) {
-		throw new UnsupportedOperationException();
-	}
-
-	public void rafraichirItineraire(Route r) {
-		throw new UnsupportedOperationException();
+		threadOrd.start();
 	}
 
 	public void addVilleEtapes(Ville villeEtapes) {
 		this.villesEtapes.add(villeEtapes);
+		// On indique au thread
+		threadOrd.setVillesEtapes(villeD, villeA, this.villesEtapes);
 	}
 
 	public void removeVilleEtapes(Ville villeEtapes) {
 		this.villesEtapes.remove(villeEtapes);
+		// On indique au thread
+		threadOrd.setVillesEtapes(villeD, villeA, this.villesEtapes);
 	}
 
-	public Ville[] toVilleEtapesArray() {
-		Ville[] lVilleEtapes_Temp = new Ville[this.villesEtapes.size()];
-		this.villesEtapes.toArray(lVilleEtapes_Temp);
-		return lVilleEtapes_Temp;
+	public List<Itineraire> getItineraireCalcules() {
+		return itineraireCalcules;
 	}
 
-	public void setVilleSuivante(Ville villeSuivante) {
-		// TODO
-		this.villeSuivante = villeSuivante;
+	public List<Ville> getVillesTraversees() {
+		return villesTraversees;
 	}
 
 	public Ville getVilleSuivante() {
@@ -119,60 +96,47 @@ public class User {
 		this.villesAEviter.remove(villeAEviter);
 		theProgps.graph.removeVilleAEviter(villeAEviter);
 	}
-
-//	public Ville[] toVillesAEviterArray() {
-//		Ville[] lVillesAEviter_Temp = new Ville[this.villesAEviter.size()];
-//		this.villesAEviter.toArray(lVillesAEviter_Temp);
-//		return lVillesAEviter_Temp;
-//	}
-
 	
 	//prend un tableau déjà trié de préférences et les ajoute à celles de l'utilisateur
-	//à clément de renvoyer un tableau deja trié avec l'interface
+	//à GUI de trier les préférences
 	public void setSesPreferences(List<Preference> l) {
 		this.sesPreferences=l;
 	}
 
-
-
 	public void setItineraireCourant(Itineraire itineraireCourant) {
 		this.itineraireCourant = itineraireCourant;
+		villeD=itineraireCourant.getVilleDep();
+		villeA=itineraireCourant.getVilleArr();
+		villeSuivante=itineraireCourant.getVilleSuivante(villeD);
 	}
 
 	public Itineraire getItineraireCourant() {
 		return this.itineraireCourant;
 	}
-
-	public void addItineraireCalcules(Itineraire itineraireCalcules) {
-		this.itineraireCalcules.add(itineraireCalcules);
-	}
-
-	public void removeItineraireCalcules(Itineraire itineraireCalcules) {
-		this.itineraireCalcules.remove(itineraireCalcules);
-	}
-
-//	public Itineraire[] toItineraireCalculesArray() {
-//		Itineraire[] lItineraireCalcules_Temp = new Itineraire[this.itineraireCalcules.size()];
-//		this.itineraireCalcules.toArray(lItineraireCalcules_Temp);
-//		return lItineraireCalcules_Temp;
-//	}
-
-	public void addVillesTraversees(Ville villesTraversees) {
-		this.villesTraversees.add(villesTraversees);
-	}
-
-	public void removeVillesTraversees(Ville villesTraversees) {
-		this.villesTraversees.remove(villesTraversees);
-	}
-
-	public Ville[] toVillesTraverseesArray() {
-		Ville[] lVillesTraversees_Temp = new Ville[this.villesTraversees.size()];
-		this.villesTraversees.toArray(lVillesTraversees_Temp);
-		return lVillesTraversees_Temp;
+	
+	public boolean avancerA(Ville v){
+		this.villesEtapes.add(v);
+		if(!v.equals(villeSuivante)){
+			try {
+				// Les villes étapes n'incluent plus les villes par lesquelle l'utilisateur est passé
+				villesEtapes.removeAll(villesTraversees);
+				threadOrd.setVillesEtapes(villeD, villeA, villesEtapes);
+				
+				List<Ville> listeVilleEtape=null;
+				// Tant que le thread n'a pas fini.
+				while (listeVilleEtape==null) {
+					listeVilleEtape=threadOrd.getVillesOrdonnees();
+				}
+				itineraireCourant=theProgps.graph.trouverLeChemin(v, villeA, villesAEviter, listeVilleEtape);
+			} catch (Exception e) {
+				System.out.println(e.toString());
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void setVilleEtapes(Set<Ville> villeEtapes) {
 		this.villesEtapes = villeEtapes;
-		theProgps.graph.setEtapes(villeEtapes);
 	}
 }

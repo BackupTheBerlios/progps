@@ -30,7 +30,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	private static final double const_pref6=10;
 	private boolean plusCourt=true;
 	private Set<Ville> aEviter=new HashSet<Ville>();
-	private Set<Ville> etapes=new HashSet<Ville>();
+	private List<Ville> etapes=new ArrayList<Ville>();
 	private List<Preference> preferences = new Vector<Preference>();
 	private ArrayList<Double> tab_const = new ArrayList<Double>();
 
@@ -95,16 +95,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     //En parametre : soit les préférences courantes, soit globales
     public void setPreferences(List<Preference> p) {
     	this.preferences=p;
-    }
-    
-    public void setAEviter(Set<Ville> sv) {
-    	this.aEviter=sv;
-    }
-    
-    public void setEtapes(Set<Ville> sv) {
-    	this.etapes=sv;
-    }
-    
+    }    
     
     public boolean villeExiste(String nom){
     	for (Ville uneVille : this.vertexSet()) {
@@ -158,7 +149,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     		Ville villeDepart, 
 			Ville villeArrivee,
 			Set<Ville> villesAEviter,
-			Set<Ville> villesEtapes) throws ExceptionRecherche{
+			List<Ville> villesEtapes) throws ExceptionRecherche{
     	
 //    	Vérification qu'une ville étape n'est pas à éviter
     	if (villesEtapes!=null && villesAEviter!=null) {
@@ -173,6 +164,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 
 //    	 Initialisation
     	aEviter=villesAEviter;
+    	etapes=villesEtapes;
     	List<Itineraire> result = new ArrayList<Itineraire>();
     	
     	ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((Multigraph)this, villeDepart, villeArrivee, 3);
@@ -201,7 +193,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     		Ville villeDepart, 
 			Ville villeArrivee,
 			Set<Ville> villesAEviter,
-			Set<Ville> villesEtapes) throws Exception{
+			List<Ville> villesEtapes) throws Exception{
     	
 //    	Vérification qu'une ville étape n'est pas à éviter
     	if (villesEtapes!=null && villesAEviter!=null) {
@@ -215,6 +207,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
     	
 //    	 Initialisation
     	aEviter=villesAEviter;
+    	etapes=villesEtapes;
     	Itineraire theResult = new Itineraire();
     	theResult.setVilleDepart(villeDepart);
     	theResult.setVilleArrivee(villeArrivee);

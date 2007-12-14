@@ -16,7 +16,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	private boolean upToDate = false;
 	private boolean aEteModifie = false;
 	private TreeMap<Integer, Ville> collection;
-	
+
 	public ThreadOrdonancementVillesEtapes(
 			MyWeightedMultigraph graph,
 			Ville villeDep,
@@ -34,13 +34,13 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	 *  	sinon les villes dans le meilleur ordre 
 	 */
 	public List<Ville> getVillesOrdonnees(){
-		if (upToDate && !aEteModifie) {
+		if (upToDate) {
 			return ordonnees;
 		} else {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Méthode pour modifier les paramètres du thread
 	 * @param villeDep : La ville de départ de l'iti
@@ -51,26 +51,39 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 			Ville villeDep,
 			Ville villeArr, 
 			Set<Ville> nonOrdonnees) {
-		this.villeDep = villeDep;
-		this.villeArr = villeArr;
-		this.nonOrdonnees = nonOrdonnees;
-		upToDate=false;
-		aEteModifie=true;
+		if(this.villeDep != villeDep
+				|| this.villeArr != villeArr
+				|| !this.nonOrdonnees.equals(nonOrdonnees)){
+			this.villeDep = villeDep;
+			this.villeArr = villeArr;
+			this.nonOrdonnees = nonOrdonnees;
+			upToDate=false;
+			aEteModifie=true;
+		}
 	}
 
 	public void run() {
 		while( !isInterrupted()) {
-			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonnees!=null) {
+			
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				System.err.println(e.toString());
+			}
+			
+			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonnees.size()>1) {
 				aEteModifie=false;
 				ordonnees = new ArrayList<Ville>();
 				int minVille;
 				collection = new TreeMap<Integer, Ville>();
+				
 				this.triCheminsAPartirDe(villeDep);
 				// Liste toutes les villes etape
 				while (!this.nonOrdonnees.isEmpty()) {
 					minVille=collection.firstKey();
 					this.ordonnees.add(collection.get(minVille));
-					this.nonOrdonnees.remove(minVille);
+					this.nonOrdonnees.remove(collection.get(minVille));
+					
 					this.triCheminsAPartirDe(collection.get(minVille));
 				}
 				// Si les paramètres n'ont pas changés, la recherche est à jour
@@ -79,7 +92,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 			}
 		}
 	}
-	
+
 	public void triCheminsAPartirDe(Ville v) {
 		collection.clear();
 		for (Ville uneVilleEtape : this.nonOrdonnees) {
@@ -92,16 +105,4 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 			}
 		}
 	}
-	/*public int compare(Integer d1, Integer d2) {
-		List<Integer> cles = new ArrayList<Integer>(collection.keySet());
-		Integer v1, v2;
-		v1=cles.get(d1);
-		v2=cles.get(d2);
-		if (v1>v2)
-			return 1;
-		else if (v2==v1)
-			return 0;
-		else return -1;
-	}
-	*/
 }
