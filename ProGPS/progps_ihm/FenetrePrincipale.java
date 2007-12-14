@@ -493,6 +493,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		
 		nbEtapes = --num;
+		//jTable_etapes.setModel(tabEtapesModele);
 		//jTable_etapes.repaint();
 	}
 	
@@ -522,6 +523,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		jComboBox_villeCourante.removeAllItems();
 		jLabel_itineraireDepart.setText("");
 		jLabel_itineraireArrivee.setText("");
+		numEtape = 0;
+		nbEtapes = 0;
 	}
 	
 	public void changerValeur(String valeur, int ligne, int col) {
@@ -1343,7 +1346,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					mod.addElement(jList_villes.getSelectedValue());
 					jList_villesEtapes.setModel(mod);
 					
-					//TODO event()
 					try {
 						lUser.addVilleEtapes(progps.getVille((String)jList_villes.getSelectedValue()));
 					}
@@ -1399,8 +1401,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						mod2.removeElementAt(jList_villesEtapes.getSelectedIndex());
 						jList_villesEtapes.setModel(mod2);
 						sortVilles();
-						
-						// TODO event()
 						
 						if (!jButton_versEtapes.isEnabled()) {
 							jButton_versEtapes.setEnabled(true);
@@ -1474,7 +1474,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					if (mod2.isEmpty()) {
 						jButton_versEviter.setEnabled(false);
 					}
-					// TODO event()
 				}
 			});
 		}
@@ -1518,7 +1517,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							jButton_enleverEviter.setEnabled(false);
 							jButton_effacerVillesEviter.setEnabled(false);
 						}
-						//TODO event()
 					}
 				}
 			});
@@ -1555,7 +1553,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							jList_villesEtapes.setModel(mod);
 							jList_villes.setModel(mod2);
 							sortVilles();
-							// TODO event()
 							
 							if (!jButton_versEtapes.isEnabled()) {
 								jButton_versEtapes.setEnabled(true);
@@ -1600,7 +1597,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							jList_villesEviter.setModel(mod);
 							jList_villes.setModel(mod2);
 							sortVilles();
-							// TODO event()
 							
 							if (!jButton_versEviter.isEnabled()) {
 								jButton_versEviter.setEnabled(true);
