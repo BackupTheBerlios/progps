@@ -527,6 +527,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	}
 	
 	private void lancerRecherche() {
+		System.out.println(lUser.calculerIti());
+		
 		jTabbedPane_global.setEnabledAt(1,true);
 		//jTabbedPane_global.setEnabledAt(2,true);
 		//jTabbedPane_global.setSelectedIndex(1);
@@ -1330,6 +1332,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					mod.addElement(jList_villes.getSelectedValue());
 					jList_villesEtapes.setModel(mod);
 					
+					//TODO event()
+					try {
+						lUser.addVilleEtapes(progps.getVille((String)jList_villes.getSelectedValue()));
+					}
+					catch (Exception exc) {
+						exc.printStackTrace();
+					}
+					
 					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
 					mod2.removeElementAt(jList_villes.getSelectedIndex());
 					jList_villes.setModel(mod2);
@@ -1343,7 +1353,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						jButton_versEtapes.setEnabled(false);
 					}
 					
-					// TODO event()
 					
 				}
 			});
@@ -1363,24 +1372,33 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_enleverEtape.setEnabled(false);
 			jButton_enleverEtape.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
-					mod.addElement(jList_villesEtapes.getSelectedValue());
-					jList_villes.setModel(mod);
-
-					DefaultListModel mod2 = (DefaultListModel)jList_villesEtapes.getModel();
-					mod2.removeElementAt(jList_villesEtapes.getSelectedIndex());
-					jList_villesEtapes.setModel(mod2);
-					sortVilles();
-					
-					// TODO event()
-					
-					if (!jButton_versEtapes.isEnabled()) {
-						jButton_versEtapes.setEnabled(true);
-					}
-					
-					if (mod2.isEmpty()) {
-						jButton_enleverEtape.setEnabled(false);
-						jButton_effacerVillesEtapes.setEnabled(false);
+					if (jList_villesEtapes.getSelectedIndex() != -1) {
+						DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
+						mod.addElement(jList_villesEtapes.getSelectedValue());
+						jList_villes.setModel(mod);
+	
+						try {
+							lUser.removeVilleEtapes(progps.getVille((String)jList_villesEtapes.getSelectedValue()));
+						}
+						catch (Exception exc) {
+							exc.printStackTrace();
+						}
+						
+						DefaultListModel mod2 = (DefaultListModel)jList_villesEtapes.getModel();
+						mod2.removeElementAt(jList_villesEtapes.getSelectedIndex());
+						jList_villesEtapes.setModel(mod2);
+						sortVilles();
+						
+						// TODO event()
+						
+						if (!jButton_versEtapes.isEnabled()) {
+							jButton_versEtapes.setEnabled(true);
+						}
+						
+						if (mod2.isEmpty()) {
+							jButton_enleverEtape.setEnabled(false);
+							jButton_effacerVillesEtapes.setEnabled(false);
+						}
 					}
 				}
 			});
@@ -1426,6 +1444,13 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					mod.addElement(jList_villes.getSelectedValue());
 					jList_villesEviter.setModel(mod);
 					
+					try {
+						lUser.addVilleAEviter(progps.getVille((String)jList_villes.getSelectedValue()));
+					}
+					catch (Exception exc) {
+						exc.printStackTrace();
+					}
+					
 					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
 					mod2.removeElementAt(jList_villes.getSelectedIndex());
 					jList_villes.setModel(mod2);
@@ -1457,24 +1482,33 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_enleverEviter.setEnabled(false);
 			jButton_enleverEviter.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
-					mod.addElement(jList_villesEviter.getSelectedValue());
-					jList_villes.setModel(mod);
-					
-					DefaultListModel mod2 = (DefaultListModel)jList_villesEviter.getModel();
-					mod2.removeElementAt(jList_villesEviter.getSelectedIndex());
-					jList_villesEviter.setModel(mod2);
-					sortVilles();
-					
-					if (!jButton_versEviter.isEnabled()) {
-						jButton_versEviter.setEnabled(true);
+					if (jList_villesEviter.getSelectedIndex() != -1) {
+						DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
+						mod.addElement(jList_villesEviter.getSelectedValue());
+						jList_villes.setModel(mod);
+						
+						try {
+							lUser.removeVilleAEviter(progps.getVille((String)jList_villesEviter.getSelectedValue()));
+						}
+						catch (Exception exc) {
+							exc.printStackTrace();
+						}
+						
+						DefaultListModel mod2 = (DefaultListModel)jList_villesEviter.getModel();
+						mod2.removeElementAt(jList_villesEviter.getSelectedIndex());
+						jList_villesEviter.setModel(mod2);
+						sortVilles();
+						
+						if (!jButton_versEviter.isEnabled()) {
+							jButton_versEviter.setEnabled(true);
+						}
+						
+						if (mod2.isEmpty()) {
+							jButton_enleverEviter.setEnabled(false);
+							jButton_effacerVillesEviter.setEnabled(false);
+						}
+						//TODO event()
 					}
-					
-					if (mod2.isEmpty()) {
-						jButton_enleverEviter.setEnabled(false);
-						jButton_effacerVillesEviter.setEnabled(false);
-					}
-					//TODO event()
 				}
 			});
 		}
@@ -1499,7 +1533,13 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							int tmp = mod.size();
 							for (int i=0; i<tmp; i++) {
 								mod2.addElement(mod.get(0));
-								mod.remove(0);
+								try {
+									lUser.removeVilleEtapes(progps.getVille((String)mod.get(0)));
+									mod.remove(0);
+								}
+								catch (Exception exc) {
+									exc.printStackTrace();
+								}
 							}
 							jList_villesEtapes.setModel(mod);
 							jList_villes.setModel(mod2);
@@ -1529,7 +1569,13 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							int tmp = mod.size();
 							for (int i=0; i<tmp; i++) {
 								mod2.addElement(mod.get(0));
-								mod.remove(0);
+								try {
+									lUser.removeVilleAEviter(progps.getVille((String)mod.get(0)));
+									mod.remove(0);
+								}
+								catch (Exception exc) {
+									exc.printStackTrace();
+								}
 							}
 							jList_villesEviter.setModel(mod);
 							jList_villes.setModel(mod2);
