@@ -1,26 +1,12 @@
 package parser;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.xml.parsers.*;
+import java.util.*;
 import javax.xml.stream.*;
 import javax.xml.stream.events.XMLEvent;
 
 import noyau.*;
 
-//import org.apache.xpath.XPathAPI;
-import org.w3c.dom.*;
-import org.w3c.dom.traversal.NodeIterator;
-import org.xml.sax.*;
-
-import com.sun.org.apache.xpath.internal.XPathAPI;
-import exceptions.ExceptionParser;
 /**
  * Pour lancer le chargement du xml :exemple :
 
@@ -64,12 +50,25 @@ public class XmlParser2 extends Thread{
 			if(!exceptionLevee && !parsingtermine){
 				//check if there are  more events  in  the input stream
 				try {
+					// Determine le nombre de balises fermantes dans le fichier
+					while(position.hasNext() && !exceptionLevee){
+						position.next();
+						if(position.getEventType()==XMLEvent.START_ELEMENT)
+							nbrNoeuds++;
+					}
+					// On se remet en position de début
+					position=XMLInputFactory.newInstance().createXMLStreamReader(
+										filename, 
+										new FileInputStream(filename));
+					
+					// On liste toutes les balises du XML
 					while(position.hasNext() && !exceptionLevee){
 						position.next();
 						int eventType = position.getEventType();
 						switch  (eventType)
 						{
 						case XMLEvent.START_ELEMENT:
+							nbrNoeudsVisites++;
 							if(position.getLocalName().equalsIgnoreCase("reseau")){
 								position.next();
 								break;
@@ -93,7 +92,7 @@ public class XmlParser2 extends Thread{
 							break;
 						}
 					}
-				} catch (XMLStreamException e) {
+				} catch (Exception e) {
 					System.out.println(e.toString());
 					exceptionLevee=true;
 				}
@@ -117,6 +116,7 @@ public class XmlParser2 extends Thread{
 				switch  (eventType)
 				{
 				case XMLEvent.START_ELEMENT:
+					nbrNoeudsVisites++;
 					if(position.getLocalName().equalsIgnoreCase("nom")){
 						nomVille=position.getElementText();
 						break;
@@ -184,6 +184,7 @@ public class XmlParser2 extends Thread{
 				switch  (eventType)
 				{
 				case XMLEvent.START_ELEMENT:
+					nbrNoeudsVisites++;
 					if(position.getLocalName().equalsIgnoreCase("nom")){
 						nomRoute=position.getElementText();
 						break;
@@ -224,15 +225,12 @@ public class XmlParser2 extends Thread{
 			exceptionLevee=true;
 		}
 	}
-	
+
 	private void nodeTroncon(Route r){
 		String ville1=null;
 		String ville2=null;
 		int vitesse=0;
 		int longueur=0;
-		boolean radar=false;
-		boolean payant=false;
-		boolean touristique=false;
 		List<Etat> etats=new ArrayList<Etat>();
 
 		try {
@@ -243,6 +241,7 @@ public class XmlParser2 extends Thread{
 				switch  (eventType)
 				{
 				case XMLEvent.START_ELEMENT:
+					nbrNoeudsVisites++;
 					if(position.getLocalName().equalsIgnoreCase("ville1")){
 						ville1=position.getElementText();
 						break;
