@@ -67,10 +67,11 @@ public class ChoixItineraire extends JPanel {
 	
 	private FenetrePrincipale laFenetre = null;
 	private ArrayList<Itineraire> lesItis = null;  //  @jve:decl-index=0:
-	private SingletonProgps sys = null;
+	private SingletonProgps progps = null;
 
-	public ChoixItineraire(FenetrePrincipale fen) {
+	public ChoixItineraire(FenetrePrincipale fen, SingletonProgps sys) {
 		laFenetre = fen;
+		progps = sys;
 		initComponents();
 	}
 
@@ -584,14 +585,16 @@ public class ChoixItineraire extends JPanel {
 			jButton_Choix.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (jTree_Itineraire_1.isEnabled()){
-						laFenetre.initItineraire(lesItis.get(0));
+						laFenetre.initItineraire(lesItis.get(2));
 					}
 					else if (jTree_Itineraire_2.isEnabled()) {
 						laFenetre.initItineraire(lesItis.get(1));
 					}
 					else if (jTree_Itineraire_3.isEnabled()) {
-						laFenetre.initItineraire(lesItis.get(2));
+						laFenetre.initItineraire(lesItis.get(0));
 					}
+					laFenetre.getJTabbedPane_global().setEnabledAt(2, true);
+					laFenetre.getJTabbedPane_global().setSelectedIndex(2);
 				}
 			});
 		}

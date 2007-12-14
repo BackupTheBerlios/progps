@@ -311,7 +311,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		this.setBounds(23, 36, 803, 740);
 		jTabbedPane_global.setSelectedIndex(0);
 		jTabbedPane_global.setEnabledAt(1,false);
-		//jTabbedPane_global.setEnabledAt(2,false);
+		jTabbedPane_global.setEnabledAt(2,false);
 		toggleDisplayVilles();
 		toggleDisplayParams();
 	}
@@ -336,6 +336,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			lesVilles.add(progps.getVilles().get(i).getNomVille());
 		}
 		Collections.sort(lesVilles);
+		mod.addElement("Sélectionnez...");
 		for (int i=0; i < lesVilles.size(); i++) {
 			mod.addElement(lesVilles.get(i));
 		}
@@ -350,6 +351,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 				lesVilles.add(progps.getVilles().get(i).getNomVille());
 		}
 		Collections.sort(lesVilles);
+		mod.addElement("Sélectionnez...");
 		for (int i=0; i < lesVilles.size(); i++) {
 			mod.addElement(lesVilles.get(i));
 		}
@@ -687,7 +689,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 * 	
 	 * @return javax.swing.JTabbedPane	
 	 */
-	private JTabbedPane getJTabbedPane_global() {
+	public JTabbedPane getJTabbedPane_global() {
 		if (jTabbedPane_global == null) {
 			jTabbedPane_global = new JTabbedPane();
 			jTabbedPane_global.addTab("Etape 1 : Paramètres", null, getJPanel_accueil(), null);
@@ -1074,7 +1076,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JPanel getJPanel_choixItineraire() {
 		if (jPanel_choixItineraire == null) {
-			jPanel_choixItineraire = new ChoixItineraire(this);
+			jPanel_choixItineraire = new ChoixItineraire(this, progps);
 		}
 		return jPanel_choixItineraire;
 	}
@@ -1103,9 +1105,12 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_rechercherIti = new JButton();
 			jButton_rechercherIti.setText("Rechercher les itinéraires possibles");
 			jButton_rechercherIti.setIcon(new ImageIcon("images//gps_small.png"));
+			jButton_rechercherIti.setEnabled(false);
 			jButton_rechercherIti.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					lancerRecherche();
+					jTabbedPane_global.setEnabledAt(1, true);
+					jTabbedPane_global.setSelectedIndex(1);
 				}
 			});
 			jButton_rechercherIti.setIconTextGap(10);
@@ -1182,24 +1187,24 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JComboBox getJComboBox_villeDepart() {
 		if (jComboBox_villeDepart == null) {
-			Vector<String> villesDep = new Vector<String>();
-			villesDep.add("Paris");
-			villesDep.add("Orsay");
-			jComboBox_villeDepart = new JComboBox(villesDep);
+			jComboBox_villeDepart = new JComboBox();
 			jComboBox_villeDepart.setPreferredSize(new Dimension(200,20));
 			jComboBox_villeDepart.setBackground(Color.WHITE);
 			jComboBox_villeDepart.setForeground(Color.BLUE);
 			jComboBox_villeDepart.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					chargerVillesComboArrivee();
-					jComboBox_villeArrivee.setEnabled(true);
-					
-					try {
-						lUser.setVilleD(progps.getVille((String)jComboBox_villeDepart.getSelectedItem()));
+					if (jComboBox_villeDepart.getSelectedIndex() != 0) {
+						chargerVillesComboArrivee();
+						jComboBox_villeArrivee.setEnabled(true);
+						
+						try {
+							lUser.setVilleD(progps.getVille((String)jComboBox_villeDepart.getSelectedItem()));
+						}
+						catch (Exception exc) {
+							exc.printStackTrace();
+						}
 					}
-					catch (Exception exc) {
-						exc.printStackTrace();
-					}
+					else jButton_rechercherIti.setEnabled(false);
 				}
 			});
 		}
@@ -1220,12 +1225,18 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jComboBox_villeArrivee.setEnabled(false);
 			jComboBox_villeArrivee.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					try {
-						lUser.setVilleA(progps.getVille((String)jComboBox_villeArrivee.getSelectedItem()));
+					if (jComboBox_villeArrivee.getSelectedIndex() != 0) {
+						try {
+							lUser.setVilleA(progps.getVille((String)jComboBox_villeArrivee.getSelectedItem()));
+						}
+						catch (Exception exc) {
+							exc.printStackTrace();
+						}
+						if (jComboBox_villeDepart.getSelectedIndex() != 0) {
+							jButton_rechercherIti.setEnabled(true);
+						}
 					}
-					catch (Exception exc) {
-						exc.printStackTrace();
-					}
+					else jButton_rechercherIti.setEnabled(false);
 				}
 			});
 		}
@@ -1545,6 +1556,15 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							jList_villes.setModel(mod2);
 							sortVilles();
 							// TODO event()
+							
+							if (!jButton_versEtapes.isEnabled()) {
+								jButton_versEtapes.setEnabled(true);
+							}
+							
+							if (mod.isEmpty()) {
+								jButton_enleverEtape.setEnabled(false);
+								jButton_effacerVillesEtapes.setEnabled(false);
+							}
 						}
 					});
 		}
@@ -1581,6 +1601,15 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							jList_villes.setModel(mod2);
 							sortVilles();
 							// TODO event()
+							
+							if (!jButton_versEviter.isEnabled()) {
+								jButton_versEviter.setEnabled(true);
+							}
+							
+							if (mod.isEmpty()) {
+								jButton_enleverEviter.setEnabled(false);
+								jButton_effacerVillesEviter.setEnabled(false);
+							}
 						}
 					});
 		}
