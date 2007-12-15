@@ -16,7 +16,7 @@ public class User {
 	private Ville villeA;
 	private Set<Ville> villesAEviter = new HashSet<Ville>();
 	private Set<Ville> villesEtapes = new HashSet<Ville>();
-	private List<Preference> sesPreferences = new Vector<Preference>();
+//	private List<Preference> sesPreferences = new Vector<Preference>();
 	private Itineraire itineraireCourant;
 	private List<Itineraire> itineraireCalcules = new Vector<Itineraire>();
 	private List<Ville> villesTraversees = new Vector<Ville>();
@@ -100,9 +100,21 @@ public class User {
 	//prend un tableau déjà trié de préférences et les ajoute à celles de l'utilisateur
 	//à GUI de trier les préférences
 	public void setSesPreferences(List<Preference> l) {
-		this.sesPreferences=l;
+		this.theProgps.graph.setPreferences(l);
+	}
+	
+	public List<Preference> getPreferences(){
+		return this.theProgps.graph.getPreferences();
 	}
 
+	public void activerPreference(Preference p){
+		this.theProgps.graph.activerPref(p);
+	}
+	
+	public void desactiverPreference(Preference p){
+		this.theProgps.graph.desactiverPref(p);
+	}
+	
 	public void setItineraireCourant(Itineraire itineraireCourant) {
 		this.itineraireCourant = itineraireCourant;
 		villeD=itineraireCourant.getVilleDep();

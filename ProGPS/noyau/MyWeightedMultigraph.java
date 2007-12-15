@@ -34,6 +34,58 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	private List<Preference> preferences = new Vector<Preference>();
 	private ArrayList<Double> tab_const = new ArrayList<Double>();
 
+	public void activerPref(Preference p){
+		int k=this.preferences.indexOf(p);
+		switch (k) {
+		case 1:
+			tab_const.set(1, const_pref1);
+			break;
+		case 2:
+			tab_const.set(2, const_pref2);
+			break;
+		case 3:
+			tab_const.set(3, const_pref3);
+			break;
+		case 4:
+			tab_const.set(4, const_pref4);
+			break;
+		case 5:
+			tab_const.set(5, const_pref5);
+			break;
+		case 6:
+			tab_const.set(6, const_pref6);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void desactiverPref(Preference p){
+		int k=this.preferences.indexOf(p);
+		switch (k) {
+		case 1:
+			tab_const.set(1, 0.0);
+			break;
+		case 2:
+			tab_const.set(2, 0.0);
+			break;
+		case 3:
+			tab_const.set(3, 0.0);
+			break;
+		case 4:
+			tab_const.set(4, 0.0);
+			break;
+		case 5:
+			tab_const.set(5, 0.0);
+			break;
+		case 6:
+			tab_const.set(6, 0.0);
+			break;
+		default:
+			break;
+		}
+	}
+	
 	/** Inherited code
 	 * Creates a new weighted multigraph.
 	 *
@@ -95,7 +147,11 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	//En parametre : soit les préférences courantes, soit globales
 	public void setPreferences(List<Preference> p) {
 		this.preferences=p;
-	}    
+	}
+	
+	public List<Preference> getPreferences(){
+		return this.preferences;
+	}
 
 	public boolean villeExiste(String nom){
 		for (Ville uneVille : this.vertexSet()) {

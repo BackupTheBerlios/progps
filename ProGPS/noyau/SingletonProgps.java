@@ -31,7 +31,7 @@ public class SingletonProgps {
 	private int lastIdRoute;
 	private Admin sonAdmin;
 	private User sonUser;
-	
+
 	private SingletonProgps() {
 		lastIdVille = 0;
 		lastIdRoute = 0;
@@ -70,14 +70,14 @@ public class SingletonProgps {
 					nouveauTr.setSaRoute(laRoute);
 //					On indique les 2 villes qui encadrent le troncon
 					nouveauTr.setSesVilles(uneVille, nouvelleVille);
-					
+
 //					On génère des valeurs aléatoires pour le troncon
 					nouveauTr.genererValeursAleatoires();
 				}
 			}
 		}
 	}
-	
+
 
 	private List<Ville> prendreDeuxVillesAuHasard(){
 		List<Ville> res = new Vector<Ville>();
@@ -85,7 +85,7 @@ public class SingletonProgps {
 		Random rand = new Random();
 		Ville tab[]=new Ville[graph.vertexSet().size()];
 		graph.vertexSet().toArray(tab);
-		
+
 		while(res.size()==0){
 			res.clear();
 			res.add(tab[rand.nextInt(graph.vertexSet().size())]);
@@ -95,19 +95,19 @@ public class SingletonProgps {
 		return res;
 	}
 
-	
+
 	public static void main(String[] args) throws Exception {
 		SingletonProgps me = getInstance();
 		String urlFichier;
 
 		if (args.length==0){ urlFichier = new String("parser/network.xml");}
 		else{urlFichier=args[0];}
-		
+
 		// Etape 1 : Création de la fenêtre de loading...
 		FenetreChargement chargement = new FenetreChargement(new Frame());
 		chargement.setVisible(true);
 		chargement.setAlwaysOnTop(true);
-		
+
 		// Etape 2 : Création du thread de parsing
 		XmlParser2 threadDeParsing = new XmlParser2(me, urlFichier);
 		threadDeParsing.start();
@@ -129,19 +129,19 @@ public class SingletonProgps {
 		}
 		// On ferme le thread
 		threadDeParsing.setStop(true);
-		
+
 //		// Etape 4 : destruction de la fenetre de chargement
 		chargement.dispose();
-//		
+
 //		// Etape 5 : Création de la fenêtre principale
 		FenetrePrincipale laFenetre = new FenetrePrincipale(me);
 		laFenetre.setVisible(true);
-		
+
 		// TESTS
 		/*
 		me.initialiseGraphComplet(5);
 		List deuxVilles = me.prendreDeuxVillesAuHasard();
-				
+
 		try {
 			List<Itineraire> lesIti = me.graph.trouver3Chemins((Ville)deuxVilles.get(0), (Ville)deuxVilles.get(1), null, null);
 			for (Iterator iter = lesIti.iterator(); iter.hasNext();) {
@@ -153,31 +153,18 @@ public class SingletonProgps {
 			// Error
 			e.printStackTrace();
 		}
-		*/
-		
+		 */
+
 	}
-	
+
 	public List<Ville> getVilles(){
 		return new ArrayList<Ville>(this.graph.vertexSet());
 	}
-	
-	
+
+
 	/*
 	 * Début modifications pour le parseur
 	 */
-//	public boolean ajouterVille(Ville ville) throws Exception {
-//		System.out.println("Add ville BAD");
-//		if(!villeConnue(ville)){
-//			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
-//				Ville villeAccontrole = (Ville) i.next();
-//				if(ville.getIdVille()==villeAccontrole.getIdVille()){
-//					throw new Exception("Impossible d'ajouter deux villes avec le même id : " + ville.getNomVille() + " : " + villeAccontrole.getNomVille());
-//				}
-//			}
-//			sesVilles.add(ville);
-//			return true;
-//		}else throw new Exception("Ville déjà connue " + ville.getNomVille());
-//	}
 	/*
 	 * Modifs d'Olivier pour prendre en compte JGraphT
 	 */
@@ -197,7 +184,7 @@ public class SingletonProgps {
 		}
 		return true;
 	}
-	
+
 	public boolean ajouterTroncon(String v1, 
 			String v2, 
 			Route route,
@@ -212,7 +199,7 @@ public class SingletonProgps {
 		} catch (Exception e) {
 			return false;
 		}
-		
+
 		Troncon newTroncon=this.graph.ajouterUnTroncon(ville1, ville2);
 		newTroncon.setSaRoute(route);
 		newTroncon.setSesVilles(ville1, ville2);
@@ -226,14 +213,13 @@ public class SingletonProgps {
 	 * Fin modifs d'Olivier
 	 */
 	public void ajouterRoute(Route r)  {
-			sesRoutes.add(r);
+		sesRoutes.add(r);
 	}
-	
+
 	public void setPreferences(List<Preference> l) {
-		this.graph.setPreferences(l);
 		this.sonUser.setSesPreferences(l);
 	}
-	
+
 	public Route ajouterRoute(String nom, int type) {
 		Route r = new Route(this.getNewIdRoute(), nom, type);
 		this.ajouterRoute(r);
@@ -246,33 +232,33 @@ public class SingletonProgps {
 	private boolean villeConnue(Ville ville) {
 		return this.graph.containsVertex(ville);
 //		if(sesVilles.contains(ville)){
-//			return true;
+//		return true;
 //		}else {
-//			for (Iterator i = sesVilles.iterator(); i.hasNext();) {
-//				Ville villeAccontrole = (Ville) i.next();
-//				if(ville.getNomVille()==villeAccontrole.getNomVille()){
-//					return true;
-//				}
-//			}
-//			return false;
+//		for (Iterator i = sesVilles.iterator(); i.hasNext();) {
+//		Ville villeAccontrole = (Ville) i.next();
+//		if(ville.getNomVille()==villeAccontrole.getNomVille()){
+//		return true;
+//		}
+//		}
+//		return false;
 //		}
 	}
-	
+
 	//Modif Olivier
 	public boolean villeConnue(String nomVille) {
 		return this.graph.villeExiste(nomVille);
 //		for (Iterator iter = sesVilles.iterator(); iter.hasNext();) {
-//			Ville v = (Ville) iter.next();
-//			if(v.getNomVille().equalsIgnoreCase(nomVille))
-//				return true;
+//		Ville v = (Ville) iter.next();
+//		if(v.getNomVille().equalsIgnoreCase(nomVille))
+//		return true;
 //		}
 //		return false;
 	}
-	
+
 	public List<Route> getRoutes() {
 		return this.sesRoutes;
 	}
-	
+
 	public boolean routeConnue(String s) {
 		for (Route r: this.sesRoutes) {
 			if (r.getNomRoute().equalsIgnoreCase(s))
@@ -280,7 +266,7 @@ public class SingletonProgps {
 		}
 		return false;
 	}
-	
+
 	public boolean tronconConnu(String route, String v1, String v2) throws Exception {
 		for (Route r : this.sesRoutes) {
 			for (Troncon t : r.getSesTroncons()) {
@@ -290,7 +276,7 @@ public class SingletonProgps {
 		}
 		return false;
 	}
-	
+
 	public Troncon getTroncon(String r, String v1, String v2) throws Exception {
 
 		for (Route rou : this.sesRoutes) {
@@ -304,7 +290,7 @@ public class SingletonProgps {
 		return null;
 	}
 
-	
+
 	public Route getRoute(String s) {
 		for (Route r : this.sesRoutes) {
 			if (r.getNomRoute().equals(s))
@@ -312,20 +298,20 @@ public class SingletonProgps {
 		}
 		return null;
 	}
-	
+
 	public int getNewIdVille(){
 		lastIdVille++;
 		return lastIdVille;
 	}
-	
+
 	public int getNewIdRoute() {
 		lastIdRoute++;
 		return lastIdRoute;
 	}
 	public Ville getVille(String nomVille) throws Exception {
 //		for(int i = 0; i < sesVilles.size(); i++){
-//			if(sesVilles.get(i).getNomVille().equalsIgnoreCase(nomVille))
-//				return sesVilles.get(i);
+//		if(sesVilles.get(i).getNomVille().equalsIgnoreCase(nomVille))
+//		return sesVilles.get(i);
 //		}throw new Exception("Ville " + nomVille + " is unknow by the système");
 		return this.graph.getVille(nomVille);
 	}
@@ -345,7 +331,7 @@ public class SingletonProgps {
 	public void setSonUser(User sonUser) {
 		this.sonUser = sonUser;
 	}
-	
+
 	public int getNbTronconsTotal() {
 		int cpt=0;
 		for (Route rou : this.sesRoutes) {
@@ -353,19 +339,19 @@ public class SingletonProgps {
 		}
 		return cpt;
 	}
-	
+
 	public List<Itineraire> getItinerairesCalcules() {
 		return sonUser.getItineraireCalcules();
 	}
-	
+
 	// Modif Olive : Renommée en villeConnue
 //	public boolean existeVille(String nomVille) {
-//		for (Iterator iter = sesVilles.iterator(); iter.hasNext();) {
-//			Ville v = (Ville) iter.next();
-//			if(v.getNomVille().equalsIgnoreCase(nomVille))
-//				return true;
-//		}
-//		return false;
+//	for (Iterator iter = sesVilles.iterator(); iter.hasNext();) {
+//	Ville v = (Ville) iter.next();
+//	if(v.getNomVille().equalsIgnoreCase(nomVille))
+//	return true;
+//	}
+//	return false;
 //	}
 	/*
 	 * Fin modifications pour le parseur
