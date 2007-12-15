@@ -28,7 +28,7 @@ public class User {
 			listeVilleEtape=threadOrd.getVillesOrdonnees();
 			// Tant que le thread n'a pas fini.
 			while (listeVilleEtape==null) {
-				Thread.sleep(100);
+				Thread.sleep(500);
 				listeVilleEtape=threadOrd.getVillesOrdonnees();
 			}
 			itineraireCalcules=theProgps.graph.trouver3Chemins(villeD, villeA, villesAEviter, listeVilleEtape);

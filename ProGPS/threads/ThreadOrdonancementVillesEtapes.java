@@ -11,10 +11,11 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	private MyWeightedMultigraph graph=null;
 	private Ville villeDep = null;
 	private Ville villeArr = null;
-	private Set<Ville> nonOrdonnees = null;
-	private List<Ville> ordonnees = null;
+	private Set<Ville> nonOrdonnees = new HashSet<Ville>();
+	private List<Ville> ordonnees = new ArrayList<Ville>();
 	private boolean upToDate = false;
 	private boolean aEteModifie = false;
+	private Set<Ville> nonOrdonneesModif=null;
 	private TreeMap<Integer, Ville> collection;
 
 	public ThreadOrdonancementVillesEtapes(
@@ -26,6 +27,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 		this.villeDep = villeDep;
 		this.villeArr = villeArr;
 		nonOrdonnees=nonOrd;
+		ordonnees=new ArrayList<Ville>();
 	}
 
 	/**
@@ -34,6 +36,8 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	 *  	sinon les villes dans le meilleur ordre 
 	 */
 	public List<Ville> getVillesOrdonnees(){
+		if(nonOrdonneesModif.size()==0)
+			return new ArrayList();
 		if (upToDate) {
 			return ordonnees;
 		} else {
@@ -53,10 +57,10 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 			Set<Ville> nonOrdonnees) {
 		if(this.villeDep != villeDep
 				|| this.villeArr != villeArr
-				|| !this.nonOrdonnees.equals(nonOrdonnees)){
+				|| !this.nonOrdonneesModif.equals(nonOrdonnees)){
 			this.villeDep = villeDep;
 			this.villeArr = villeArr;
-			this.nonOrdonnees = nonOrdonnees;
+			this.nonOrdonneesModif = nonOrdonnees;
 			upToDate=false;
 			aEteModifie=true;
 		}
@@ -71,7 +75,8 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 				System.err.println(e.toString());
 			}
 			
-			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonnees.size()>1) {
+			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonneesModif.size()>1) {
+				nonOrdonnees=nonOrdonneesModif;
 				aEteModifie=false;
 				ordonnees = new ArrayList<Ville>();
 				int minVille;
@@ -79,7 +84,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 				
 				this.triCheminsAPartirDe(villeDep);
 				// Liste toutes les villes etape
-				while (!this.nonOrdonnees.isEmpty()) {
+				while (!this.nonOrdonnees.isEmpty() && !aEteModifie) {
 					minVille=collection.firstKey();
 					this.ordonnees.add(collection.get(minVille));
 					this.nonOrdonnees.remove(collection.get(minVille));

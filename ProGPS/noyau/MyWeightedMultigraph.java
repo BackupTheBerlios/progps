@@ -220,14 +220,18 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 
 //		Initialisation
 		aEviter=villesAEviter;
-		etapes=villesEtapes;
+		etapes=new ArrayList<Ville>();
+		if(villesEtapes!=null)
+			etapes=villesEtapes;
 		etapes.add(villeArrivee);
 		List<Itineraire> result = new ArrayList<Itineraire>();
 
+		boolean premiereEtape=true;
+		List<Itineraire> etape = new ArrayList<Itineraire>();
+		Ville villePrecedente=villeDepart;
 		for (Ville villeSuivante : etapes) {
-
-
-			ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((WeightedMultigraph)this, villeDepart, villeArrivee, 3);
+			etape.clear();
+			ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((WeightedMultigraph)this, villePrecedente, villeSuivante, 3);
 
 			Itineraire unIti;
 			// On liste des 3 chemins (il se peut qu'il y ait moins de 3 chemins
@@ -243,9 +247,58 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 					unIti.addUnTroncon(unTroncon);
 				}
 
-				result.add(unIti);
+				etape.add(unIti);
 			}
+			
+			if(premiereEtape){
+				if(etape.size()==0)
+					throw new ExceptionRecherche("Impossible de trouver des chemins");
+				result=etape;
+			}else{
+				if(result.size()>etape.size()){
+					int i=0;
+					for (Itineraire unItineraire : etape) {
+						result.get(i).concat(unItineraire);
+						i++;
+					}
+					if(i==1 && result.size()>1){
+						result.get(1).concat(etape.get(0));
+						if(result.size()>2)
+							result.get(2).concat(etape.get(0));
+					}
+					if(i==2 && result.size()>2){
+						result.get(2).concat(etape.get(1));
+					}
+				}else if(result.size()<etape.size()){
+					Itineraire partieFixe=result.get(0);
+					int i=0;
+					for (Itineraire unItineraire : result) {
+						unItineraire.concat(etape.get(i));
+						i++;
+					}
+					if(i==1 && etape.size()>1){
+						result.add(partieFixe);
+						result.get(1).concat(etape.get(1));
+						if(etape.size()>2){
+							result.add(partieFixe);
+							result.get(2).concat(etape.get(2));
+						}
+					}else if(i==2 && etape.size()>2){
+						result.add(partieFixe);
+						result.get(2).concat(etape.get(2));
+						
+					}
+				}else if(result.size()==etape.size()){
+					int i=0;
+					for (Itineraire unItineraire : result) {
+						unItineraire.concat(etape.get(i));
+						i++;
+					}
+				}
+			}
+			villePrecedente=villeSuivante;
 		}
+		
 		return result;
 	}
 
