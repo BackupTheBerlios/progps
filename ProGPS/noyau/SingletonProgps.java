@@ -353,7 +353,11 @@ public class SingletonProgps {
 		}
 		return cpt;
 	}
-
+	
+	public List<Itineraire> getItinerairesCalcules() {
+		return sonUser.getItineraireCalcules();
+	}
+	
 	// Modif Olive : Renommée en villeConnue
 //	public boolean existeVille(String nomVille) {
 //		for (Iterator iter = sesVilles.iterator(); iter.hasNext();) {

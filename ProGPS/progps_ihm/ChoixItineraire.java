@@ -585,13 +585,13 @@ public class ChoixItineraire extends JPanel {
 			jButton_Choix.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (jTree_Itineraire_1.isEnabled()){
-						laFenetre.initItineraire(lesItis.get(2));
+						laFenetre.initItineraire(progps.getItinerairesCalcules().get(2));
 					}
 					else if (jTree_Itineraire_2.isEnabled()) {
-						laFenetre.initItineraire(lesItis.get(1));
+						laFenetre.initItineraire(progps.getItinerairesCalcules().get(1));
 					}
 					else if (jTree_Itineraire_3.isEnabled()) {
-						laFenetre.initItineraire(lesItis.get(0));
+						laFenetre.initItineraire(progps.getItinerairesCalcules().get(0));
 					}
 					laFenetre.getJTabbedPane_global().setEnabledAt(2, true);
 					laFenetre.getJTabbedPane_global().setSelectedIndex(2);
