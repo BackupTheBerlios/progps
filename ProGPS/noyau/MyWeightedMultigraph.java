@@ -34,198 +34,203 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	private List<Preference> preferences = new Vector<Preference>();
 	private ArrayList<Double> tab_const = new ArrayList<Double>();
 
-    /** Inherited code
-     * Creates a new weighted multigraph.
-     *
-     * @param edgeClass class on which to base factory for edges
-     */
-    public MyWeightedMultigraph(Class<? extends Troncon> edgeClass)
-    {
-        this(new ClassBasedEdgeFactory<Ville, Troncon>(edgeClass));
-    }
+	/** Inherited code
+	 * Creates a new weighted multigraph.
+	 *
+	 * @param edgeClass class on which to base factory for edges
+	 */
+	public MyWeightedMultigraph(Class<? extends Troncon> edgeClass)
+	{
+		this(new ClassBasedEdgeFactory<Ville, Troncon>(edgeClass));
+	}
 
-    /** Inherited code
-     * Creates a new weighted multigraph with the specified edge factory.
-     *
-     * @param ef the edge factory of the new graph.
-     */
-    public MyWeightedMultigraph(EdgeFactory<Ville, Troncon> ef)
-    {
-        super(ef);
-        tab_const.add(0, const_pref1);
-        tab_const.add(1, const_pref2);
-        tab_const.add(2, const_pref3);
-        tab_const.add(3, const_pref4);
-        tab_const.add(4, const_pref5);
-        tab_const.add(5, const_pref6);
-    }
+	/** Inherited code
+	 * Creates a new weighted multigraph with the specified edge factory.
+	 *
+	 * @param ef the edge factory of the new graph.
+	 */
+	public MyWeightedMultigraph(EdgeFactory<Ville, Troncon> ef)
+	{
+		super(ef);
+		tab_const.add(0, const_pref1);
+		tab_const.add(1, const_pref2);
+		tab_const.add(2, const_pref3);
+		tab_const.add(3, const_pref4);
+		tab_const.add(4, const_pref5);
+		tab_const.add(5, const_pref6);
+	}
 
-    public Ville ajouterUneVille(String nom) throws ExceptionGraph{
-    	// Teste si une ville ne porte pas déjà le même nom
-    	Set<Ville> lesVertex = this.vertexSet();
-    	for (Iterator iter = lesVertex.iterator(); iter.hasNext();) {
-    		Ville unVertex = (Ville) iter.next();
-    		Ville uneVille = (Ville) unVertex;
-    		if (uneVille.getNomVille().equals(nom))
-    			throw new ExceptionGraph("Le graph contient déjà une ville de nom : "+nom);
-    	}
-    	Ville nouvelleVille = new Ville(nom);
-    	this.addVertex((Ville)nouvelleVille);
+	public Ville ajouterUneVille(String nom) throws ExceptionGraph{
+		// Teste si une ville ne porte pas déjà le même nom
+		Set<Ville> lesVertex = this.vertexSet();
+		for (Iterator iter = lesVertex.iterator(); iter.hasNext();) {
+			Ville unVertex = (Ville) iter.next();
+			Ville uneVille = (Ville) unVertex;
+			if (uneVille.getNomVille().equals(nom))
+				throw new ExceptionGraph("Le graph contient déjà une ville de nom : "+nom);
+		}
+		Ville nouvelleVille = new Ville(nom);
+		this.addVertex((Ville)nouvelleVille);
 
-    	return nouvelleVille;
-    }
-    
-    public Troncon ajouterUnTroncon(Ville ville1, Ville ville2){
-    	Troncon theEdge = this.addEdge(ville1, ville2);
-    	Troncon troncon=null;
-		
-    	troncon = (Troncon) theEdge;
-    	return troncon;
-    }
-    
-    public Ville getVille(String nom) throws ExceptionGraph{
-    	for (Iterator iter = this.vertexSet().iterator(); iter.hasNext();) {
+		return nouvelleVille;
+	}
+
+	public Troncon ajouterUnTroncon(Ville ville1, Ville ville2){
+		Troncon theEdge = this.addEdge(ville1, ville2);
+		Troncon troncon=null;
+
+		troncon = (Troncon) theEdge;
+		return troncon;
+	}
+
+	public Ville getVille(String nom) throws ExceptionGraph{
+		for (Iterator iter = this.vertexSet().iterator(); iter.hasNext();) {
 			Ville uneVille = (Ville) iter.next();
 			if(uneVille.getNomVille().equalsIgnoreCase(nom))
 				return uneVille;
 		}
-    	throw new ExceptionGraph("La ville "+nom+" n'est pas dans le graph.");
-    }
-    
-    //En parametre : soit les préférences courantes, soit globales
-    public void setPreferences(List<Preference> p) {
-    	this.preferences=p;
-    }    
-    
-    public boolean villeExiste(String nom){
-    	for (Ville uneVille : this.vertexSet()) {
+		throw new ExceptionGraph("La ville "+nom+" n'est pas dans le graph.");
+	}
+
+	//En parametre : soit les préférences courantes, soit globales
+	public void setPreferences(List<Preference> p) {
+		this.preferences=p;
+	}    
+
+	public boolean villeExiste(String nom){
+		for (Ville uneVille : this.vertexSet()) {
 			if(uneVille.getNomVille().equalsIgnoreCase(nom))
 				return true;
 		}
-    	return false;
-    }
-    
-    public double getEdgeWeight(Troncon t)
-    {
-//  		Méthode de calcul
-    		double poids=t.getLongueur();
-    		if (!this.plusCourt)
-    			poids/=t.getVitesse();
-    		int cpt=0;
-    		if (!t.isDispo())
-    			poids=const_indispo;
-    		else {
-    			for (Preference p : this.preferences) {
-    				if (p.name().equalsIgnoreCase("Radar") || p.name().equalsIgnoreCase("Payant") || p.name().equalsIgnoreCase("Touristique")) {
-	    				for (Etat e : t.getSesEtats()) {
-	    					if (e.name().equalsIgnoreCase(p.name()) && !e.name().equalsIgnoreCase("Touristique"))
-	    						poids+=this.tab_const.get(cpt);
-	    				}
-    				}
-    				else if (p.name().equalsIgnoreCase("VillesAEviter")) {
-    					if (t.isRelieVille(this.aEviter))
-    						poids+=this.tab_const.get(cpt);
-    				}
-    				cpt++;
-    			}
-    		}
-    		return poids;
-    }
-    
-    public void seDecrire(){
+		return false;
+	}
+
+	public double getEdgeWeight(Troncon t)
+	{
+//		Méthode de calcul
+		double poids=t.getLongueur();
+		if (!this.plusCourt)
+			poids/=t.getVitesse();
+		int cpt=0;
+		if (!t.isDispo())
+			poids=const_indispo;
+		else {
+			for (Preference p : this.preferences) {
+				if (p.name().equalsIgnoreCase("Radar") || p.name().equalsIgnoreCase("Payant") || p.name().equalsIgnoreCase("Touristique")) {
+					for (Etat e : t.getSesEtats()) {
+						if (e.name().equalsIgnoreCase(p.name()) && !e.name().equalsIgnoreCase("Touristique"))
+							poids+=this.tab_const.get(cpt);
+					}
+				}
+				else if (p.name().equalsIgnoreCase("VillesAEviter")) {
+					if (t.isRelieVille(this.aEviter))
+						poids+=this.tab_const.get(cpt);
+				}
+				cpt++;
+			}
+		}
+		return poids;
+	}
+
+	public void seDecrire(){
 		System.out.println("Nombre de villes : "+this.vertexSet().size());
 		Set<Troncon> lesTroncons=this.edgeSet();
 		for (Troncon theEdge : lesTroncons) {
-				Troncon troncon = (Troncon) theEdge;
-				System.out.println("**************");
-				System.out.println("De :"+this.getEdgeSource(theEdge).toString());
-				System.out.println("A :"+this.getEdgeTarget(theEdge).toString());
-				System.out.println("Dist:"+troncon.getLongueur()+"km");
-				System.out.println("Vit:"+troncon.getVitesse()+"km/h");
+			Troncon troncon = (Troncon) theEdge;
+			System.out.println("**************");
+			System.out.println("De :"+this.getEdgeSource(theEdge).toString());
+			System.out.println("A :"+this.getEdgeTarget(theEdge).toString());
+			System.out.println("Dist:"+troncon.getLongueur()+"km");
+			System.out.println("Vit:"+troncon.getVitesse()+"km/h");
 		}
 	}
-    
-    public List<Itineraire> trouver3Chemins(
-    		Ville villeDepart, 
+
+	public List<Itineraire> trouver3Chemins(
+			Ville villeDepart, 
 			Ville villeArrivee,
 			Set<Ville> villesAEviter,
 			List<Ville> villesEtapes) throws ExceptionRecherche{
-    	
-//    	Vérification qu'une ville étape n'est pas à éviter
-    	if (villesEtapes!=null && villesAEviter!=null) {
 
-    		for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
-    			Ville uneEtape = (Ville) iter.next();
-    			if(villesAEviter.contains(uneEtape)){
-    				throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
-    			}
-    		}
-    	}
+//		Vérification qu'une ville étape n'est pas à éviter
+		if (villesEtapes!=null && villesAEviter!=null) {
 
-//    	 Initialisation
-    	aEviter=villesAEviter;
-    	etapes=villesEtapes;
-    	List<Itineraire> result = new ArrayList<Itineraire>();
-    	
-    	ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((Multigraph)this, villeDepart, villeArrivee, 3);
-    	
-    	Itineraire unIti;
-    	// On liste des 3 chemins (il se peut qu'il y ait moins de 3 chemins
-    	for (int i = 0; i < liste.size(); i++) {
-			// On liste tous les troncons
-    		unIti = new Itineraire();
-    		unIti.setVilleDepart(villeDepart);
-    		unIti.setVilleArrivee(villeArrivee);
-    		
-    		List<Troncon> lesTroncons = liste.getEdgesDuChemin(i);
-    		for (Iterator iter = lesTroncons.iterator(); iter.hasNext();) {
-				Troncon unTroncon = (Troncon) iter.next();
-				unIti.addUnTroncon(unTroncon);
+			for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
+				Ville uneEtape = (Ville) iter.next();
+				if(villesAEviter.contains(uneEtape)){
+					throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
+				}
 			}
-    		
-    		result.add(unIti);
 		}
-    	return result;
-    }
-    
+
+//		Initialisation
+		aEviter=villesAEviter;
+		etapes=villesEtapes;
+		etapes.add(villeArrivee);
+		List<Itineraire> result = new ArrayList<Itineraire>();
+
+		for (Ville villeSuivante : etapes) {
+
+
+			ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((WeightedMultigraph)this, villeDepart, villeArrivee, 3);
+
+			Itineraire unIti;
+			// On liste des 3 chemins (il se peut qu'il y ait moins de 3 chemins
+			for (int i = 0; i < liste.size(); i++) {
+				// On liste tous les troncons
+				unIti = new Itineraire();
+				unIti.setVilleDepart(villeDepart);
+				unIti.setVilleArrivee(villeArrivee);
+
+				List<Troncon> lesTroncons = liste.getEdgesDuChemin(i);
+				for (Iterator iter = lesTroncons.iterator(); iter.hasNext();) {
+					Troncon unTroncon = (Troncon) iter.next();
+					unIti.addUnTroncon(unTroncon);
+				}
+
+				result.add(unIti);
+			}
+		}
+		return result;
+	}
+
 
 	public Itineraire trouverLeChemin(
-    		Ville villeDepart, 
+			Ville villeDepart, 
 			Ville villeArrivee,
 			Set<Ville> villesAEviter,
 			List<Ville> villesEtapes) throws Exception{
-    	
-//    	Vérification qu'une ville étape n'est pas à éviter
-    	if (villesEtapes!=null && villesAEviter!=null) {
-    		for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
-    			Ville uneEtape = (Ville) iter.next();
-    			if(villesAEviter.contains(uneEtape)){
-    				throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
-    			}
-    		}
-    	}
-    	
-//    	 Initialisation
-    	aEviter=villesAEviter;
-    	etapes=villesEtapes;
-    	Itineraire theResult = new Itineraire();
-    	theResult.setVilleDepart(villeDepart);
-    	theResult.setVilleArrivee(villeArrivee);
-    	
-    	List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villeDepart, (Ville)villeArrivee);
-    	
-    	for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
-    		Troncon anEdge = (Troncon) iter.next();
-    		Troncon unTroncon = (Troncon) anEdge;
-    		theResult.addUnTroncon(unTroncon);
+
+//		Vérification qu'une ville étape n'est pas à éviter
+		if (villesEtapes!=null && villesAEviter!=null) {
+			for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
+				Ville uneEtape = (Ville) iter.next();
+				if(villesAEviter.contains(uneEtape)){
+					throw new ExceptionRecherche("Impossible de trouver des chemins quand une ville étape est une ville à éviter");
+				}
+			}
 		}
-    	return theResult;
-    }
+
+//		Initialisation
+		aEviter=villesAEviter;
+		etapes=villesEtapes;
+		Itineraire theResult = new Itineraire();
+		theResult.setVilleDepart(villeDepart);
+		theResult.setVilleArrivee(villeArrivee);
+
+		List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villeDepart, (Ville)villeArrivee);
+
+		for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
+			Troncon anEdge = (Troncon) iter.next();
+			Troncon unTroncon = (Troncon) anEdge;
+			theResult.addUnTroncon(unTroncon);
+		}
+		return theResult;
+	}
 
 	public boolean addVilleAEviter(Ville v){
 		return aEviter.add(v);
 	}
-	
+
 	public boolean removeVilleAEviter(Ville v){
 		return aEviter.remove(v);
 	}

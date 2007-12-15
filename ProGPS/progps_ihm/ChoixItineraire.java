@@ -233,7 +233,7 @@ public class ChoixItineraire extends JPanel {
 		Vector<String> infosVect = new Vector<String>();
 		infosVect.add(iti.getLongueurTotal() + " kms");
 		infosVect.add(iti.getTempsTotal());
-		infosVect.add("" + iti.getPrix());
+		infosVect.add("" + iti.getDistancePayante());
 		
 		String[] infos = (String[])infosVect.toArray();
 		

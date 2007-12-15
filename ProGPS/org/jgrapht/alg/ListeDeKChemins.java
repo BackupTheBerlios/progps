@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Vector;
 
 import org.jgrapht.Graph;
-import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.Multigraph;
 
 public class ListeDeKChemins<V, E> {
@@ -31,6 +30,7 @@ public class ListeDeKChemins<V, E> {
 		KShortestPaths<V, E> algoDeChemin=new KShortestPaths<V, E>(g, vDepart, nbChemins);
 		lesChemins = algoDeChemin.getPathElements(vArrivee);
 	}
+	
 	
 	public List<E> getEdgesDuChemin(int k){
 		return lesChemins.get(k).createEdgeListPath();
@@ -71,15 +71,4 @@ public class ListeDeKChemins<V, E> {
 		return lesChemins.size();
 	}
 
-	public void seDecrire(){
-		for (int i = 0; i < this.size(); i++) {
-			System.out.println("Chemin : "+(i+1)+" cout : "+this.getWeightDuChemin(i));
-			List<V> villes = this.getVertexDuChemin(i);
-			for (Iterator iter = villes.iterator(); iter.hasNext();) {
-				V uneVille = (V) iter.next();
-				System.out.println("Ville : "+uneVille.toString());
-			}
-		}
-		
-	}
 }
