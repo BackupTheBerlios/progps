@@ -12,13 +12,13 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.alg.ListeDeKChemins;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.Multigraph;
 import org.jgrapht.graph.WeightedMultigraph;
 
 import exceptions.ExceptionGraph;
 import exceptions.ExceptionRecherche;
 
 
+@SuppressWarnings("serial")
 public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	// Constantes
 	private static final double const_indispo=Double.MAX_VALUE;
@@ -30,7 +30,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	private static final double const_pref6=10;
 	private boolean plusCourt=true;
 	private Set<Ville> aEviter=new HashSet<Ville>();
-	private List<Ville> etapes=new ArrayList<Ville>();
+	private List<Ville> listeVillesEtapes=new ArrayList<Ville>();
 	private List<Preference> preferences = new Vector<Preference>();
 	private ArrayList<Double> tab_const = new ArrayList<Double>();
 
@@ -59,7 +59,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			break;
 		}
 	}
-	
+
 	public void desactiverPref(Preference p){
 		int k=this.preferences.indexOf(p);
 		switch (k) {
@@ -85,7 +85,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			break;
 		}
 	}
-	
+
 	/** Inherited code
 	 * Creates a new weighted multigraph.
 	 *
@@ -148,7 +148,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	public void setPreferences(List<Preference> p) {
 		this.preferences=p;
 	}
-	
+
 	public List<Preference> getPreferences(){
 		return this.preferences;
 	}
@@ -207,9 +207,9 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			Set<Ville> villesAEviter,
 			List<Ville> villesEtapes) throws ExceptionRecherche{
 
+
 //		Vérification qu'une ville étape n'est pas à éviter
 		if (villesEtapes!=null && villesAEviter!=null) {
-
 			for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
 				Ville uneEtape = (Ville) iter.next();
 				if(villesAEviter.contains(uneEtape)){
@@ -220,18 +220,23 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 
 //		Initialisation
 		aEviter=villesAEviter;
-		etapes=new ArrayList<Ville>();
+		listeVillesEtapes=new ArrayList<Ville>();
 		if(villesEtapes!=null)
-			etapes=villesEtapes;
-		etapes.add(villeArrivee);
+			listeVillesEtapes.addAll(villesEtapes);
+
+		listeVillesEtapes.add(villeArrivee);
 		List<Itineraire> result = new ArrayList<Itineraire>();
 
 		boolean premiereEtape=true;
-		List<Itineraire> etape = new ArrayList<Itineraire>();
+		List<Itineraire> itineraireDeEtape = new ArrayList<Itineraire>();
 		Ville villePrecedente=villeDepart;
-		for (Ville villeSuivante : etapes) {
-			etape.clear();
-			ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>((WeightedMultigraph)this, villePrecedente, villeSuivante, 3);
+		for (Ville villeSuivante : listeVillesEtapes) {
+			itineraireDeEtape=new ArrayList<Itineraire>();
+			for (Itineraire itineraire : itineraireDeEtape) {
+				itineraire.setVilleArrivee(villeSuivante);
+			}
+			
+			ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>(this, villePrecedente, villeSuivante, 3);
 
 			Itineraire unIti;
 			// On liste des 3 chemins (il se peut qu'il y ait moins de 3 chemins
@@ -247,58 +252,62 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 					unIti.addUnTroncon(unTroncon);
 				}
 
-				etape.add(unIti);
+				itineraireDeEtape.add(unIti);
 			}
-			
+
 			if(premiereEtape){
-				if(etape.size()==0)
+				premiereEtape=false;
+				if(itineraireDeEtape.size()==0)
 					throw new ExceptionRecherche("Impossible de trouver des chemins");
-				result=etape;
+				result=itineraireDeEtape;
 			}else{
-				if(result.size()>etape.size()){
+				if(result.size()>itineraireDeEtape.size()){
 					int i=0;
-					for (Itineraire unItineraire : etape) {
+					for (Itineraire unItineraire : itineraireDeEtape) {
 						result.get(i).concat(unItineraire);
 						i++;
 					}
 					if(i==1 && result.size()>1){
-						result.get(1).concat(etape.get(0));
+						result.get(1).concat(itineraireDeEtape.get(0));
 						if(result.size()>2)
-							result.get(2).concat(etape.get(0));
+							result.get(2).concat(itineraireDeEtape.get(0));
 					}
 					if(i==2 && result.size()>2){
-						result.get(2).concat(etape.get(1));
+						result.get(2).concat(itineraireDeEtape.get(1));
 					}
-				}else if(result.size()<etape.size()){
+				}else if(result.size()<itineraireDeEtape.size()){
 					Itineraire partieFixe=result.get(0);
 					int i=0;
 					for (Itineraire unItineraire : result) {
-						unItineraire.concat(etape.get(i));
+						unItineraire.concat(itineraireDeEtape.get(i));
 						i++;
 					}
-					if(i==1 && etape.size()>1){
+					if(i==1 && itineraireDeEtape.size()>1){
 						result.add(partieFixe);
-						result.get(1).concat(etape.get(1));
-						if(etape.size()>2){
+						result.get(1).concat(itineraireDeEtape.get(1));
+						if(itineraireDeEtape.size()>2){
 							result.add(partieFixe);
-							result.get(2).concat(etape.get(2));
+							result.get(2).concat(itineraireDeEtape.get(2));
 						}
-					}else if(i==2 && etape.size()>2){
+					}else if(i==2 && itineraireDeEtape.size()>2){
 						result.add(partieFixe);
-						result.get(2).concat(etape.get(2));
-						
+						result.get(2).concat(itineraireDeEtape.get(2));
+
 					}
-				}else if(result.size()==etape.size()){
+				}else if(result.size()==itineraireDeEtape.size()){
 					int i=0;
 					for (Itineraire unItineraire : result) {
-						unItineraire.concat(etape.get(i));
+						unItineraire.concat(itineraireDeEtape.get(i));
 						i++;
 					}
 				}
 			}
 			villePrecedente=villeSuivante;
 		}
-		
+		for (Itineraire itineraire : result) {
+			System.out.println("***************************");
+			System.out.println(itineraire.toString());
+		}
 		return result;
 	}
 
@@ -321,19 +330,32 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 
 //		Initialisation
 		aEviter=villesAEviter;
-		etapes=villesEtapes;
-		Itineraire theResult = new Itineraire();
-		theResult.setVilleDepart(villeDepart);
-		theResult.setVilleArrivee(villeArrivee);
+		
+		listeVillesEtapes=new ArrayList<Ville>();
+		if(villesEtapes!=null)
+			listeVillesEtapes.addAll(villesEtapes);
+		listeVillesEtapes.add(villeArrivee);
+		
+		Itineraire result = new Itineraire();
+		result.setVilleDepart(villeDepart);
+		result.setVilleArrivee(villeArrivee);
 
-		List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villeDepart, (Ville)villeArrivee);
+		Ville villePrecedente=villeDepart;
+		for (Ville villeSuivante : listeVillesEtapes) {
+			Itineraire unItineraireDeEtape = new Itineraire();
+			unItineraireDeEtape.setVilleArrivee(villeSuivante);
+			
+			List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villePrecedente, (Ville)villeSuivante);
 
-		for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
-			Troncon anEdge = (Troncon) iter.next();
-			Troncon unTroncon = (Troncon) anEdge;
-			theResult.addUnTroncon(unTroncon);
+			for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
+				Troncon anEdge = (Troncon) iter.next();
+				Troncon unTroncon = (Troncon) anEdge;
+				unItineraireDeEtape.addUnTroncon(unTroncon);
+			}
+			result.concat(unItineraireDeEtape);
+			villePrecedente=villeSuivante;
 		}
-		return theResult;
+		return result;
 	}
 
 	public boolean addVilleAEviter(Ville v){

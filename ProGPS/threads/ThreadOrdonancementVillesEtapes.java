@@ -1,11 +1,14 @@
 package threads;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 
-import exceptions.ExceptionGraph;
-import exceptions.ExceptionRecherche;
-
-import noyau.*;
+import noyau.Itineraire;
+import noyau.MyWeightedMultigraph;
+import noyau.Ville;
 
 public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	private MyWeightedMultigraph graph=null;
@@ -37,7 +40,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	 */
 	public List<Ville> getVillesOrdonnees(){
 		if(nonOrdonneesModif.size()==0)
-			return new ArrayList();
+			return new ArrayList<Ville>();
 		if (upToDate) {
 			return ordonnees;
 		} else {
@@ -55,40 +58,41 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 			Ville villeDep,
 			Ville villeArr, 
 			Set<Ville> nonOrdonnees) {
-		if(this.villeDep != villeDep
-				|| this.villeArr != villeArr
-				|| !this.nonOrdonneesModif.equals(nonOrdonnees)){
-			this.villeDep = villeDep;
-			this.villeArr = villeArr;
-			this.nonOrdonneesModif = nonOrdonnees;
-			upToDate=false;
-			aEteModifie=true;
-		}
+		this.villeDep = villeDep;
+		this.villeArr = villeArr;
+		this.nonOrdonneesModif = new HashSet<Ville>(nonOrdonnees);
+		upToDate=false;
+		aEteModifie=true;
 	}
 
 	public void run() {
 		while( !isInterrupted()) {
-			
+
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				System.err.println(e.toString());
 			}
-			
-			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonneesModif.size()>1) {
+			if(!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonneesModif.size()==1){
 				nonOrdonnees=nonOrdonneesModif;
+				ordonnees=new ArrayList<Ville>(nonOrdonnees);
+				upToDate=true;
+			}
+			if (!upToDate && graph!=null && villeDep!=null && villeArr!=null && nonOrdonneesModif.size()>1) {
+
+				nonOrdonnees=new HashSet<Ville>(nonOrdonneesModif);
 				aEteModifie=false;
 				ordonnees = new ArrayList<Ville>();
 				int minVille;
 				collection = new TreeMap<Integer, Ville>();
-				
+
 				this.triCheminsAPartirDe(villeDep);
 				// Liste toutes les villes etape
 				while (!this.nonOrdonnees.isEmpty() && !aEteModifie) {
 					minVille=collection.firstKey();
 					this.ordonnees.add(collection.get(minVille));
 					this.nonOrdonnees.remove(collection.get(minVille));
-					
+
 					this.triCheminsAPartirDe(collection.get(minVille));
 				}
 				// Si les paramètres n'ont pas changés, la recherche est à jour

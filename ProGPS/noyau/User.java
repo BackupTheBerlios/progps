@@ -1,8 +1,9 @@
 package noyau;
 
-import java.util.*;
-
-import exceptions.ExceptionRecherche;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 import threads.ThreadOrdonancementVillesEtapes;
 
