@@ -1736,6 +1736,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JCheckBox getJCheckBox_options1() {
 		if (jCheckBox_options1 == null) {
 			jCheckBox_options1 = new JCheckBox();
+			jCheckBox_options1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (jCheckBox_options1.isSelected()) {
+						lUser.activerPreference(Preference.Touristique);
+					}
+					else lUser.desactiverPreference(Preference.Touristique);
+				}
+			});
 		}
 		return jCheckBox_options1;
 	}
@@ -1748,6 +1756,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JCheckBox getJCheckBox_options2() {
 		if (jCheckBox_options2 == null) {
 			jCheckBox_options2 = new JCheckBox();
+			jCheckBox_options2.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (jCheckBox_options2.isSelected()) {
+						lUser.activerPreference(Preference.Payant);
+					}
+					else lUser.desactiverPreference(Preference.Payant);
+				}
+			});
 		}
 		return jCheckBox_options2;
 	}
@@ -1760,6 +1776,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JCheckBox getJCheckBox_options3() {
 		if (jCheckBox_options3 == null) {
 			jCheckBox_options3 = new JCheckBox();
+			jCheckBox_options3.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if (jCheckBox_options3.isSelected()) {
+						lUser.activerPreference(Preference.Radars);
+					}
+					else lUser.desactiverPreference(Preference.Radars);
+				}
+			});
 		}
 		return jCheckBox_options3;
 	}
@@ -1777,10 +1801,12 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					if (jComboBox_limitations.isEnabled()) {
 						jLabel_options42.setEnabled(false);
 						jComboBox_limitations.setEnabled(false);
+						lUser.desactiverPreference(Preference.Vitesse);
 					}
 					else {
 						jLabel_options42.setEnabled(true);
 						jComboBox_limitations.setEnabled(true);
+						lUser.activerPreference(Preference.Touristique);
 					}
 				}
 			});
@@ -1819,6 +1845,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jRadioButton1 = new JRadioButton();
 			jRadioButton1.setActionCommand("plusrapide");
 		    jRadioButton1.setSelected(true);
+		    jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+		    	public void actionPerformed(java.awt.event.ActionEvent e) {
+		    		//TODO
+		    	}
+		    });
 		}
 		return jRadioButton1;
 	}
@@ -1832,6 +1863,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jRadioButton2 == null) {
 			jRadioButton2 = new JRadioButton();
 			jRadioButton2.setActionCommand("pluscourt");
+			jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					//TODO
+				}
+			});
 		}
 		return jRadioButton2;
 	}

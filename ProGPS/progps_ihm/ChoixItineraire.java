@@ -78,7 +78,7 @@ public class ChoixItineraire extends JPanel {
 	/**
 	 * Remplir les informations d'un récapitulatif
 	 * @param num 3=gauche,2=centre,1=droite
-	 * @param String[] Infos : Distance, durée, prix (seulement les valeurs, ex : "25€50")
+	 * @param String[] Infos : Distance, durée, distance payante
 	 * @param String[] Preferences violées (texte complet, ex : "Radars : 3")
 	 */
 	public void remplirRecap(int num, String[] infos, String[] viols) {
@@ -91,7 +91,7 @@ public class ChoixItineraire extends JPanel {
 		{ "Récapitulatif :\n",            //regular
 				"Distance : " + infos[0] + "\n",                                   //italic
 				"Durée : " + infos[1] + "\n",                                    //bold
-				"Prix : " + infos[2] + "\n\n",                                      //small
+				"Distance payante : " + infos[2] + "\n\n",                                      //small
 				"Préférences violées : \n",                                //large
 				v
 		};
