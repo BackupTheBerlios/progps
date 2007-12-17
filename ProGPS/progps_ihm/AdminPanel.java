@@ -902,8 +902,8 @@ public class AdminPanel extends JPanel {
 										// Vérification si on doit modifier l'itineraire courant
 										if (admin.besoinRafraichirIti(tmp)) {
 											Itineraire newIti = admin.rafraichirItineraire();
-											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
 											((FenetrePrincipale)getTopLevelAncestor()).setItineraireModifie(true);
+											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
 										}
 									}
 									catch (Exception exc) {
@@ -1149,8 +1149,8 @@ public class AdminPanel extends JPanel {
 										// Vérification si on doit modifier l'itineraire courant
 										if (admin.besoinRafraichirIti(tmp)) {
 											Itineraire newIti = admin.rafraichirItineraire();
-											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
 											((FenetrePrincipale)getTopLevelAncestor()).setItineraireModifie(true);
+											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
 										}
 									}
 									catch (Exception exc) {
@@ -1547,8 +1547,8 @@ public class AdminPanel extends JPanel {
 										// Vérification si on doit modifier l'itineraire courant
 										if (admin.besoinRafraichirIti(tmp)) {
 											Itineraire newIti = admin.rafraichirItineraire();
-											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
 											((FenetrePrincipale)getTopLevelAncestor()).setItineraireModifie(true);
+											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
 										}
 									}
 									catch (Exception exc) {

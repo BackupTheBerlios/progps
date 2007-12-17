@@ -492,6 +492,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	public void initItineraire(Itineraire iti) {
 
 		resetAllItineraire();
+		itineraireModifie = false;
 		lUser.setItineraireCourant(iti);
 
 		Vector<String> line = new Vector<String>();
@@ -554,7 +555,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	public void rafraichirItineraire(Itineraire iti) {
 		int numEtapeTemp = numEtape;
 		resetAllItineraire();
-		lUser.setItineraireCourant(iti);
+		//System.out.println("RAFRAICHIR");
+		//lUser.setItineraireCourant(iti);
 
 		Vector<String> line = new Vector<String>();
 		int num = 1;
@@ -604,9 +606,17 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		nbEtapes = --num;
 		actualiserVillesAccessibles();
 		
-		jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtapeTemp));
-		jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtapeTemp));
-		jTable_etapes.repaint();
+		// si l'itineraire a été modifié par une mise en indisponible
+		if (itineraireModifie) {
+			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtapeTemp));
+			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtapeTemp));
+			jTable_etapes.repaint();
+		}
+		else {
+			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtapeTemp+1));
+			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtapeTemp+1));
+			jTable_etapes.repaint();
+		}
 	}
 	
 	public void actualiserVillesAccessibles(){
