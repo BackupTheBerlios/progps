@@ -17,7 +17,7 @@ public class User {
 	private Ville villeA;
 	private Set<Ville> villesAEviter = new HashSet<Ville>();
 	private Set<Ville> villesEtapes = new HashSet<Ville>();
-//	private List<Preference> sesPreferences = new Vector<Preference>();
+
 	private Itineraire itineraireCourant;
 	private List<Itineraire> itineraireCalcules = new Vector<Itineraire>();
 	private List<Ville> villesTraversees = new Vector<Ville>();
@@ -46,6 +46,29 @@ public class User {
 			return false;
 		}
 	}
+	
+	public boolean rafraichirItineraire(){
+		Ville villeActuelle=getVilleActuelle();
+		try {
+			// Les villes étapes n'incluent plus les villes par lesquelle l'utilisateur est passé
+			villesEtapes.removeAll(villesTraversees);
+			threadOrd.setVillesEtapes(villeActuelle, villeA, villesEtapes);
+			
+			List<Ville> listeVilleEtape=null;
+			// Tant que le thread n'a pas fini.
+			while (listeVilleEtape==null) {
+				listeVilleEtape=threadOrd.getVillesOrdonnees();
+			}
+			itineraireCourant=theProgps.graph.trouverLeChemin(villeActuelle, villeA, villesAEviter, listeVilleEtape);
+			
+			// Met à jour la ville suivante
+			villeSuivante=itineraireCourant.getVilleSuivante(villeActuelle);
+			return true;
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			return false;
+		}
+	}
 
 	public User(SingletonProgps leSingleton) {
 		theProgps=leSingleton;
@@ -65,6 +88,12 @@ public class User {
 		threadOrd.setVillesEtapes(villeD, villeA, this.villesEtapes);
 	}
 
+	public Ville getVilleActuelle(){
+		if(villesTraversees.size()==0)
+			return villeD;
+		else return villesTraversees.get(villesTraversees.size()-1);
+	}
+	
 	public List<Itineraire> getItineraireCalcules() {
 		return itineraireCalcules;
 	}
@@ -135,12 +164,9 @@ public class User {
 	}
 	
 	public Set<Ville> getVillesAccessibles(){
-		Ville villeActuelle;
-		if(villesTraversees.size()==0)
-			villeActuelle=villeD;
-		else villeActuelle=villesTraversees.get(villesTraversees.size()-1);
-		Set<Ville> result=new HashSet<Ville>(); 
+		Ville villeActuelle=getVilleActuelle();
 		
+		Set<Ville> result=new HashSet<Ville>();
 		
 		Set<Troncon> lesTronconsAccessibles=theProgps.graph.edgesOf(villeActuelle);
 		for (Troncon unTroncon : lesTronconsAccessibles) {

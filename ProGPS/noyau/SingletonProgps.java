@@ -16,7 +16,7 @@ import exceptions.ExceptionGraph;
 
 
 /*
- * Lancer avec -Xmx512M -Xms512M dans les arguments de la VM
+ * Lancer avec -Xmx512M dans les arguments de la VM
  */
 public class SingletonProgps {
 
