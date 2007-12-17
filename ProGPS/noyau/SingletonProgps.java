@@ -217,6 +217,7 @@ public class SingletonProgps {
 	}
 
 	public void setPreferences(List<Preference> l) {
+		System.err.println("ok");
 		this.sonUser.setSesPreferences(l);
 	}
 
@@ -225,8 +226,6 @@ public class SingletonProgps {
 		this.ajouterRoute(r);
 		return r;
 	}
-
-
 
 	// Modif Olivier
 	private boolean villeConnue(Ville ville) {

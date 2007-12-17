@@ -19,7 +19,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 	private boolean upToDate = false;
 	private boolean aEteModifie = false;
 	private Set<Ville> nonOrdonneesModif=null;
-	private TreeMap<Integer, Ville> collection;
+	private TreeMap<Double, Ville> collection;
 
 	public ThreadOrdonancementVillesEtapes(
 			MyWeightedMultigraph graph,
@@ -83,8 +83,8 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 				nonOrdonnees=new HashSet<Ville>(nonOrdonneesModif);
 				aEteModifie=false;
 				ordonnees = new ArrayList<Ville>();
-				int minVille;
-				collection = new TreeMap<Integer, Ville>();
+				double minVille;
+				collection = new TreeMap<Double, Ville>();
 
 				this.triCheminsAPartirDe(villeDep);
 				// Liste toutes les villes etape
@@ -107,7 +107,7 @@ public class ThreadOrdonancementVillesEtapes<V, T> extends Thread  {
 		for (Ville uneVilleEtape : this.nonOrdonnees) {
 			try {
 				Itineraire leChemin = graph.trouverLeChemin(v, uneVilleEtape, null, null);
-				collection.put(leChemin.getLongueurTotal(), uneVilleEtape);
+				collection.put(leChemin.getPoidTotal(), uneVilleEtape);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -14,6 +14,7 @@ public class Itineraire {
 	private int distanceTouristique=0;
 	private int vitesseMin=Integer.MAX_VALUE;
 	private int vitesseMax=Integer.MIN_VALUE;
+	private double poidTotal=0.0;
 	private Troncon tronconCourant=null;
 	private List<Troncon> lesTroncons = new ArrayList<Troncon>();
 	
@@ -32,6 +33,9 @@ public class Itineraire {
 	}
 
 	public void addUnTroncon(Troncon unTroncon) {
+		if(lesTroncons.size()==0)
+			tronconCourant=unTroncon;
+		this.poidTotal+=(SingletonProgps.getInstance()).graph.getEdgeWeight(unTroncon);
 		this.lesTroncons.add(unTroncon);
 		longueurTotal+=unTroncon.getLongueur();
 		if(unTroncon.isPayant())
@@ -95,6 +99,7 @@ public class Itineraire {
 	}
 
 	public Ville getVilleSuivante(Ville lastVilleTrav) {
+		
 		int i=0;
 		Ville v1 = (Ville)lesTroncons.get(0).getSesVilles().toArray()[0];
 		Ville v2 = (Ville)lesTroncons.get(0).getSesVilles().toArray()[1];
@@ -104,7 +109,7 @@ public class Itineraire {
 			v2 = (Ville)lesTroncons.get(i).getSesVilles().toArray()[1];
 		}
 		
-		if (i == lesTroncons.size()) {		// On est sur le dernier troncon, la prochaine ville traversée est donc la ville d'arrivée
+		if (i == lesTroncons.size()-1) {		// On est sur le dernier troncon, la prochaine ville traversée est donc la ville d'arrivée
 			if (lastVilleTrav == v1) {
 				return v2;
 			}
@@ -143,7 +148,12 @@ public class Itineraire {
 		return -1;
 	}
 
+	public double getPoidTotal() {
+		return poidTotal;
+	}
+
 	public void removeUnTroncon(Troncon unTroncon) {
+		this.poidTotal-=(SingletonProgps.getInstance()).graph.getEdgeWeight(unTroncon);
 		this.lesTroncons.remove(unTroncon);
 		longueurTotal-=unTroncon.getLongueur();
 		if(unTroncon.isPayant())
@@ -207,6 +217,7 @@ public class Itineraire {
 					derniereVilleVue=uneVilleReliee;
 					iterator.next();
 				}
+				mess+=" sur route :"+unTroncon.getSaRoute().getNomRoute();
 			}
 		}
 		return mess;

@@ -137,6 +137,10 @@ public class Troncon
 		return false;
 	}
 	
+	public boolean isRelieVilleIndispo(){
+		return !this.ville1.isDispoVille() && this.ville2.isDispoVille();
+	}
+	
 	public boolean isPayant() {
 		Iterator<Etat> it = this.sesEtats.iterator();
 		Etat et;

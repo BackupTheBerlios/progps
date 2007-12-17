@@ -29,7 +29,6 @@ public class TabInfos extends JPanel implements TableCellRenderer {
 			int row, int column) {
 		
 		removeAll();
-		
 		String[] result = ((String)value).split("/");
 		
 		JLabel empty = new JLabel();

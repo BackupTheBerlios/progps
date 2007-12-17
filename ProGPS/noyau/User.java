@@ -22,7 +22,14 @@ public class User {
 	private List<Itineraire> itineraireCalcules = new Vector<Itineraire>();
 	private List<Ville> villesTraversees = new Vector<Ville>();
 	
+	private int vitesseMin=50;
 	
+	
+	public void setVitesseMin(int vitesseMin) {
+		this.vitesseMin = vitesseMin;
+		theProgps.graph.setVitesseMin(vitesseMin);
+	}
+
 	public boolean calculerIti(){
 		try {
 			List<Ville> listeVilleEtape=null;
@@ -43,7 +50,7 @@ public class User {
 	public User(SingletonProgps leSingleton) {
 		theProgps=leSingleton;
 		threadOrd=new ThreadOrdonancementVillesEtapes<Ville, Troncon>(theProgps.graph, null, null, null);
-		threadOrd.start();
+		threadOrd.start();		
 	}
 
 	public void addVilleEtapes(Ville villeEtapes) {
@@ -127,9 +134,28 @@ public class User {
 		return this.itineraireCourant;
 	}
 	
+	public Set<Ville> getVillesAccessibles(){
+		Ville villeActuelle;
+		if(villesTraversees.size()==0)
+			villeActuelle=villeD;
+		else villeActuelle=villesTraversees.get(villesTraversees.size()-1);
+		Set<Ville> result=new HashSet<Ville>(); 
+		
+		
+		Set<Troncon> lesTronconsAccessibles=theProgps.graph.edgesOf(villeActuelle);
+		for (Troncon unTroncon : lesTronconsAccessibles) {
+			result.addAll(unTroncon.getSesVilles());
+		}
+		
+		result.remove(villeActuelle);
+		return result;
+	}
+	
 	public boolean avancerA(Ville v){
-		this.villesEtapes.add(v);
+		this.villesTraversees.add(v);
 		if(!v.equals(villeSuivante)){
+			if(v.equals(villeA))
+				return true;
 			try {
 				// Les villes étapes n'incluent plus les villes par lesquelle l'utilisateur est passé
 				villesEtapes.removeAll(villesTraversees);
@@ -141,15 +167,27 @@ public class User {
 					listeVilleEtape=threadOrd.getVillesOrdonnees();
 				}
 				itineraireCourant=theProgps.graph.trouverLeChemin(v, villeA, villesAEviter, listeVilleEtape);
+				
+				villeSuivante=itineraireCourant.getVilleSuivante(v);
 			} catch (Exception e) {
 				System.out.println(e.toString());
 				return false;
 			}
+		}else{
+			villeSuivante=itineraireCourant.getVilleSuivante(v);
 		}
 		return true;
 	}
 
 	public void setVilleEtapes(Set<Ville> villeEtapes) {
 		this.villesEtapes = villeEtapes;
+	}
+	
+	public void setPlusCourt(boolean b){
+		theProgps.graph.setPlusCourt(b);
+	}
+
+	public int getVitesseMin() {
+		return vitesseMin;
 	}
 }

@@ -21,7 +21,7 @@ import exceptions.ExceptionRecherche;
 @SuppressWarnings("serial")
 public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	// Constantes
-	private static final double const_indispo=Double.MAX_VALUE;
+	private static final double const_indispo=10000000;
 	private static final double const_pref1=1000000;
 	private static final double const_pref2=100000;
 	private static final double const_pref3=10000;
@@ -33,6 +33,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	private List<Ville> listeVillesEtapes=new ArrayList<Ville>();
 	private List<Preference> preferences = new Vector<Preference>();
 	private ArrayList<Double> tab_const = new ArrayList<Double>();
+	private int vitesseMin=50;
 
 	public void activerPref(Preference p){
 		int k=this.preferences.indexOf(p);
@@ -110,6 +111,15 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 		tab_const.add(3, const_pref4);
 		tab_const.add(4, const_pref5);
 		tab_const.add(5, const_pref6);
+
+
+		// On initialise les préférences
+		preferences.add(Preference.Villes);
+		preferences.add(Preference.VillesAEviter);
+		preferences.add(Preference.Touristique);
+		preferences.add(Preference.Vitesse);
+		preferences.add(Preference.Payant);
+		preferences.add(Preference.Radars);
 	}
 
 	public Ville ajouterUneVille(String nom) throws ExceptionGraph{
@@ -161,6 +171,9 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 		return false;
 	}
 
+	public void setVitesseMin(int v){
+		this.vitesseMin=v;
+	}
 	public double getEdgeWeight(Troncon t)
 	{
 //		Méthode de calcul
@@ -168,8 +181,8 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 		if (!this.plusCourt)
 			poids/=t.getVitesse();
 		int cpt=0;
-		if (!t.isDispo())
-			poids=const_indispo;
+		if ( !t.isDispo()|| t.isRelieVilleIndispo())
+			poids+=const_indispo;
 		else {
 			for (Preference p : this.preferences) {
 				if (p.name().equalsIgnoreCase("Radar") || p.name().equalsIgnoreCase("Payant") || p.name().equalsIgnoreCase("Touristique")) {
@@ -181,7 +194,9 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 				else if (p.name().equalsIgnoreCase("VillesAEviter")) {
 					if (t.isRelieVille(this.aEviter))
 						poids+=this.tab_const.get(cpt);
-				}
+				}else if(p.name().equalsIgnoreCase("Vitesse"))
+					if(t.getVitesse()<vitesseMin)
+						poids+=this.tab_const.get(cpt);
 				cpt++;
 			}
 		}
@@ -235,7 +250,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			for (Itineraire itineraire : itineraireDeEtape) {
 				itineraire.setVilleArrivee(villeSuivante);
 			}
-			
+
 			ListeDeKChemins<Ville, Troncon> liste = new ListeDeKChemins<Ville, Troncon>(this, villePrecedente, villeSuivante, 3);
 
 			Itineraire unIti;
@@ -330,12 +345,12 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 
 //		Initialisation
 		aEviter=villesAEviter;
-		
+
 		listeVillesEtapes=new ArrayList<Ville>();
 		if(villesEtapes!=null)
 			listeVillesEtapes.addAll(villesEtapes);
 		listeVillesEtapes.add(villeArrivee);
-		
+
 		Itineraire result = new Itineraire();
 		result.setVilleDepart(villeDepart);
 		result.setVilleArrivee(villeArrivee);
@@ -344,7 +359,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 		for (Ville villeSuivante : listeVillesEtapes) {
 			Itineraire unItineraireDeEtape = new Itineraire();
 			unItineraireDeEtape.setVilleArrivee(villeSuivante);
-			
+
 			List<Troncon> listOfEdges = DijkstraShortestPath.findPathBetween(this, (Ville)villePrecedente, (Ville)villeSuivante);
 
 			for (Iterator iter = listOfEdges.iterator(); iter.hasNext();) {
@@ -355,6 +370,9 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			result.concat(unItineraireDeEtape);
 			villePrecedente=villeSuivante;
 		}
+
+		System.out.println(result.toString());
+
 		return result;
 	}
 
@@ -364,5 +382,10 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 
 	public boolean removeVilleAEviter(Ville v){
 		return aEviter.remove(v);
+	}
+
+	public void setPlusCourt(boolean plusCourt) {
+		this.plusCourt = plusCourt;
+		System.out.println("plus court : "+plusCourt);
 	}
 }

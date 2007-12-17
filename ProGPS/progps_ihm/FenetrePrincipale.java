@@ -1,57 +1,62 @@
 package progps_ihm;
 
-import noyau.*;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JPasswordField;
-import javax.swing.JComboBox;
-import javax.swing.JList;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Vector;
-
-import javax.swing.JCheckBox;
 import javax.swing.JRadioButton;
-import javax.swing.ButtonGroup;
-import java.awt.Font;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+
+import noyau.Admin;
+import noyau.Itineraire;
+import noyau.Preference;
+import noyau.SingletonProgps;
+import noyau.Troncon;
+import noyau.User;
+import noyau.Ville;
 
 /**
  * 
  */
 public class FenetrePrincipale extends javax.swing.JFrame {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private FenetrePreferences fenPrefs = null;
 	private SingletonProgps progps = null;
 	private User lUser = null;
 	private Admin lAdmin = null;
 	private AdminPanel adminPanel = null;
-	
+
 	private javax.swing.JPanel jFrameContentPane = null;
 
 	private javax.swing.JMenuBar jMenuBar_menu = null;
@@ -85,9 +90,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JLabel jLabel_itineraireDepart = null;
 
 	private JLabel jLabel_itineraireTo = null;
-	
+
 	private JLabel jLabel_itineraireArrivee = null;
-	
+
 	private JButton jButton_itineraireModifier = null;
 
 	private JPanel jPanel_etapes = null;
@@ -101,7 +106,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JScrollPane jScrollPane_etapes = null;
 
 	private JTable jTable_etapes = null;
-	
+
 	private TableDataModel tabEtapesModele = new TableDataModel();  //  @jve:decl-index=0:visual-constraint="839,55"
 
 	private JPasswordField jPasswordField_adminpass = null;
@@ -265,9 +270,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JComboBox jComboBox_villeCourante = null;
 
 	private JLabel jLabel_empty43 = null;
-	
-	
-	
+
+
+
 	private int numEtape = 0;
 	private int nbEtapes = 0;
 
@@ -280,7 +285,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		leProgps.setSonUser(lUser);
 		initialize();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		chargerVillesListe();
 		chargerVillesComboDepart();
 	}
@@ -315,7 +320,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		toggleDisplayVilles();
 		toggleDisplayParams();
 	}
-	
+
 	private void chargerVillesListe() {
 		DefaultListModel mod = new DefaultListModel();
 		ArrayList<String> lesVilles = new ArrayList<String>();
@@ -328,7 +333,36 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		jList_villes.setModel(mod);
 	}
-	
+
+	private void refreshVillesListe() {
+		DefaultListModel mod = new DefaultListModel();
+		ArrayList<String> lesVilles = new ArrayList<String>();
+		for (int i=0; i < progps.getVilles().size(); i++) {
+			if (!progps.getVilles().get(i).getNomVille().equals((String)jComboBox_villeDepart.getSelectedItem())
+					&& !progps.getVilles().get(i).getNomVille().equals((String)jComboBox_villeArrivee.getSelectedItem()))
+				lesVilles.add(progps.getVilles().get(i).getNomVille());
+		}
+		DefaultListModel modEtape=(DefaultListModel) jList_villesEtapes.getModel();
+		for (int i = 0; i < modEtape.getSize(); i++) {
+			lesVilles.remove(modEtape.getElementAt(i));
+		}
+		DefaultListModel modEvite=(DefaultListModel) jList_villesEviter.getModel();
+		for (int i = 0; i < modEvite.getSize(); i++) {
+			lesVilles.remove(modEvite.getElementAt(i));
+		}
+
+		modEtape.removeElement((String)jComboBox_villeDepart.getSelectedItem());
+		modEtape.removeElement((String)jComboBox_villeArrivee.getSelectedItem());
+		modEvite.removeElement((String)jComboBox_villeDepart.getSelectedItem());
+		modEvite.removeElement((String)jComboBox_villeArrivee.getSelectedItem());
+
+		Collections.sort(lesVilles);
+		for (int i=0; i < lesVilles.size(); i++) {
+			mod.addElement(lesVilles.get(i));
+		}
+		jList_villes.setModel(mod);
+	}
+
 	private void chargerVillesComboDepart() {
 		DefaultComboBoxModel mod = new DefaultComboBoxModel();
 		ArrayList<String> lesVilles = new ArrayList<String>();
@@ -342,7 +376,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		jComboBox_villeDepart.setModel(mod);
 	}
-	
+
 	private void chargerVillesComboArrivee() {
 		DefaultComboBoxModel mod = new DefaultComboBoxModel();
 		ArrayList<String> lesVilles = new ArrayList<String>();
@@ -357,7 +391,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		jComboBox_villeArrivee.setModel(mod);
 	}
-	
+
 	private void sortVilles() {
 		DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
 		ArrayList<String> lesVilles = new ArrayList<String>();
@@ -371,7 +405,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		jList_villes.setModel(mod);
 	}
-	
+
 	private void toggleDisplayVilles() {
 		if (jLabel_deroul1.getText().equals("-")) {
 			jLabel_deroul1.setText("+");
@@ -386,7 +420,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			this.setSize(this.getWidth(),(this.getHeight()+200));
 		}
 	}
-	
+
 	private void toggleDisplayParams() {
 		if (jLabel_deroul2.getText().equals("-")) {
 			jLabel_deroul2.setText("+");
@@ -404,9 +438,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			//this.setSize(this.getWidth(),(this.getHeight()+235));
 		}
 	}
-	
+
 	private void initTabExemple() {
-		
+
 		Vector<String> line1 = new Vector<String>();
 		line1.add("1");
 		line1.add("Paris");
@@ -414,7 +448,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		line1.add("A6");
 		line1.add("300 km");
 		line1.add("payant/radar/touristique/130");
-		
+
 		Vector<String> line2 = new Vector<String>();
 		line2.add("2");
 		line2.add("Dijon");
@@ -422,7 +456,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		line2.add("A6");
 		line2.add("200 km");
 		line2.add("payant/110");
-		
+
 		Vector<String> line3 = new Vector<String>();
 		line3.add("3");
 		line3.add("Lyon");
@@ -430,7 +464,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		line3.add("N91");
 		line3.add("100 km");
 		line3.add("payant/touristique/90");
-		
+
 		Vector<String> line4 = new Vector<String>();
 		line4.add("4");
 		line4.add("Avignon");
@@ -438,32 +472,32 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		line4.add("A6");
 		line4.add("200 km");
 		line4.add("radar/110");
-		
+
 		tabEtapesModele.addRow(line1);
 		tabEtapesModele.addRow(line2);
 		tabEtapesModele.addRow(line3);
 		tabEtapesModele.addRow(line4);
-		
+
 		nbEtapes = 4;
 	}
-	
+
 	public void initItineraire(Itineraire iti) {
-		
+
 		resetAllItineraire();
 		lUser.setItineraireCourant(iti);
-		
+
 		Vector<String> line = new Vector<String>();
 		int num = 1;
-		
+
 		Ville villeDep = iti.getVilleDep();
 		Ville villeArr = iti.getVilleArr();
 		Ville derniereVilleTrav = villeDep;
 		Ville tmp;
 		String infos = "";
-		
+
 		jLabel_itineraireDepart.setText(villeDep.getNomVille());
 		jLabel_itineraireArrivee.setText(villeArr.getNomVille());
-		
+
 		for(Iterator iter = iti.getLesTroncons().iterator(); iter.hasNext();) {
 			Troncon tronc = (Troncon)iter.next();
 			line.add("" + num);												// Numero de l'etape
@@ -471,32 +505,49 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			tmp = iti.getVilleSuivante(derniereVilleTrav);
 			line.add(tmp.getNomVille());									// Ville arrivée troncon
 			line.add(tronc.getSaRoute().getNomRoute());						// Nom de la route
+			line.add(tronc.getLongueur()+" km(s)");
 			infos += tronc.getVitesse();
-			
+
+			infos += "/";
+
 			if (iti.getTronconCourant().isPayant()) {
-				infos += "/";
 				infos += "payant";
+				infos += "/";
 			}
 			if (iti.getTronconCourant().isRadar()) {
-				infos += "/";
 				infos += "radar";
+				infos += "/";
 			}
 			if (iti.getTronconCourant().isTouristique()) {
-				infos += "/";
 				infos += "touristique";
+				infos += "/";
 			}
 			line.add(infos);
-			
-			tabEtapesModele.addRow(line);
+
+			tabEtapesModele.addRow(new Vector<String>(line));
 			derniereVilleTrav = tmp;
 			num++;
+			line.clear();
+			infos="";
 		}
-		
+
 		nbEtapes = --num;
-		//jTable_etapes.setModel(tabEtapesModele);
-		//jTable_etapes.repaint();
+		actualiserVillesAccessibles();
+//		jTable_etapes.setModel(tabEtapesModele);
+//		jTable_etapes.repaint();
 	}
-	
+
+	public void actualiserVillesAccessibles(){
+		DefaultComboBoxModel mod=new DefaultComboBoxModel();
+
+		Set<Ville> villesAccessibles=lUser.getVillesAccessibles();
+		for (Ville ville : villesAccessibles) {
+			mod.addElement(ville.getNomVille());
+		}
+
+		jComboBox_villeCourante.setModel(mod);
+	}
+
 	public void setVillesCourantesPoss(Vector<String> villes) {
 		jComboBox_villeCourante.removeAllItems();
 		Collections.sort(villes);
@@ -504,7 +555,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		jComboBox_villeCourante.setModel(combo);
 		//for (int i=0;i<)
 	}
-	
+
 	public void setNumEtapeCourante(int num) {
 		if (num <= nbEtapes && num >= 0) {
 			numEtape = num;
@@ -514,39 +565,53 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		else System.out.println("setNumEtapeCourante : Valeur incorrecte");
 	}
-	
+
 	public void resetAllItineraire() {
 		for (int i=0;i<nbEtapes; i++) {
 			tabEtapesModele.removeRow(0);
 		}
-		
+
 		jComboBox_villeCourante.removeAllItems();
 		jLabel_itineraireDepart.setText("");
 		jLabel_itineraireArrivee.setText("");
 		numEtape = 0;
 		nbEtapes = 0;
 	}
-	
+
 	public void changerValeur(String valeur, int ligne, int col) {
 		tabEtapesModele.setValueAt(valeur, ligne, col);
 	}
-	
+
 	private void lancerRecherche() {
-		System.out.println(lUser.calculerIti());
-		
-		jTabbedPane_global.setEnabledAt(1,true);
-		//jTabbedPane_global.setEnabledAt(2,true);
-		//jTabbedPane_global.setSelectedIndex(1);
-		/*WaitPanel wp = new WaitPanel(this);
-		wp.setAlwaysOnTop(true);
-		jTabbedPane_global.setEnabled(false);
-		wp.setSize(new Dimension(50,50));
-		wp.setLocation((int)(this.getLocation().getX()+this.getWidth()/2-wp.getWidth()/2),(int)(this.getLocation().getY()+this.getHeight()/2-wp.getHeight()/2));
-		wp.setVisible(true);
-		this.setEnabled(false);*/
-		//TODO
+		boolean recherche=lUser.calculerIti();
+		if(recherche){
+			List<Itineraire> itiCalcules=lUser.getItineraireCalcules();
+			if(itiCalcules.size()==1){
+				initItineraire(itiCalcules.get(0));
+				jTabbedPane_global.setEnabledAt(1, false);
+				jTabbedPane_global.setEnabledAt(2, true);
+				jTabbedPane_global.setSelectedIndex(2);
+			}else{
+
+				jTabbedPane_global.setEnabledAt(1, true);
+				jTabbedPane_global.setSelectedIndex(1);
+				jPanel_choixItineraire.remplirItineraires(new ArrayList<Itineraire>(itiCalcules));
+
+				jTabbedPane_global.setEnabledAt(1,true);
+				//jTabbedPane_global.setEnabledAt(2,true);
+				//jTabbedPane_global.setSelectedIndex(1);
+				/*WaitPanel wp = new WaitPanel(this);
+			wp.setAlwaysOnTop(true);
+			jTabbedPane_global.setEnabled(false);
+			wp.setSize(new Dimension(50,50));
+			wp.setLocation((int)(this.getLocation().getX()+this.getWidth()/2-wp.getWidth()/2),(int)(this.getLocation().getY()+this.getHeight()/2-wp.getHeight()/2));
+			wp.setVisible(true);
+			this.setEnabled(false);*/
+				//TODO	
+			}
+		}
 	}
-	
+
 
 	/**
 	 * This method initializes jMenuBar_menu
@@ -560,7 +625,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jMenuBar_menu.add(getJMenu_edition());
 			jMenuBar_menu.add(getJMenu_itineraire());
 			jMenuBar_menu.add(getJMenu_aide());
-			
+
 		}
 		return jMenuBar_menu;
 	}
@@ -591,7 +656,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jMenuItem_quitter.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int i = JOptionPane.showConfirmDialog(null,
-				            "Voulez-vous vraiment quitter ProGPS ?", "Quitter ?", JOptionPane.YES_NO_OPTION);
+							"Voulez-vous vraiment quitter ProGPS ?", "Quitter ?", JOptionPane.YES_NO_OPTION);
 					if (i == JOptionPane.YES_OPTION) {
 						System.exit(0);
 					}
@@ -673,9 +738,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jMenuItem_newitineraire.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					int option = JOptionPane.showConfirmDialog(new Frame(),
-				            "Voulez-vous vraiment commencer un nouvel itinéraire ?\n" +
-				            "Cette fonction effacera l'itinéraire courant.", "Attention",
-				            JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+							"Voulez-vous vraiment commencer un nouvel itinéraire ?\n" +
+							"Cette fonction effacera l'itinéraire courant.", "Attention",
+							JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 					if(option == JOptionPane.YES_OPTION) {	// réponse : OUI
 						jTabbedPane_global.setSelectedIndex(0);
 						jTabbedPane_global.setEnabledAt(1,false);
@@ -766,7 +831,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		return jPanel_admin;
 	}
-	
+
 
 	/**
 	 * This method initializes jPanel_itineraire	
@@ -826,12 +891,12 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_itineraireModifier = new JButton();
 			jButton_itineraireModifier.setText("Modifier");
 			jButton_itineraireModifier
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							jTabbedPane_global.setSelectedIndex(0);
-							jTabbedPane_global.setEnabledAt(0, true);
-						}
-					});
+			.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					jTabbedPane_global.setSelectedIndex(0);
+					jTabbedPane_global.setEnabledAt(0, true);
+				}
+			});
 		}
 		return jButton_itineraireModifier;
 	}
@@ -870,7 +935,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			gridBagConstraints1.gridx = 1;
 			jLabel_arrivea = new JLabel();
 			jLabel_arrivea.setText("Je suis arrivé à : ");
-			
+
 			jPanel_localisation = new JPanel();
 			jPanel_localisation.setLayout(new FlowLayout());
 			jPanel_localisation.add(jLabel_arrivea,null);
@@ -891,7 +956,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_OKlocalisation.setText("OK");
 			jButton_OKlocalisation.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try {
+						lUser.avancerA(progps.getVille(((String)jComboBox_villeCourante.getSelectedItem())));
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
 					if (((String)tabEtapesModele.getValueAt(numEtape, 2)).equals((String)jComboBox_villeCourante.getSelectedItem())) {
+						// Cas ou l'utilisateur suit le GPS
 						numEtape++;
 						jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
 						jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
@@ -900,11 +972,16 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 							jButton_OKlocalisation.setEnabled(false);
 							jComboBox_villeCourante.setEnabled(false);
 							JOptionPane.showMessageDialog(null, "Vous êtes arrivés à destination !", "Arrivée", JOptionPane.INFORMATION_MESSAGE);
+						}else{
+							actualiserVillesAccessibles();
 						}
 					}
 					else {
-						//TODO
+						// Cas ou l'utilisateur se paume
+						// TODO tester si l'utilisateur n'est pas à destination !
 						System.out.println("Recalcul necessaire !");
+						// TODO lister les nouvelles étapes
+						actualiserVillesAccessibles();
 					}
 				}
 			});
@@ -932,7 +1009,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JTable getJTable_etapes() {
 		if (jTable_etapes == null) {
-			
+
 			/*TableColumn numEtape = new TableColumn();
 			numEtape.setHeaderValue("N°");
 			numEtape.setPreferredWidth(1);
@@ -955,27 +1032,27 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			TabInfos tabInfos = new TabInfos();
 			infos.setCellRenderer(tabInfos);
 			jTable_etapes.addColumn(infos);*/
-			
+
 			tabEtapesModele.addColumn("N°");
 			tabEtapesModele.addColumn("Ville de départ");
 			tabEtapesModele.addColumn("Ville d'arrivée");
 			tabEtapesModele.addColumn("Route");
 			tabEtapesModele.addColumn("Distance");
 			tabEtapesModele.addColumn("Informations");
-			
+
 			jTable_etapes = new JTable(tabEtapesModele);
 			jTable_etapes.setAutoCreateColumnsFromModel(false);
 			jTable_etapes.setRowHeight(35);
 			jTable_etapes.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
-			
+
 			jTable_etapes.getTableHeader().setReorderingAllowed(false);
-			
+
 			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
 			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
 			jTable_etapes.getColumnModel().getColumn(0).setMaxWidth(20);
-			
+
 			initTabExemple();
-			
+
 		}
 		return jTable_etapes;	
 	}
@@ -1036,11 +1113,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		jPanel_admin.add(jButton_logout);
 		jPanel_admin.repaint();
 	}
-	
+
 	public AdminPanel getAdminPanel() {
 		return adminPanel;
 	}
-	
+
 	/**
 	 * This method initializes jButton_okadmin	
 	 * 	
@@ -1058,7 +1135,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		return jButton_okadmin;
 	}
-	
+
 	private void verifyAdminPass() {
 		if(new String(jPasswordField_adminpass.getPassword()).equals("progps")) {
 			setAdminPanel();
@@ -1112,8 +1189,6 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_rechercherIti.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					lancerRecherche();
-					jTabbedPane_global.setEnabledAt(1, true);
-					jTabbedPane_global.setSelectedIndex(1);
 				}
 			});
 			jButton_rechercherIti.setIconTextGap(10);
@@ -1196,12 +1271,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jComboBox_villeDepart.setForeground(Color.BLUE);
 			jComboBox_villeDepart.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					jButton_rechercherIti.setEnabled(false);
 					if (jComboBox_villeDepart.getSelectedIndex() != 0) {
 						chargerVillesComboArrivee();
 						jComboBox_villeArrivee.setEnabled(true);
-						
+
 						try {
 							lUser.setVilleD(progps.getVille((String)jComboBox_villeDepart.getSelectedItem()));
+							refreshVillesListe();
 						}
 						catch (Exception exc) {
 							exc.printStackTrace();
@@ -1231,6 +1308,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					if (jComboBox_villeArrivee.getSelectedIndex() != 0) {
 						try {
 							lUser.setVilleA(progps.getVille((String)jComboBox_villeArrivee.getSelectedItem()));
+							refreshVillesListe();
 						}
 						catch (Exception exc) {
 							exc.printStackTrace();
@@ -1253,7 +1331,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	 */
 	private JPanel getJPanel_listVilles() {
 		if (jPanel_listVilles == null) {
-			
+
 			GridBagConstraints gridBagConstraints26 = new GridBagConstraints();
 			gridBagConstraints26.fill = GridBagConstraints.BOTH;
 			gridBagConstraints26.gridy = 1;
@@ -1316,9 +1394,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jPanel_listVilles.add(getJButton_enleverEtape(), gridBagConstraints10);
 			jPanel_listVilles.add(getJButton_versEviter(), gridBagConstraints12);
 			jPanel_listVilles.add(getJButton_enleverEviter(), gridBagConstraints13);
-			
+
 			//JScrollPane scrollVilles = new JScrollPane(getJList_villes());
-			
+
 			jPanel_listVilles.add(getJButton_effacerVillesEtapes(), gridBagConstraints18);
 			jPanel_listVilles.add(jLabel_empty7, gridBagConstraints16);
 			jPanel_listVilles.add(getJButton_effacerVillesEviter(), gridBagConstraints19);
@@ -1345,28 +1423,28 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					DefaultListModel mod = (DefaultListModel)jList_villesEtapes.getModel();
 					mod.addElement(jList_villes.getSelectedValue());
 					jList_villesEtapes.setModel(mod);
-					
+
 					try {
 						lUser.addVilleEtapes(progps.getVille((String)jList_villes.getSelectedValue()));
 					}
 					catch (Exception exc) {
 						exc.printStackTrace();
 					}
-					
+
 					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
 					mod2.removeElementAt(jList_villes.getSelectedIndex());
 					jList_villes.setModel(mod2);
-					
+
 					if (!jButton_effacerVillesEtapes.isEnabled()) {
 						jButton_enleverEtape.setEnabled(true);
 						jButton_effacerVillesEtapes.setEnabled(true);
 					}
-					
+
 					if (mod2.isEmpty()) {
 						jButton_versEtapes.setEnabled(false);
 					}
-					
-					
+
+
 				}
 			});
 		}
@@ -1389,23 +1467,23 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
 						mod.addElement(jList_villesEtapes.getSelectedValue());
 						jList_villes.setModel(mod);
-	
+
 						try {
 							lUser.removeVilleEtapes(progps.getVille((String)jList_villesEtapes.getSelectedValue()));
 						}
 						catch (Exception exc) {
 							exc.printStackTrace();
 						}
-						
+
 						DefaultListModel mod2 = (DefaultListModel)jList_villesEtapes.getModel();
 						mod2.removeElementAt(jList_villesEtapes.getSelectedIndex());
 						jList_villesEtapes.setModel(mod2);
 						sortVilles();
-						
+
 						if (!jButton_versEtapes.isEnabled()) {
 							jButton_versEtapes.setEnabled(true);
 						}
-						
+
 						if (mod2.isEmpty()) {
 							jButton_enleverEtape.setEnabled(false);
 							jButton_effacerVillesEtapes.setEnabled(false);
@@ -1430,11 +1508,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			mod.addElement("Orsay3");
 			mod.addElement("Orsay4");	
 			jList_villes = new JList();
-			
+
 			/*for (int i=0;i<progps.getVilles().size();i++) {
 				mod.addElement(progps.getVilles().get(i));
 			}*/
-			
+
 			jList_villes.setModel(mod);
 		}
 		return jList_villes;
@@ -1454,23 +1532,23 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					DefaultListModel mod = (DefaultListModel)jList_villesEviter.getModel();
 					mod.addElement(jList_villes.getSelectedValue());
 					jList_villesEviter.setModel(mod);
-					
+
 					try {
 						lUser.addVilleAEviter(progps.getVille((String)jList_villes.getSelectedValue()));
 					}
 					catch (Exception exc) {
 						exc.printStackTrace();
 					}
-					
+
 					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
 					mod2.removeElementAt(jList_villes.getSelectedIndex());
 					jList_villes.setModel(mod2);
-					
+
 					if (!jButton_effacerVillesEviter.isEnabled()) {
 						jButton_effacerVillesEviter.setEnabled(true);
 						jButton_enleverEviter.setEnabled(true);
 					}
-					
+
 					if (mod2.isEmpty()) {
 						jButton_versEviter.setEnabled(false);
 					}
@@ -1496,23 +1574,23 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						DefaultListModel mod = (DefaultListModel)jList_villes.getModel();
 						mod.addElement(jList_villesEviter.getSelectedValue());
 						jList_villes.setModel(mod);
-						
+
 						try {
 							lUser.removeVilleAEviter(progps.getVille((String)jList_villesEviter.getSelectedValue()));
 						}
 						catch (Exception exc) {
 							exc.printStackTrace();
 						}
-						
+
 						DefaultListModel mod2 = (DefaultListModel)jList_villesEviter.getModel();
 						mod2.removeElementAt(jList_villesEviter.getSelectedIndex());
 						jList_villesEviter.setModel(mod2);
 						sortVilles();
-						
+
 						if (!jButton_versEviter.isEnabled()) {
 							jButton_versEviter.setEnabled(true);
 						}
-						
+
 						if (mod2.isEmpty()) {
 							jButton_enleverEviter.setEnabled(false);
 							jButton_effacerVillesEviter.setEnabled(false);
@@ -1535,35 +1613,35 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_effacerVillesEtapes.setText("Effacer tout");
 			jButton_effacerVillesEtapes.setEnabled(false);
 			jButton_effacerVillesEtapes
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							DefaultListModel mod = (DefaultListModel)jList_villesEtapes.getModel();
-							DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
-							int tmp = mod.size();
-							for (int i=0; i<tmp; i++) {
-								mod2.addElement(mod.get(0));
-								try {
-									lUser.removeVilleEtapes(progps.getVille((String)mod.get(0)));
-									mod.remove(0);
-								}
-								catch (Exception exc) {
-									exc.printStackTrace();
-								}
-							}
-							jList_villesEtapes.setModel(mod);
-							jList_villes.setModel(mod2);
-							sortVilles();
-							
-							if (!jButton_versEtapes.isEnabled()) {
-								jButton_versEtapes.setEnabled(true);
-							}
-							
-							if (mod.isEmpty()) {
-								jButton_enleverEtape.setEnabled(false);
-								jButton_effacerVillesEtapes.setEnabled(false);
-							}
+			.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					DefaultListModel mod = (DefaultListModel)jList_villesEtapes.getModel();
+					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
+					int tmp = mod.size();
+					for (int i=0; i<tmp; i++) {
+						mod2.addElement(mod.get(0));
+						try {
+							lUser.removeVilleEtapes(progps.getVille((String)mod.get(0)));
+							mod.remove(0);
 						}
-					});
+						catch (Exception exc) {
+							exc.printStackTrace();
+						}
+					}
+					jList_villesEtapes.setModel(mod);
+					jList_villes.setModel(mod2);
+					sortVilles();
+
+					if (!jButton_versEtapes.isEnabled()) {
+						jButton_versEtapes.setEnabled(true);
+					}
+
+					if (mod.isEmpty()) {
+						jButton_enleverEtape.setEnabled(false);
+						jButton_effacerVillesEtapes.setEnabled(false);
+					}
+				}
+			});
 		}
 		return jButton_effacerVillesEtapes;
 	}
@@ -1579,35 +1657,35 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jButton_effacerVillesEviter.setText("Effacer tout");
 			jButton_effacerVillesEviter.setEnabled(false);
 			jButton_effacerVillesEviter
-					.addActionListener(new java.awt.event.ActionListener() {
-						public void actionPerformed(java.awt.event.ActionEvent e) {
-							DefaultListModel mod = (DefaultListModel)jList_villesEviter.getModel();
-							DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
-							int tmp = mod.size();
-							for (int i=0; i<tmp; i++) {
-								mod2.addElement(mod.get(0));
-								try {
-									lUser.removeVilleAEviter(progps.getVille((String)mod.get(0)));
-									mod.remove(0);
-								}
-								catch (Exception exc) {
-									exc.printStackTrace();
-								}
-							}
-							jList_villesEviter.setModel(mod);
-							jList_villes.setModel(mod2);
-							sortVilles();
-							
-							if (!jButton_versEviter.isEnabled()) {
-								jButton_versEviter.setEnabled(true);
-							}
-							
-							if (mod.isEmpty()) {
-								jButton_enleverEviter.setEnabled(false);
-								jButton_effacerVillesEviter.setEnabled(false);
-							}
+			.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					DefaultListModel mod = (DefaultListModel)jList_villesEviter.getModel();
+					DefaultListModel mod2 = (DefaultListModel)jList_villes.getModel();
+					int tmp = mod.size();
+					for (int i=0; i<tmp; i++) {
+						mod2.addElement(mod.get(0));
+						try {
+							lUser.removeVilleAEviter(progps.getVille((String)mod.get(0)));
+							mod.remove(0);
 						}
-					});
+						catch (Exception exc) {
+							exc.printStackTrace();
+						}
+					}
+					jList_villesEviter.setModel(mod);
+					jList_villes.setModel(mod2);
+					sortVilles();
+
+					if (!jButton_versEviter.isEnabled()) {
+						jButton_versEviter.setEnabled(true);
+					}
+
+					if (mod.isEmpty()) {
+						jButton_enleverEviter.setEnabled(false);
+						jButton_effacerVillesEviter.setEnabled(false);
+					}
+				}
+			});
 		}
 		return jButton_effacerVillesEviter;
 	}
@@ -1638,7 +1716,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					toggleDisplayParams();
 				}
 			});
-			
+
 			jLabel_empty19 = new JLabel();
 			jLabel_empty19.setPreferredSize(new Dimension(113, 20));
 			jLabel_empty19.setText("");
@@ -1721,7 +1799,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jPanel_globalParams.add(jLabel_deroul2, null);
 			jPanel_globalParams.add(jLabel_fillEmpty2, null);
 			jPanel_globalParams.add(getJPanel_listParams(), null);
-			
+
 			radioGroup1.add(jRadioButton1);
 			radioGroup1.add(jRadioButton2);
 		}
@@ -1822,15 +1900,16 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private JComboBox getJComboBox_limitations() {
 		if (jComboBox_limitations == null) {
 			java.util.Vector<String> limitations = new Vector<String>();
-			limitations.add("50 km/h");
-			limitations.add("70 km/h");
-			limitations.add("90 km/h");
-			limitations.add("110 km/h");
-			limitations.add("130 km/h");
+			limitations.add("50");
+			limitations.add("70");
+			limitations.add("90");
+			limitations.add("110");
+			limitations.add("130");
 			jComboBox_limitations = new JComboBox(limitations);
 			jComboBox_limitations.setBackground(Color.WHITE);
 			jComboBox_limitations.setForeground(Color.RED);
 			jComboBox_limitations.setEnabled(false);
+			// TODO faire le lien avec User.setVitesseMin();
 		}
 		return jComboBox_limitations;
 	}
@@ -1844,12 +1923,12 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jRadioButton1 == null) {
 			jRadioButton1 = new JRadioButton();
 			jRadioButton1.setActionCommand("plusrapide");
-		    jRadioButton1.setSelected(true);
-		    jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-		    	public void actionPerformed(java.awt.event.ActionEvent e) {
-		    		//TODO
-		    	}
-		    });
+			jRadioButton1.setSelected(false);
+			jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					lUser.setPlusCourt(!jRadioButton1.isSelected());
+				}
+			});
 		}
 		return jRadioButton1;
 	}
@@ -1863,9 +1942,10 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jRadioButton2 == null) {
 			jRadioButton2 = new JRadioButton();
 			jRadioButton2.setActionCommand("pluscourt");
+			jRadioButton2.setSelected(true);
 			jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//TODO
+					lUser.setPlusCourt(jRadioButton2.isSelected());
 				}
 			});
 		}
@@ -1968,7 +2048,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					toggleDisplayVilles();
 				}
 			});
-			
+
 			jPanel_globalVilles = new JPanel();
 			jPanel_globalVilles.setLayout(new FlowLayout());
 			jPanel_globalVilles.setAlignmentY(JPanel.TOP_ALIGNMENT);
@@ -2128,5 +2208,5 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 		return jComboBox_villeCourante;
 	}
-	
+
 }  //  @jve:decl-index=0:visual-constraint="24,14"
