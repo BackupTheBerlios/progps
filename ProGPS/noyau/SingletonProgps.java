@@ -9,13 +9,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
-import parser.XmlParser;
 import parser.XmlParser2;
 import progps_ihm.FenetreChargement;
 import progps_ihm.FenetrePrincipale;
-import sun.awt.windows.ThemeReader;
 import exceptions.ExceptionGraph;
-import exceptions.ExceptionRecherche;
 
 
 /*
