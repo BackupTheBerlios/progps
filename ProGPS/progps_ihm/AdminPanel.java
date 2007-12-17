@@ -40,6 +40,7 @@ public class AdminPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private SingletonProgps progps = null;
+	private Admin admin = null;
 	
 	private JTabbedPane jTabbedPane_adminTabs = null;
 	private JPanel jPanel_adminInfos = null;
@@ -108,9 +109,10 @@ public class AdminPanel extends JPanel {
 	/**
 	 * This is the default constructor
 	 */
-	public AdminPanel(SingletonProgps pro) {
+	public AdminPanel(SingletonProgps pro, Admin a) {
 		super();
 		progps = pro;
+		admin = a;
 		initialize();
 	}
 
@@ -896,6 +898,13 @@ public class AdminPanel extends JPanel {
 									try {
 										tmp = progps.getVille((String)jComboBox_adminVilles.getSelectedItem());
 										tmp.setDispoVille(false);
+										
+										// Vérification si on doit modifier l'itineraire courant
+										if (admin.besoinRafraichirIti(tmp)) {
+											Itineraire newIti = admin.rafraichirItineraire();
+											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
+											((FenetrePrincipale)getTopLevelAncestor()).setItineraireModifie(true);
+										}
 									}
 									catch (Exception exc) {
 										exc.printStackTrace();
@@ -1136,6 +1145,13 @@ public class AdminPanel extends JPanel {
 									try {
 										tmp = progps.getRoute((String)jComboBox_adminRoutes.getSelectedItem());
 										tmp.setDispoRoute(false);
+										
+										// Vérification si on doit modifier l'itineraire courant
+										if (admin.besoinRafraichirIti(tmp)) {
+											Itineraire newIti = admin.rafraichirItineraire();
+											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
+											((FenetrePrincipale)getTopLevelAncestor()).setItineraireModifie(true);
+										}
 									}
 									catch (Exception exc) {
 										exc.printStackTrace();
@@ -1527,6 +1543,13 @@ public class AdminPanel extends JPanel {
 										String res[] = ((String)jComboBox_adminTroncons.getSelectedItem()).split(" ");
 										tmp = progps.getTroncon((String)jComboBox_adminRoutesTroncons.getSelectedItem(), res[0], res[2]);
 										tmp.setDispo(false);
+										
+										// Vérification si on doit modifier l'itineraire courant
+										if (admin.besoinRafraichirIti(tmp)) {
+											Itineraire newIti = admin.rafraichirItineraire();
+											((FenetrePrincipale)getTopLevelAncestor()).rafraichirItineraire(newIti);
+											((FenetrePrincipale)getTopLevelAncestor()).setItineraireModifie(true);
+										}
 									}
 									catch (Exception exc) {
 										exc.printStackTrace();

@@ -56,6 +56,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	private User lUser = null;
 	private Admin lAdmin = null;
 	private AdminPanel adminPanel = null;
+	private boolean itineraireModifie = false;
 
 	private javax.swing.JPanel jFrameContentPane = null;
 
@@ -517,15 +518,77 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 
 			infos += "/";
 
-			if (iti.getTronconCourant().isPayant()) {
+			if (tronc.isPayant()) {
 				infos += "payant";
 				infos += "/";
 			}
-			if (iti.getTronconCourant().isRadar()) {
+			if (tronc.isRadar()) {
 				infos += "radar";
 				infos += "/";
 			}
-			if (iti.getTronconCourant().isTouristique()) {
+			if (tronc.isTouristique()) {
+				infos += "touristique";
+				infos += "/";
+			}
+			line.add(infos);
+
+			tabEtapesModele.addRow(new Vector<String>(line));
+			derniereVilleTrav = tmp;
+			num++;
+			line.clear();
+			infos="";
+		}
+
+		nbEtapes = --num;
+		numEtape = 0;
+		actualiserVillesAccessibles();
+		
+		jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
+		jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
+		jTable_etapes.repaint();
+		
+//		jTable_etapes.setModel(tabEtapesModele);
+//		jTable_etapes.repaint();
+	}
+
+	public void rafraichirItineraire(Itineraire iti) {
+		int numEtapeTemp = numEtape;
+		resetAllItineraire();
+		lUser.setItineraireCourant(iti);
+
+		Vector<String> line = new Vector<String>();
+		int num = 1;
+
+		Ville villeDep = iti.getVilleDep();
+		Ville villeArr = iti.getVilleArr();
+		Ville derniereVilleTrav = villeDep;
+		Ville tmp;
+		String infos = "";
+
+		jLabel_itineraireDepart.setText(villeDep.getNomVille());
+		jLabel_itineraireArrivee.setText(villeArr.getNomVille());
+
+		for(Iterator iter = iti.getLesTroncons().iterator(); iter.hasNext();) {
+			Troncon tronc = (Troncon)iter.next();
+			line.add("" + num);												// Numero de l'etape
+			line.add(derniereVilleTrav.getNomVille());						// Ville départ troncon			
+			tmp = iti.getVilleSuivante(derniereVilleTrav);
+			line.add(tmp.getNomVille());									// Ville arrivée troncon
+			line.add(tronc.getSaRoute().getNomRoute());						// Nom de la route
+			line.add(tronc.getLongueur()+" km(s)");
+			infos += tronc.getVitesse();
+
+			infos += "/";
+
+			if (tronc.isPayant()) {
+				infos += "payant";
+				infos += "/";
+			}
+			if (tronc.isRadar()) {
+				infos += "radar";
+				infos += "/";
+			}
+			if (tronc.isTouristique()) {
 				infos += "touristique";
 				infos += "/";
 			}
@@ -540,10 +603,12 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 
 		nbEtapes = --num;
 		actualiserVillesAccessibles();
-//		jTable_etapes.setModel(tabEtapesModele);
-//		jTable_etapes.repaint();
+		
+		jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtapeTemp));
+		jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtapeTemp));
+		jTable_etapes.repaint();
 	}
-
+	
 	public void actualiserVillesAccessibles(){
 		DefaultComboBoxModel mod=new DefaultComboBoxModel();
 
@@ -583,6 +648,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		jLabel_itineraireArrivee.setText("");
 		numEtape = 0;
 		nbEtapes = 0;
+		
+		jComboBox_villeCourante.setEnabled(true);
+		jButton_OKlocalisation.setEnabled(true);
 	}
 
 	public void changerValeur(String valeur, int ligne, int col) {
@@ -771,6 +839,14 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jTabbedPane_global.addTab("Etape 2 : Choix itinéraire", null, getJPanel_choixItineraire(), null);
 			jTabbedPane_global.addTab("Etape 3 : Itinéraire courant", null, getJPanel_itineraire(), null);
 			jTabbedPane_global.addTab("Administration", null, getJPanel_admin(), null);
+			jTabbedPane_global.addChangeListener(new javax.swing.event.ChangeListener() {
+				public void stateChanged(javax.swing.event.ChangeEvent e) {
+					if (jTabbedPane_global.getSelectedIndex() == 2 && itineraireModifie) {
+						itineraireModifie = false;
+						JOptionPane.showMessageDialog(null, "Votre itinéraire a été modifié suite à une déviation !", "Information", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}
+			});
 		}
 		return jTabbedPane_global;
 	}
@@ -1054,8 +1130,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 
 			jTable_etapes.getTableHeader().setReorderingAllowed(false);
 
-			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
-			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
+			//jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtape));
+			//jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtape));
 			jTable_etapes.getColumnModel().getColumn(0).setMaxWidth(20);
 
 			initTabExemple();
@@ -1099,7 +1175,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		jPanel_admin.removeAll();
 		//jPanel_admin.repaint();
 		if (adminPanel == null) {
-			adminPanel = new AdminPanel(progps);
+			adminPanel = new AdminPanel(progps, lAdmin);
 			adminPanel.remplirChamps();
 		}
 		jPanel_admin.add(adminPanel,null);
@@ -2214,6 +2290,10 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jComboBox_villeCourante.setBackground(Color.WHITE);
 		}
 		return jComboBox_villeCourante;
+	}
+	
+	public void setItineraireModifie(boolean mod) {
+		itineraireModifie = mod;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="24,14"

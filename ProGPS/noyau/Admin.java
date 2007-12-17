@@ -99,8 +99,8 @@ public class Admin {
 		return false;
 	}
 	
-	public Itineraire rafraichirItineraireVille(){
-		// Si la ville devient indispo, on fait recalculer l'user
+	public Itineraire rafraichirItineraire(){
+		// on fait recalculer l'user
 		theProgps.getSonUser().rafraichirItineraire();
 		return theProgps.getSonUser().getItineraireCourant();
 	}

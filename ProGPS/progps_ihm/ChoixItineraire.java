@@ -606,6 +606,7 @@ public class ChoixItineraire extends JPanel {
 					}
 					laFenetre.getJTabbedPane_global().setEnabledAt(2, true);
 					laFenetre.getJTabbedPane_global().setSelectedIndex(2);
+					laFenetre.getJTabbedPane_global().setEnabledAt(1, false);
 				}
 			});
 		}
