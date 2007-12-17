@@ -217,4 +217,20 @@ public class User {
 	public int getVitesseMin() {
 		return vitesseMin;
 	}
+
+	public Set<Ville> getVillesAEviter() {
+		return villesAEviter;
+	}
+
+	public void setVillesAEviter(Set<Ville> villesAEviter) {
+		this.villesAEviter = villesAEviter;
+	}
+
+	public Set<Ville> getVillesEtapes() {
+		return villesEtapes;
+	}
+
+	public void setVillesEtapes(Set<Ville> villesEtapes) {
+		this.villesEtapes = villesEtapes;
+	}
 }
