@@ -1,12 +1,48 @@
 package noyau;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+
 public class Admin {
 	private String nomAdmin;
-	private String mdp;
+	private String mdp = null;
 	SingletonProgps theProgps;
 	
 	public Admin(SingletonProgps leProGPS){
 		theProgps=leProGPS;
+		
+		File fichier = new File(".//admin.dat");
+		try {
+			InputStream ips = new FileInputStream(fichier); 
+			InputStreamReader ipsr = new InputStreamReader(ips);
+			BufferedReader br = new BufferedReader(ipsr);
+			String ligne = br.readLine();
+			br.close();
+			mdp = ligne;
+		}
+		catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		if (mdp == null) {
+			mdp = "progps";
+			try {
+				FileWriter fw = new FileWriter(fichier, false);
+				BufferedWriter bw = new BufferedWriter(fw);
+				PrintWriter fichierSortie = new PrintWriter(bw); 
+				fichierSortie.println(mdp);
+				fichierSortie.close();
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void setNomAdmin(String nomAdmin) {
@@ -19,6 +55,17 @@ public class Admin {
 
 	public void setMdp(String mdp) {
 		this.mdp = mdp;
+		File fichier = new File(".//admin.dat");
+		try {
+			FileWriter fw = new FileWriter(fichier, false);
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter fichierSortie = new PrintWriter(bw); 
+			fichierSortie.println(mdp);
+			fichierSortie.close();
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	public String getMdp() {

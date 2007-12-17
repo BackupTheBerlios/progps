@@ -13,11 +13,16 @@ import javax.swing.JLabel;
 import java.awt.GridBagLayout;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+
+import noyau.Admin;
+
 import java.awt.GridBagConstraints;
 
 public class FenetreAdminPass extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	
+	private Admin admin = null;
 
 	private JPanel jContentPane = null;
 
@@ -46,8 +51,9 @@ public class FenetreAdminPass extends JFrame {
 	/**
 	 * This is the default constructor
 	 */
-	public FenetreAdminPass() {
+	public FenetreAdminPass(Admin a) {
 		super();
+		admin = a;
 		initialize();
 	}
 
@@ -202,6 +208,19 @@ public class FenetreAdminPass extends JFrame {
 					String confirm = new String(jPasswordField_confirmnew.getPassword());
 					if(!newpass.equals(confirm)) {
 						JOptionPane.showMessageDialog(new Frame(), "Erreur : le nouveau mot de passe et sa confirmation ne correspondent pas.", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jPasswordField_confirmnew.requestFocus();
+					}
+					else if (!new String(jPasswordField_old.getPassword()).equals(admin.getMdp())) {
+						JOptionPane.showMessageDialog(new Frame(), "Erreur : l'ancien mot de passe est incorrect.", "Erreur", JOptionPane.ERROR_MESSAGE);
+						jPasswordField_old.requestFocus();
+					}
+					else if (!new String(jPasswordField_confirmnew.getPassword()).matches("[a-zA-Z0-9]+")){
+						JOptionPane.showMessageDialog(new Frame(), "Erreur : nouveau mot de passe incorrect.\nIl doit comporter seulement des caractères alphanumériques sans espaces.", "Erreur", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						admin.setMdp(new String(jPasswordField_confirmnew.getPassword()));
+						JOptionPane.showMessageDialog(new Frame(), "Le mot de passe a bien été changé !", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+						dispose();
 					}
 				}
 			});

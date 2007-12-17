@@ -1144,7 +1144,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 	}
 
 	private void verifyAdminPass() {
-		if(new String(jPasswordField_adminpass.getPassword()).equals("progps")) {
+		if(new String(jPasswordField_adminpass.getPassword()).equals(lAdmin.getMdp())) {
 			setAdminPanel();
 			jMenuItem_adminPass.setEnabled(false);
 		}
@@ -1728,8 +1728,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_empty19.setPreferredSize(new Dimension(113, 20));
 			jLabel_empty19.setText("");
 			jLabel_empty12 = new JLabel();
-			jLabel_empty12.setPreferredSize(new Dimension(47, 20));
-			jLabel_empty12.setText("");
+			jLabel_empty12.setText("km/h");
+			jLabel_empty12.setPreferredSize(new Dimension(75, 20));
 			jLabel_options52 = new JLabel();
 			jLabel_options52.setIcon(new ImageIcon(""));
 			jLabel_options52.setText("le plus rapide");
@@ -2193,7 +2193,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jMenuItem_adminPass.setText("Mot de passe administration...");
 			jMenuItem_adminPass.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					FenetreAdminPass fenAdmin = new FenetreAdminPass();
+					FenetreAdminPass fenAdmin = new FenetreAdminPass(lAdmin);
 					fenAdmin.setVisible(true);
 				}
 			});
