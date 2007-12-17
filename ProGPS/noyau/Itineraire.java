@@ -3,6 +3,8 @@ package noyau;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 
 public class Itineraire {
@@ -221,6 +223,102 @@ public class Itineraire {
 			}
 		}
 		return mess;
+	}
+	
+	
+	
+	public int compteRadar() {
+		int cpt=0;
+		for (Troncon t : lesTroncons) {
+			if (t.isRadar())
+				cpt++;
+		}
+		return cpt;
+	}
+	
+	public int comptePayant() {
+		int cpt=0;
+		for (Troncon t : lesTroncons) {
+			if (t.isPayant())
+				cpt++;
+		}
+		return cpt;
+	}
+	
+	public int compteNonTouristique() {
+		int cpt=0;
+		for (Troncon t : lesTroncons) {
+			for (Ville v : t.getSesVilles()) {
+				if (!v.isTouristique())
+					cpt++;
+			}
+			if (!t.isTouristique())
+				cpt++;
+		}
+		return cpt;
+	}
+	
+	public int compteVitesse() {
+		int cpt=0;
+		for (Troncon t : lesTroncons) {
+			if (t.getVitesse()<SingletonProgps.getInstance().getSonUser().getVitesseMin())
+				cpt++;
+		}
+		return cpt;
+	}
+	
+	public int compteEviterViolees() {
+		int cpt=0;
+		for (Troncon t : lesTroncons) {
+			if (t.isRelieVille(SingletonProgps.getInstance().getSonUser().getVillesAEviter()))
+				cpt++;		
+		}
+		return cpt;
+	}
+	
+	public int compteEtapesViolees() {
+		Set<Ville> eTemp=SingletonProgps.getInstance().getSonUser().getVillesEtapes();
+		for (Ville v : eTemp) {
+			for (Troncon t : lesTroncons) {
+				if (t.isRelieVille(v))
+					eTemp.remove(v);
+			}
+		}
+		return eTemp.size();
+	}
+	
+	public Vector<Integer> getPrefViolees() {
+		//Nb Radars, Nb non Touristique , Nb Vitesse violee, Nb villes etapes violees, Nb VillesAEviter violees, Nb troncons Payant
+		Vector <Integer> v= new Vector<Integer>();
+		List<Preference> ps = SingletonProgps.getInstance().graph.getPreferences();
+		for (Preference p : ps) {
+			if (!ps.contains(p))
+				v.add(0);
+			else {
+				if (p.name().equals("Radars")) {
+					v.add(this.compteRadar());
+				}
+				else if (p.name().equals("Touristique")) {
+					v.add(this.compteNonTouristique());
+				}
+				else if (p.name().equals("Vitesse")) {
+					v.add(this.compteVitesse());
+				}
+				else if (p.name().equals("Villes")) {
+					v.add(this.compteEtapesViolees());
+				}
+				else if (p.name().equals("VillesAEviter")) {
+					v.add(this.compteEviterViolees());
+				}
+				else if (p.name().equals("Payant")) {
+					v.add(this.comptePayant());
+				}
+			}
+		}
+//		for (int i = 0; i < v.size(); i++) {
+//			System.out.println(v.get(i));
+//		}
+		return v;
 	}
 	
 	

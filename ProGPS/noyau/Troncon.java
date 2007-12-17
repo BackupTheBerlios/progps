@@ -168,7 +168,7 @@ public class Troncon
 		Etat et;
 		while (it.hasNext()) {
 			et=(Etat)it.next();
-			if (et.name().equals("Radar"))
+			if (et.name().equalsIgnoreCase("Radar"))
 				return true;
 		}
 		return false;
