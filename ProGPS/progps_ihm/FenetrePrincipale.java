@@ -338,8 +338,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		DefaultListModel mod = new DefaultListModel();
 		ArrayList<String> lesVilles = new ArrayList<String>();
 		for (int i=0; i < progps.getVilles().size(); i++) {
+			// Ne doit pas être le départ ou arrivée
 			if (!progps.getVilles().get(i).getNomVille().equals((String)jComboBox_villeDepart.getSelectedItem())
-					&& !progps.getVilles().get(i).getNomVille().equals((String)jComboBox_villeArrivee.getSelectedItem()))
+					&& !progps.getVilles().get(i).getNomVille().equals((String)jComboBox_villeArrivee.getSelectedItem())
+					// Prend pas en compte les villes indispo
+					&& progps.getVilles().get(i).isDispoVille())
 				lesVilles.add(progps.getVilles().get(i).getNomVille());
 		}
 		DefaultListModel modEtape=(DefaultListModel) jList_villesEtapes.getModel();
@@ -367,7 +370,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		DefaultComboBoxModel mod = new DefaultComboBoxModel();
 		ArrayList<String> lesVilles = new ArrayList<String>();
 		for (int i=0; i < progps.getVilles().size(); i++) {
-			lesVilles.add(progps.getVilles().get(i).getNomVille());
+			// On ne prend pas les villes indispo
+			if(progps.getVilles().get(i).isDispoVille())
+				lesVilles.add(progps.getVilles().get(i).getNomVille());
 		}
 		Collections.sort(lesVilles);
 		mod.addElement("Sélectionnez...");
@@ -381,7 +386,9 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		DefaultComboBoxModel mod = new DefaultComboBoxModel();
 		ArrayList<String> lesVilles = new ArrayList<String>();
 		for (int i=0; i < progps.getVilles().size(); i++) {
-			if(!progps.getVilles().get(i).getNomVille().equals((String)jComboBox_villeDepart.getSelectedItem()))
+			if(!progps.getVilles().get(i).getNomVille().equals((String)jComboBox_villeDepart.getSelectedItem())
+					// On ne prend pas les villes indispo
+					&& progps.getVilles().get(i).isDispoVille())
 				lesVilles.add(progps.getVilles().get(i).getNomVille());
 		}
 		Collections.sort(lesVilles);
