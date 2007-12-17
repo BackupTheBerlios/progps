@@ -1,3 +1,2 @@
-+ Qd un troncon devient dispo sur une route indispo; la route doit devenir dispo.
 + Gérer les préférences violés
 + Quand l'admin met qqch indiso -> il faut refresh
