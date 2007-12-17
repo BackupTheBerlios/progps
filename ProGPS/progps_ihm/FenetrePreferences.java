@@ -1,25 +1,19 @@
 package progps_ihm;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-import javax.swing.JFrame;
-import javax.swing.JTextPane;
-
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
+import java.awt.FlowLayout;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Vector;
 
-import javax.swing.JSlider;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.plaf.SliderUI;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextPane;
 
 import noyau.Preference;
 import noyau.SingletonProgps;
@@ -74,18 +68,6 @@ public class FenetrePreferences extends JFrame {
 	private JLabel jLabel_opt6 = null;
 
 	private JSlider jSlider_opt6 = null;
-
-	private JCheckBox jCheckBox_opt1 = null;
-
-	private JCheckBox jCheckBox_opt2 = null;
-
-	private JCheckBox jCheckBox_opt3 = null;
-
-	private JCheckBox jCheckBox_opt4 = null;
-
-	private JCheckBox jCheckBox_opt5 = null;
-
-	private JCheckBox jCheckBox_opt6 = null;
 	
 	private Vector<JSlider> lesSliders = new Vector<JSlider>();  //  @jve:decl-index=0:
 
@@ -105,15 +87,16 @@ public class FenetrePreferences extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(400, 410);
+		this.setSize(380, 410);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Préférences");
-		this.setIconImage(this.getToolkit().getImage("C://progps_images//gps_small.png"));
+		this.setIconImage(this.getToolkit().getImage("images/gps_small.png"));
 		this.setResizable(false);
 	}
 	
 	public void refreshInitValues() {
 		valuesInit.removeAllElements();
+		
 		for (int i=0; i < lesSliders.size(); i++) {
 			if (!lesSliders.get(i).isEnabled()) {
 				valuesInit.add(0);
@@ -124,38 +107,54 @@ public class FenetrePreferences extends JFrame {
 	
 	public void setInitValues() {
 		for (int i=0; i < valuesInit.size(); i++) {
-			if (valuesInit.get(i).intValue() == 0) {
-				lesSliders.get(i).setEnabled(false);
-				lesSliders.get(i).setValue(0);
-			}
-			else {
 				lesSliders.get(i).setEnabled(true);
 				lesSliders.get(i).setValue(valuesInit.get(i).intValue());
-			}
 		}
 	}
 	
+	private int valeurNonUtilisee(){
+		HashSet<Integer> valeursPossibles = new HashSet<Integer>();
+		HashSet<Integer> valeursUtilisees = new HashSet<Integer>();
+		
+		valeursPossibles.add(1);
+		valeursPossibles.add(2);
+		valeursPossibles.add(3);
+		valeursPossibles.add(4);
+		valeursPossibles.add(5);
+		valeursPossibles.add(6);
+		for (JSlider unSlider : lesSliders) {
+			valeursUtilisees.add(unSlider.getValue());
+		}
+		
+		valeursPossibles.removeAll(valeursUtilisees);
+		for (Integer integer : valeursPossibles) {
+			return integer;
+		}
+		return 0;
+	}
+	
 	private void commitSliderValue(JSlider slider) {
+		// Vérification qu'il n'y a pas 2x la même priorité
 		for (int i=0; i<lesSliders.size(); i++) {
 			if (slider != lesSliders.get(i)) {
-				if (lesSliders.get(i).isEnabled()) {
 					if (slider.getValue() == lesSliders.get(i).getValue()) {
-						lesSliders.get(i).setValue(0);
+						// Si 2sliders ont mm priorité -> l'ancien est mis à la valeur non utilisée
+						lesSliders.get(i).setValue(valeurNonUtilisee());
 					}
-				}
 			}
 		}
 	}
 	
 	private boolean checkSliderValues() {
-		for (int i=0; i<lesSliders.size(); i++) {
-			if (lesSliders.get(i).getValue() == 0) {
-				if (lesSliders.get(i).isEnabled()) {
-					JOptionPane.showMessageDialog(null, "Une priorité ne peut pas être égale à 0 !", "Erreur", JOptionPane.ERROR_MESSAGE);
-					lesSliders.get(i).requestFocus();
-					return false;
-				}
+		// Tous les sliders doivent avoir une valeur différente
+		HashSet<Integer> valeurs=new HashSet<Integer>();
+		for (JSlider unSlider:lesSliders) {
+			if(valeurs.contains(unSlider.getValue())){
+				JOptionPane.showMessageDialog(null, "Plusieurs priorités ont la même valeur !", "Erreur", JOptionPane.ERROR_MESSAGE);
+				unSlider.requestFocus();
+				return false;
 			}
+			valeurs.add(unSlider.getValue());
 		}
 		return true;
 	}
@@ -223,22 +222,16 @@ public class FenetrePreferences extends JFrame {
 			jPanel_preferences.add(jTextPane_opt0, null);
 			jPanel_preferences.add(jLabel_opt1, null);
 			jPanel_preferences.add(getJSlider_opt1(), null);
-			jPanel_preferences.add(getJCheckBox_opt1(), null);
 			jPanel_preferences.add(jLabel_opt2, null);
 			jPanel_preferences.add(getJSlider_opt2(), null);
-			jPanel_preferences.add(getJCheckBox_opt2(), null);
 			jPanel_preferences.add(jLabel_opt3, null);
 			jPanel_preferences.add(getJSlider_opt3(), null);
-			jPanel_preferences.add(getJCheckBox_opt3(), null);
 			jPanel_preferences.add(jLabel_opt4, null);
 			jPanel_preferences.add(getJSlider_opt4(), null);
-			jPanel_preferences.add(getJCheckBox_opt4(), null);
 			jPanel_preferences.add(jLabel_opt5, null);
 			jPanel_preferences.add(getJSlider_opt5(), null);
-			jPanel_preferences.add(getJCheckBox_opt5(), null);
 			jPanel_preferences.add(jLabel_opt6, null);
 			jPanel_preferences.add(getJSlider_opt6(), null);
-			jPanel_preferences.add(getJCheckBox_opt6(), null);
 			jTextPane_opt0.setBackground(jPanel_preferences.getBackground());
 		}
 		return jPanel_preferences;
@@ -297,15 +290,14 @@ public class FenetrePreferences extends JFrame {
 			jButton_ok.setText("OK");
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					//TODO
+					//TODO Création de la liste ordonnée des préférences
 					if (checkSliderValues()) {
 						Vector<Integer> values = new Vector<Integer> ();
 						for (int i=0; i < lesSliders.size(); i++) {
-							if (lesSliders.get(i).isEnabled()) {
 								values.add(new Integer(lesSliders.get(i).getValue()));
-							}
 						}
 						Collections.sort(values);
+						
 						Vector<Preference> pref = new Vector<Preference>();
 						for (int i=0; i < values.size(); i++) {
 							int j=0;
@@ -491,161 +483,161 @@ public class FenetrePreferences extends JFrame {
 	 * 	
 	 * @return javax.swing.JCheckBox	
 	 */
-	private JCheckBox getJCheckBox_opt1() {
-		if (jCheckBox_opt1 == null) {
-			jCheckBox_opt1 = new JCheckBox();
-			if (jSlider_opt1.isEnabled()) {
-				jCheckBox_opt1.setSelected(true);
-			}
-			else jCheckBox_opt1.setSelected(false);
-			jCheckBox_opt1.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if (jSlider_opt1.isEnabled()) {
-						jSlider_opt1.setEnabled(false);
-					}
-					else {
-						jSlider_opt1.setEnabled(true);
-						jSlider_opt1.setValue(0);
-					}
-				}
-			});
-		}
-		return jCheckBox_opt1;
-	}
-
-	/**
-	 * This method initializes jCheckBox_opt2	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getJCheckBox_opt2() {
-		if (jCheckBox_opt2 == null) {
-			jCheckBox_opt2 = new JCheckBox();
-		}
-		if (jSlider_opt2.isEnabled()) {
-			jCheckBox_opt2.setSelected(true);
-		}
-		else jCheckBox_opt2.setSelected(false);
-		jCheckBox_opt2.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (jSlider_opt2.isEnabled()) {
-					jSlider_opt2.setEnabled(false);
-				}
-				else {
-					jSlider_opt2.setEnabled(true);
-					jSlider_opt2.setValue(0);
-				}
-			}
-		});
-		return jCheckBox_opt2;
-	}
-
-	/**
-	 * This method initializes jCheckBox_opt3	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getJCheckBox_opt3() {
-		if (jCheckBox_opt3 == null) {
-			jCheckBox_opt3 = new JCheckBox();
-		}
-		if (jSlider_opt3.isEnabled()) {
-			jCheckBox_opt3.setSelected(true);
-		}
-		else jCheckBox_opt3.setSelected(false);
-		jCheckBox_opt3.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (jSlider_opt3.isEnabled()) {
-					jSlider_opt3.setEnabled(false);
-				}
-				else {
-					jSlider_opt3.setEnabled(true);
-					jSlider_opt3.setValue(0);
-				}
-			}
-		});
-		return jCheckBox_opt3;
-	}
-
-	/**
-	 * This method initializes jCheckBox_opt4	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getJCheckBox_opt4() {
-		if (jCheckBox_opt4 == null) {
-			jCheckBox_opt4 = new JCheckBox();
-		}
-		if (jSlider_opt4.isEnabled()) {
-			jCheckBox_opt4.setSelected(true);
-		}
-		else jCheckBox_opt4.setSelected(false);
-		jCheckBox_opt4.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (jSlider_opt4.isEnabled()) {
-					jSlider_opt4.setEnabled(false);
-				}
-				else {
-					jSlider_opt4.setEnabled(true);
-					jSlider_opt4.setValue(0);
-				}
-			}
-		});
-		return jCheckBox_opt4;
-	}
-
-	/**
-	 * This method initializes jCheckBox_opt5	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getJCheckBox_opt5() {
-		if (jCheckBox_opt5 == null) {
-			jCheckBox_opt5 = new JCheckBox();
-		}
-		if (jSlider_opt5.isEnabled()) {
-			jCheckBox_opt5.setSelected(true);
-		}
-		else jCheckBox_opt5.setSelected(false);
-		jCheckBox_opt5.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (jSlider_opt5.isEnabled()) {
-					jSlider_opt5.setEnabled(false);
-				}
-				else {
-					jSlider_opt5.setEnabled(true);
-					jSlider_opt5.setValue(0);
-				}
-			}
-		});
-		return jCheckBox_opt5;
-	}
-
-	/**
-	 * This method initializes jCheckBox_opt6	
-	 * 	
-	 * @return javax.swing.JCheckBox	
-	 */
-	private JCheckBox getJCheckBox_opt6() {
-		if (jCheckBox_opt6 == null) {
-			jCheckBox_opt6 = new JCheckBox();
-		}
-		if (jSlider_opt6.isEnabled()) {
-			jCheckBox_opt6.setSelected(true);
-		}
-		else jCheckBox_opt6.setSelected(false);
-		jCheckBox_opt6.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				if (jSlider_opt6.isEnabled()) {
-					jSlider_opt6.setEnabled(false);
-				}
-				else {
-					jSlider_opt6.setEnabled(true);
-					jSlider_opt2.setValue(0);
-				}
-			}
-		});
-		return jCheckBox_opt6;
-	}
+//	private JCheckBox getJCheckBox_opt1() {
+//		if (jCheckBox_opt1 == null) {
+//			jCheckBox_opt1 = new JCheckBox();
+//			if (jSlider_opt1.isEnabled()) {
+//				jCheckBox_opt1.setSelected(true);
+//			}
+//			else jCheckBox_opt1.setSelected(false);
+//			jCheckBox_opt1.addActionListener(new java.awt.event.ActionListener() {
+//				public void actionPerformed(java.awt.event.ActionEvent e) {
+//					if (jSlider_opt1.isEnabled()) {
+//						jSlider_opt1.setEnabled(false);
+//					}
+//					else {
+//						jSlider_opt1.setEnabled(true);
+//						jSlider_opt1.setValue(0);
+//					}
+//				}
+//			});
+//		}
+//		return jCheckBox_opt1;
+//	}
+//
+//	/**
+//	 * This method initializes jCheckBox_opt2	
+//	 * 	
+//	 * @return javax.swing.JCheckBox	
+//	 */
+//	private JCheckBox getJCheckBox_opt2() {
+//		if (jCheckBox_opt2 == null) {
+//			jCheckBox_opt2 = new JCheckBox();
+//		}
+//		if (jSlider_opt2.isEnabled()) {
+//			jCheckBox_opt2.setSelected(true);
+//		}
+//		else jCheckBox_opt2.setSelected(false);
+//		jCheckBox_opt2.addActionListener(new java.awt.event.ActionListener() {
+//			public void actionPerformed(java.awt.event.ActionEvent e) {
+//				if (jSlider_opt2.isEnabled()) {
+//					jSlider_opt2.setEnabled(false);
+//				}
+//				else {
+//					jSlider_opt2.setEnabled(true);
+//					jSlider_opt2.setValue(0);
+//				}
+//			}
+//		});
+//		return jCheckBox_opt2;
+//	}
+//
+//	/**
+//	 * This method initializes jCheckBox_opt3	
+//	 * 	
+//	 * @return javax.swing.JCheckBox	
+//	 */
+//	private JCheckBox getJCheckBox_opt3() {
+//		if (jCheckBox_opt3 == null) {
+//			jCheckBox_opt3 = new JCheckBox();
+//		}
+//		if (jSlider_opt3.isEnabled()) {
+//			jCheckBox_opt3.setSelected(true);
+//		}
+//		else jCheckBox_opt3.setSelected(false);
+//		jCheckBox_opt3.addActionListener(new java.awt.event.ActionListener() {
+//			public void actionPerformed(java.awt.event.ActionEvent e) {
+//				if (jSlider_opt3.isEnabled()) {
+//					jSlider_opt3.setEnabled(false);
+//				}
+//				else {
+//					jSlider_opt3.setEnabled(true);
+//					jSlider_opt3.setValue(0);
+//				}
+//			}
+//		});
+//		return jCheckBox_opt3;
+//	}
+//
+//	/**
+//	 * This method initializes jCheckBox_opt4	
+//	 * 	
+//	 * @return javax.swing.JCheckBox	
+//	 */
+//	private JCheckBox getJCheckBox_opt4() {
+//		if (jCheckBox_opt4 == null) {
+//			jCheckBox_opt4 = new JCheckBox();
+//		}
+//		if (jSlider_opt4.isEnabled()) {
+//			jCheckBox_opt4.setSelected(true);
+//		}
+//		else jCheckBox_opt4.setSelected(false);
+//		jCheckBox_opt4.addActionListener(new java.awt.event.ActionListener() {
+//			public void actionPerformed(java.awt.event.ActionEvent e) {
+//				if (jSlider_opt4.isEnabled()) {
+//					jSlider_opt4.setEnabled(false);
+//				}
+//				else {
+//					jSlider_opt4.setEnabled(true);
+//					jSlider_opt4.setValue(0);
+//				}
+//			}
+//		});
+//		return jCheckBox_opt4;
+//	}
+//
+//	/**
+//	 * This method initializes jCheckBox_opt5	
+//	 * 	
+//	 * @return javax.swing.JCheckBox	
+//	 */
+//	private JCheckBox getJCheckBox_opt5() {
+//		if (jCheckBox_opt5 == null) {
+//			jCheckBox_opt5 = new JCheckBox();
+//		}
+//		if (jSlider_opt5.isEnabled()) {
+//			jCheckBox_opt5.setSelected(true);
+//		}
+//		else jCheckBox_opt5.setSelected(false);
+//		jCheckBox_opt5.addActionListener(new java.awt.event.ActionListener() {
+//			public void actionPerformed(java.awt.event.ActionEvent e) {
+//				if (jSlider_opt5.isEnabled()) {
+//					jSlider_opt5.setEnabled(false);
+//				}
+//				else {
+//					jSlider_opt5.setEnabled(true);
+//					jSlider_opt5.setValue(0);
+//				}
+//			}
+//		});
+//		return jCheckBox_opt5;
+//	}
+//
+//	/**
+//	 * This method initializes jCheckBox_opt6	
+//	 * 	
+//	 * @return javax.swing.JCheckBox	
+//	 */
+//	private JCheckBox getJCheckBox_opt6() {
+//		if (jCheckBox_opt6 == null) {
+//			jCheckBox_opt6 = new JCheckBox();
+//		}
+//		if (jSlider_opt6.isEnabled()) {
+//			jCheckBox_opt6.setSelected(true);
+//		}
+//		else jCheckBox_opt6.setSelected(false);
+//		jCheckBox_opt6.addActionListener(new java.awt.event.ActionListener() {
+//			public void actionPerformed(java.awt.event.ActionEvent e) {
+//				if (jSlider_opt6.isEnabled()) {
+//					jSlider_opt6.setEnabled(false);
+//				}
+//				else {
+//					jSlider_opt6.setEnabled(true);
+//					jSlider_opt2.setValue(0);
+//				}
+//			}
+//		});
+//		return jCheckBox_opt6;
+//	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

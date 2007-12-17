@@ -50,6 +50,7 @@ public class User {
 	
 	public boolean rafraichirItineraire(){
 		Ville villeActuelle=getDerniereVilleTraversee();
+		
 		try {
 			// Les villes étapes n'incluent plus les villes par lesquelle l'utilisateur est passé
 			villesEtapes.removeAll(villesTraversees);
@@ -61,7 +62,7 @@ public class User {
 				listeVilleEtape=threadOrd.getVillesOrdonnees();
 			}
 			itineraireCourant=theProgps.graph.trouverLeChemin(villeActuelle, villeA, villesAEviter, listeVilleEtape);
-			
+			System.out.println(itineraireCourant.getPoidTotal());
 			// Met à jour la ville suivante
 			villeSuivante=itineraireCourant.getVilleSuivante(villeActuelle);
 			return true;
@@ -153,7 +154,7 @@ public class User {
 		this.theProgps.graph.desactiverPref(p);
 	}
 	
-	public void setItineraireCourant(Itineraire itineraireCourant) {
+	public void setItineraireCourant(Itineraire itineraireCourant){
 		this.itineraireCourant = itineraireCourant;
 		villeD=itineraireCourant.getVilleDep();
 		villeA=itineraireCourant.getVilleArr();

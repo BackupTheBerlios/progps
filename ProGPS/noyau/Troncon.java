@@ -21,9 +21,12 @@ public class Troncon
 	private boolean dispo;
 	private Route saRoute;
 	private List<Etat> sesEtats = new ArrayList<Etat>();
-	private Route route;
 	private Ville ville1;
 	private Ville ville2;
+	
+	// Variable de classe utiles pour les recherches
+	private static int longeurMaxi=1;
+	private static double tempsMaxi=1;
 	
 	public Troncon() {
 	}
@@ -33,10 +36,14 @@ public class Troncon
 		this.vitesse = vitesse;
 		this.longueur = longueur;
 		this.dispo = dispo;
-		this.route = route2;
+		this.saRoute = route2;
 		this.ville1 = ville1;
 		this.ville2 = ville2;
 		this.sesEtats = sesEtats;
+		if(longeurMaxi<longueur)
+			longeurMaxi=longueur;
+		if(tempsMaxi<(double)longueur/vitesse)
+			tempsMaxi=longueur/vitesse;
 	}
 
 	public void genererValeursAleatoires(){
@@ -63,6 +70,8 @@ public class Troncon
 	
 	public void setVitesse(int vitesse) {
 		this.vitesse = vitesse;
+		if(tempsMaxi<(double)longueur/vitesse)
+			tempsMaxi=longueur/vitesse;
 	}
 
 	public int getVitesse() {
@@ -71,6 +80,10 @@ public class Troncon
 
 	public void setLongueur(int longueur) {
 		this.longueur = longueur;
+		if(longeurMaxi<longueur)
+			longeurMaxi=longueur;
+		if(tempsMaxi<(double)longueur/vitesse)
+			tempsMaxi=longueur/vitesse;
 	}
 
 	public int getLongueur() {
@@ -176,6 +189,14 @@ public class Troncon
 
 	public void setSesEtats(List<Etat> setEtats) {
 		this.sesEtats = setEtats;
+	}
+
+	public static int getLongeurMaxi() {
+		return longeurMaxi;
+	}
+
+	public static double getTempsMaxi() {
+		return tempsMaxi;
 	}
 	
 }

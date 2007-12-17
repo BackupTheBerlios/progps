@@ -6,10 +6,23 @@
 
 package progps_ihm;
 
-import java.awt.*;
-import noyau.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.JTree;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
@@ -18,19 +31,12 @@ import javax.swing.text.StyledDocument;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
-import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import javax.swing.JScrollPane;
+import noyau.Itineraire;
+import noyau.Route;
+import noyau.SingletonProgps;
+import noyau.Troncon;
+import noyau.Ville;
 
 public class ChoixItineraire extends JPanel {
 
@@ -81,12 +87,13 @@ public class ChoixItineraire extends JPanel {
 	 * @param String[] Infos : Distance, durée, distance payante
 	 * @param String[] Preferences violées (texte complet, ex : "Radars : 3")
 	 */
-	public void remplirRecap(int num, String[] infos, String[] viols) {
+	public void remplirRecap(int num, String[] infos, Vector<String> viols) {
 		String v = "";
-		for(int i=0; i<viols.length;i++) {
-			v += viols[i];
+		for(String chaine:viols) {
+			v += chaine;
 			v += "\n";
 		}
+		
 		String[] initString =
 		{ "Récapitulatif :\n",            //regular
 				"Distance : " + infos[0] + "\n",                                   //italic
@@ -248,8 +255,8 @@ public class ChoixItineraire extends JPanel {
 
 //		String[] infos = infosVect.toArray();
 
-		String[] viols = {"Radars : 3","Limitation : 110 km/h"};
-		// TODO
+//		String[] viols = {"Radars : 3","Limitation : 110 km/h"};
+		Vector<String> viols=iti.getPrefViolees();
 
 		switch (num) {
 		case 3: 
@@ -285,7 +292,6 @@ public class ChoixItineraire extends JPanel {
 			});
 
 			remplirRecap(3, infos, viols);
-			//TODO
 
 			break;
 
@@ -322,7 +328,6 @@ public class ChoixItineraire extends JPanel {
 			});
 
 			remplirRecap(2, infos, viols);
-			//TODO
 
 			break;
 

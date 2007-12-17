@@ -214,7 +214,6 @@ public class SingletonProgps {
 	}
 
 	public void setPreferences(List<Preference> l) {
-		System.err.println("ok");
 		this.sonUser.setSesPreferences(l);
 	}
 
@@ -222,22 +221,6 @@ public class SingletonProgps {
 		Route r = new Route(this.getNewIdRoute(), nom, type);
 		this.ajouterRoute(r);
 		return r;
-	}
-
-	// Modif Olivier
-	private boolean villeConnue(Ville ville) {
-		return this.graph.containsVertex(ville);
-//		if(sesVilles.contains(ville)){
-//		return true;
-//		}else {
-//		for (Iterator i = sesVilles.iterator(); i.hasNext();) {
-//		Ville villeAccontrole = (Ville) i.next();
-//		if(ville.getNomVille()==villeAccontrole.getNomVille()){
-//		return true;
-//		}
-//		}
-//		return false;
-//		}
 	}
 
 	//Modif Olivier

@@ -287,6 +287,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		initialize();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		lUser.desactiverPreference(Preference.Touristique);
+		lUser.desactiverPreference(Preference.Payant);
+		lUser.desactiverPreference(Preference.Radars);
+		lUser.desactiverPreference(Preference.Vitesse);
+
 		chargerVillesListe();
 		chargerVillesComboDepart();
 	}

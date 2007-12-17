@@ -61,6 +61,10 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 		}
 	}
 
+	public ArrayList<Double> getPoidsPref() {
+		return tab_const;
+	}
+
 	public void desactiverPref(Preference p){
 		int k=this.preferences.indexOf(p);
 		switch (k) {
@@ -177,28 +181,32 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 	public double getEdgeWeight(Troncon t)
 	{
 //		Méthode de calcul
-		double poids=t.getLongueur();
+		double poids;
+
 		if (!this.plusCourt)
-			poids/=t.getVitesse();
-		int cpt=0;
-		if ( !t.isDispo()|| t.isRelieVilleIndispo())
+			poids=((double)t.getLongueur()/t.getVitesse())/Troncon.getTempsMaxi();
+		else
+			poids=(double)t.getLongueur()/Troncon.getLongeurMaxi();
+
+		if ( !t.isDispo() || t.isRelieVilleIndispo())
 			poids+=const_indispo;
-		else {
-			for (Preference p : this.preferences) {
-				if (p.name().equalsIgnoreCase("Radar") || p.name().equalsIgnoreCase("Payant") || p.name().equalsIgnoreCase("Touristique")) {
-					for (Etat e : t.getSesEtats()) {
-						if (e.name().equalsIgnoreCase(p.name()) && !e.name().equalsIgnoreCase("Touristique"))
-							poids+=this.tab_const.get(cpt);
-					}
+
+		int cpt=0;
+		for (Preference p : this.preferences) {
+			if (p.name().equalsIgnoreCase("Radar") || p.name().equalsIgnoreCase("Payant") || p.name().equalsIgnoreCase("Touristique")) {
+				for (Etat e : t.getSesEtats()) {
+					if (e.name().equalsIgnoreCase(p.name()) || (p.name().equalsIgnoreCase("Touristique") && !e.name().equalsIgnoreCase("Touristique")))
+						poids+=this.tab_const.get(cpt);
 				}
-				else if (p.name().equalsIgnoreCase("VillesAEviter")) {
-					if (t.isRelieVille(this.aEviter))
-						poids+=this.tab_const.get(cpt);
-				}else if(p.name().equalsIgnoreCase("Vitesse"))
-					if(t.getVitesse()<vitesseMin)
-						poids+=this.tab_const.get(cpt);
-				cpt++;
 			}
+			else if (p.name().equalsIgnoreCase("VillesAEviter")) {
+				if (t.isRelieVille(this.aEviter))
+					poids+=this.tab_const.get(cpt);
+			}else if(p.name().equalsIgnoreCase("Vitesse"))
+				if(t.getVitesse()<vitesseMin)
+					poids+=this.tab_const.get(cpt);
+			cpt++;
+
 		}
 		return poids;
 	}
@@ -319,10 +327,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			}
 			villePrecedente=villeSuivante;
 		}
-		for (Itineraire itineraire : result) {
-			System.out.println("***************************");
-			System.out.println(itineraire.toString());
-		}
+
 		return result;
 	}
 
@@ -370,9 +375,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			result.concat(unItineraireDeEtape);
 			villePrecedente=villeSuivante;
 		}
-
-		System.out.println(result.toString());
-
+		
 		return result;
 	}
 
@@ -386,6 +389,5 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 
 	public void setPlusCourt(boolean plusCourt) {
 		this.plusCourt = plusCourt;
-		System.out.println("plus court : "+plusCourt);
 	}
 }

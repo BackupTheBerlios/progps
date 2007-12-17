@@ -25,6 +25,7 @@ public class Itineraire {
 		longueurTotal+=itiFin.getLongueurTotal();
 		nbRadars+=itiFin.getNbRadars();
 		distancePayante+=itiFin.getDistancePayante();
+		poidTotal+=itiFin.getPoidTotal();
 		distanceTouristique+=itiFin.getDistanceTouristique();
 		if(itiFin.getVitesseMin()<this.vitesseMin)
 			vitesseMin=itiFin.getVitesseMin();
@@ -227,7 +228,7 @@ public class Itineraire {
 	
 	
 	
-	public int compteRadar() {
+	private int compteRadar() {
 		int cpt=0;
 		for (Troncon t : lesTroncons) {
 			if (t.isRadar())
@@ -236,7 +237,7 @@ public class Itineraire {
 		return cpt;
 	}
 	
-	public int comptePayant() {
+	private int comptePayant() {
 		int cpt=0;
 		for (Troncon t : lesTroncons) {
 			if (t.isPayant())
@@ -245,7 +246,7 @@ public class Itineraire {
 		return cpt;
 	}
 	
-	public int compteNonTouristique() {
+	private int compteNonTouristique() {
 		int cpt=0;
 		for (Troncon t : lesTroncons) {
 			for (Ville v : t.getSesVilles()) {
@@ -258,7 +259,7 @@ public class Itineraire {
 		return cpt;
 	}
 	
-	public int compteVitesse() {
+	private int compteVitesse() {
 		int cpt=0;
 		for (Troncon t : lesTroncons) {
 			if (t.getVitesse()<SingletonProgps.getInstance().getSonUser().getVitesseMin())
@@ -267,7 +268,7 @@ public class Itineraire {
 		return cpt;
 	}
 	
-	public int compteEviterViolees() {
+	private int compteEviterViolees() {
 		int cpt=0;
 		for (Troncon t : lesTroncons) {
 			if (t.isRelieVille(SingletonProgps.getInstance().getSonUser().getVillesAEviter()))
@@ -276,7 +277,7 @@ public class Itineraire {
 		return cpt;
 	}
 	
-	public int compteEtapesViolees() {
+	private int compteEtapesViolees() {
 		Set<Ville> eTemp=SingletonProgps.getInstance().getSonUser().getVillesEtapes();
 		for (Ville v : eTemp) {
 			for (Troncon t : lesTroncons) {
@@ -287,33 +288,33 @@ public class Itineraire {
 		return eTemp.size();
 	}
 	
-	public Vector<Integer> getPrefViolees() {
+	public Vector<String> getPrefViolees() {
 		//Nb Radars, Nb non Touristique , Nb Vitesse violee, Nb villes etapes violees, Nb VillesAEviter violees, Nb troncons Payant
-		Vector <Integer> v= new Vector<Integer>();
+		Vector<String> v= new Vector<String>();
 		List<Preference> ps = SingletonProgps.getInstance().graph.getPreferences();
+		ArrayList<Double> valeursPref=SingletonProgps.getInstance().graph.getPoidsPref();
+		
+		int i=0;
 		for (Preference p : ps) {
-			if (!ps.contains(p))
-				v.add(0);
-			else {
-				if (p.name().equals("Radars")) {
-					v.add(this.compteRadar());
+				if (p.name().equals("Radars") && valeursPref.get(i)!=0.0 && this.compteRadar()!=0) {
+					v.add("Radars : "+this.compteRadar());
 				}
-				else if (p.name().equals("Touristique")) {
-					v.add(this.compteNonTouristique());
+				else if (p.name().equals("Touristique") && valeursPref.get(i)!=0.0 && this.compteNonTouristique()!=0) {
+					v.add("Etapes non-touristiques : "+this.compteNonTouristique());
 				}
-				else if (p.name().equals("Vitesse")) {
-					v.add(this.compteVitesse());
+				else if (p.name().equals("Vitesse") && valeursPref.get(i)!=0.0 && this.compteVitesse()!=0) {
+					v.add("Limitation : "+this.compteVitesse());
 				}
-				else if (p.name().equals("Villes")) {
-					v.add(this.compteEtapesViolees());
+				else if (p.name().equals("Villes") && valeursPref.get(i)!=0.0 && this.compteEtapesViolees()!=0) {
+					v.add("Ne visite pas "+this.compteEtapesViolees()+" villes étapes");
 				}
-				else if (p.name().equals("VillesAEviter")) {
-					v.add(this.compteEviterViolees());
+				else if (p.name().equals("VillesAEviter") && valeursPref.get(i)!=0.0 && this.compteEviterViolees()!=0) {
+					v.add("Passage par "+this.compteEviterViolees()+" villes à éviter");
 				}
-				else if (p.name().equals("Payant")) {
-					v.add(this.comptePayant());
+				else if (p.name().equals("Payant") && valeursPref.get(i)!=0.0 && this.comptePayant()!=0) {
+					v.add(this.comptePayant()+" tronçons payants");
 				}
-			}
+			i++;
 		}
 //		for (int i = 0; i < v.size(); i++) {
 //			System.out.println(v.get(i));
