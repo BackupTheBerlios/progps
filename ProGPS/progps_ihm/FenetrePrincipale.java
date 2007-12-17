@@ -615,6 +615,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (itineraireModifie) {
 			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtapeTemp));
 			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtapeTemp));
+			numEtape=numEtapeTemp;
 			jTable_etapes.repaint();
 		}
 		else {
@@ -633,6 +634,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		}
 
 		jComboBox_villeCourante.setModel(mod);
+		repaint();
 	}
 
 	public void setVillesCourantesPoss(Vector<String> villes) {

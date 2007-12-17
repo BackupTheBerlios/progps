@@ -10,9 +10,9 @@ import threads.ThreadOrdonancementVillesEtapes;
 public class User {
 	private Ville villeSuivante;
 	private SingletonProgps theProgps;
-	
+
 	private ThreadOrdonancementVillesEtapes<Ville, Troncon> threadOrd;
-	
+
 	private Ville villeD;
 	private Ville villeA;
 	private Set<Ville> villesAEviter = new HashSet<Ville>();
@@ -20,12 +20,13 @@ public class User {
 
 	private Itineraire itineraireCourant;
 	private List<Itineraire> itineraireCalcules = new Vector<Itineraire>();
-	
+
 	private List<Ville> villesTraversees = new Vector<Ville>();
-	
+	private List<Troncon> tronconsTraverses = new Vector<Troncon>();
+
 	private int vitesseMin=50;
-	
-	
+
+
 	public void setVitesseMin(int vitesseMin) {
 		this.vitesseMin = vitesseMin;
 		theProgps.graph.setVitesseMin(vitesseMin);
@@ -33,6 +34,9 @@ public class User {
 
 	public boolean calculerIti(){
 		try {
+			// Julien
+			this.villesTraversees.clear();
+			
 			List<Ville> listeVilleEtape=null;
 			listeVilleEtape=threadOrd.getVillesOrdonnees();
 			// Tant que le thread n'a pas fini.
@@ -47,22 +51,40 @@ public class User {
 			return false;
 		}
 	}
+
+	public void mettreAjourItiCourant(Itineraire nouvelItiASuivre){
+		Itineraire nouveau = new Itineraire();
+		
+		nouveau.setVilleDepart(villeD);
+		nouveau.setVilleArrivee(villeA);
+		
+		// On ajoute tous les troncons déjà visités
+		for (Troncon unTronc : tronconsTraverses) {
+			nouveau.addUnTroncon(unTronc);
+		}
+		
+		nouveau.concat(nouvelItiASuivre);
+		nouveau.setTronconCourant(itineraireCourant.getTronconCourant());
+		itineraireCourant=nouveau;
+	}
 	
 	public boolean rafraichirItineraire(){
 		Ville villeActuelle=getDerniereVilleTraversee();
-		
+
 		try {
 			// Les villes étapes n'incluent plus les villes par lesquelle l'utilisateur est passé
 			villesEtapes.removeAll(villesTraversees);
 			threadOrd.setVillesEtapes(villeActuelle, villeA, villesEtapes);
-			
+
 			List<Ville> listeVilleEtape=null;
 			// Tant que le thread n'a pas fini.
 			while (listeVilleEtape==null) {
 				listeVilleEtape=threadOrd.getVillesOrdonnees();
 			}
-			itineraireCourant=theProgps.graph.trouverLeChemin(villeActuelle, villeA, villesAEviter, listeVilleEtape);
-			System.out.println(itineraireCourant.getPoidTotal());
+			Itineraire nouvelItiASuivre=theProgps.graph.trouverLeChemin(villeActuelle, villeA, villesAEviter, listeVilleEtape);
+			
+			mettreAjourItiCourant(nouvelItiASuivre);
+			
 			// Met à jour la ville suivante
 			villeSuivante=itineraireCourant.getVilleSuivante(villeActuelle);
 			return true;
@@ -95,7 +117,7 @@ public class User {
 			return villeD;
 		else return villesTraversees.get(villesTraversees.size()-1);
 	}
-	
+
 	public List<Itineraire> getItineraireCalcules() {
 		return itineraireCalcules;
 	}
@@ -135,13 +157,13 @@ public class User {
 		this.villesAEviter.remove(villeAEviter);
 		theProgps.graph.removeVilleAEviter(villeAEviter);
 	}
-	
+
 	//prend un tableau déjà trié de préférences et les ajoute à celles de l'utilisateur
 	//à GUI de trier les préférences
 	public void setSesPreferences(List<Preference> l) {
 		this.theProgps.graph.setPreferences(l);
 	}
-	
+
 	public List<Preference> getPreferences(){
 		return this.theProgps.graph.getPreferences();
 	}
@@ -149,11 +171,11 @@ public class User {
 	public void activerPreference(Preference p){
 		this.theProgps.graph.activerPref(p);
 	}
-	
+
 	public void desactiverPreference(Preference p){
 		this.theProgps.graph.desactiverPref(p);
 	}
-	
+
 	public void setItineraireCourant(Itineraire itineraireCourant){
 		this.itineraireCourant = itineraireCourant;
 		villeD=itineraireCourant.getVilleDep();
@@ -164,53 +186,64 @@ public class User {
 	public Itineraire getItineraireCourant() {
 		return this.itineraireCourant;
 	}
-	
+
 	public Set<Ville> getVillesAccessibles(){
 		Ville villeActuelle=getDerniereVilleTraversee();
-		
+
 		Set<Ville> result=new HashSet<Ville>();
-		
+
 		Set<Troncon> lesTronconsAccessibles=theProgps.graph.edgesOf(villeActuelle);
 		for (Troncon unTroncon : lesTronconsAccessibles) {
 			result.addAll(unTroncon.getSesVilles());
 		}
-		
+
 		result.remove(villeActuelle);
 		return result;
 	}
-	
+
 	public boolean avancerA(Ville v){
+		// Ajoute la ville traversée
 		this.villesTraversees.add(v);
-		
+
 		if(!v.equals(villeSuivante)){
+			Set<Troncon> tousLesTroncons=theProgps.graph.getAllEdges(getDerniereVilleTraversee(), v);
+			for (Troncon unTroncon : tousLesTroncons) {
+				this.tronconsTraverses.add(unTroncon);
+				break;
+			}
+			
 			if(v.equals(villeA))
 				return true;
 
-				rafraichirItineraire();
+			rafraichirItineraire();
 		}else{
-			villeSuivante=itineraireCourant.getVilleSuivante(v);
+//			Ajoute le troncon utilisé
+			this.tronconsTraverses.add(itineraireCourant.getTronconCourant());
+			// Teste si on est au bout de l'iti
+			if(v.equals(villeA))
+				return true;
+			
+			try {
+				villeSuivante=itineraireCourant.getVilleSuivante(v);
+				itineraireCourant.passerAuTronconSuivant();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return true;
 	}
 
 	public Troncon getDernierTronconParcouru(){
-		if(villesTraversees.size()<2)
+		if(tronconsTraverses.size()<1)
 			return null;
-		
-		Ville dernierVilleTraversee=getDerniereVilleTraversee();
-		Ville avantDerniereVilleTraversee=villesTraversees.get(villesTraversees.size()-1);
-		
-		Set<Troncon> tousLesTroncons=theProgps.graph.getAllEdges(dernierVilleTraversee, avantDerniereVilleTraversee);
-		for (Troncon unTroncon : tousLesTroncons) {
-			return unTroncon;
-		}
-		return null;
+
+		return tronconsTraverses.get(tronconsTraverses.size()-1);
 	}
-	
+
 	public void setVilleEtapes(Set<Ville> villeEtapes) {
 		this.villesEtapes = villeEtapes;
 	}
-	
+
 	public void setPlusCourt(boolean b){
 		theProgps.graph.setPlusCourt(b);
 	}
