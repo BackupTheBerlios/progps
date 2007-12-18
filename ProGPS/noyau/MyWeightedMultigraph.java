@@ -206,7 +206,6 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 				if(t.getVitesse()<vitesseMin)
 					poids+=this.tab_const.get(cpt);
 			cpt++;
-
 		}
 		return poids;
 	}
@@ -327,7 +326,8 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			}
 			villePrecedente=villeSuivante;
 		}
-
+		
+		
 		return result;
 	}
 
@@ -337,7 +337,7 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			Ville villeArrivee,
 			Set<Ville> villesAEviter,
 			List<Ville> villesEtapes) throws Exception{
-
+		
 //		Vérification qu'une ville étape n'est pas à éviter
 		if (villesEtapes!=null && villesAEviter!=null) {
 			for (Iterator iter = villesEtapes.iterator(); iter.hasNext();) {
@@ -375,7 +375,6 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			result.concat(unItineraireDeEtape);
 			villePrecedente=villeSuivante;
 		}
-		
 		return result;
 	}
 

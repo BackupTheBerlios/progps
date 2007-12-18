@@ -151,7 +151,7 @@ public class Troncon
 	}
 	
 	public boolean isRelieVilleIndispo(){
-		return !this.ville1.isDispoVille() && this.ville2.isDispoVille();
+		return (!this.ville1.isDispoVille() || !this.ville2.isDispoVille());
 	}
 	
 	public boolean isPayant() {

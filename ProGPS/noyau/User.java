@@ -52,7 +52,7 @@ public class User {
 		}
 	}
 
-	public void mettreAjourItiCourant(Itineraire nouvelItiASuivre){
+	private void mettreAjourItiCourant(Itineraire nouvelItiASuivre){
 		Itineraire nouveau = new Itineraire();
 		
 		nouveau.setVilleDepart(villeD);
@@ -87,6 +87,7 @@ public class User {
 			
 			// Met à jour la ville suivante
 			villeSuivante=itineraireCourant.getVilleSuivante(villeActuelle);
+
 			return true;
 		} catch (Exception e) {
 			System.out.println(e.toString());
