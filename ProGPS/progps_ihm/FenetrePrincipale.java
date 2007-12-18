@@ -1985,7 +1985,8 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					else {
 						jLabel_options42.setEnabled(true);
 						jComboBox_limitations.setEnabled(true);
-						lUser.activerPreference(Preference.Touristique);
+						lUser.activerPreference(Preference.Vitesse);
+						lUser.setVitesseMin((new Integer((String)jComboBox_limitations.getSelectedItem())).intValue());
 					}
 				}
 			});
@@ -2010,7 +2011,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jComboBox_limitations.setBackground(Color.WHITE);
 			jComboBox_limitations.setForeground(Color.RED);
 			jComboBox_limitations.setEnabled(false);
-			// TODO faire le lien avec User.setVitesseMin();
+			jComboBox_limitations.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					lUser.setVitesseMin((new Integer((String)jComboBox_limitations.getSelectedItem())).intValue());
+				}
+			});
 		}
 		return jComboBox_limitations;
 	}
