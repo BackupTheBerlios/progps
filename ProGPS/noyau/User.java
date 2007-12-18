@@ -209,7 +209,6 @@ public class User {
 
 		if(!v.equals(villeSuivante)){
 			Ville precedente=getDerniereVilleTraversee();
-			System.out.println(precedente);
 
 			// Ajoute la ville traversée
 			this.villesTraversees.add(v);
