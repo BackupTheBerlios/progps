@@ -1,1 +1,4 @@
 + Oublier les préférences d'un itinéraire calculé précédementS
++ Fenetre principale :
+			tmp = iti.getVilleSuivante(derniereVilleTrav);
+			// TODO vérifier que la ville != null

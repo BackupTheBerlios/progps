@@ -580,6 +580,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			line.add("" + num);												// Numero de l'etape
 			line.add(derniereVilleTrav.getNomVille());						// Ville départ troncon			
 			tmp = iti.getVilleSuivante(derniereVilleTrav);
+			// TODO vérifier que la ville != null
 			line.add(tmp.getNomVille());									// Ville arrivée troncon
 			line.add(tronc.getSaRoute().getNomRoute());						// Nom de la route
 			line.add(tronc.getLongueur()+" km(s)");
