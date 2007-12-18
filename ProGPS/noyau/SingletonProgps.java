@@ -200,7 +200,10 @@ public class SingletonProgps {
 		Troncon newTroncon=this.graph.ajouterUnTroncon(ville1, ville2);
 		newTroncon.setSaRoute(route);
 		newTroncon.setSesVilles(ville1, ville2);
-		newTroncon.setVitesse(vitesse);
+		if(vitesse==0)
+			newTroncon.setVitesse(130);
+		else
+			newTroncon.setVitesse(vitesse);
 		newTroncon.setLongueur(longueur);
 		newTroncon.setSesEtats(etats);
 		newTroncon.setDispo(true);

@@ -16,7 +16,7 @@ import exceptions.ExceptionRecherche;
 public class Troncon 
 	extends DefaultWeightedEdge
 	{
-	private int vitesse;
+	private int vitesse=130;
 	private int longueur;
 	private boolean dispo;
 	private Route saRoute;

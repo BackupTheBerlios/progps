@@ -229,7 +229,7 @@ public class XmlParser2 extends Thread{
 	private void nodeTroncon(Route r){
 		String ville1=null;
 		String ville2=null;
-		int vitesse=0;
+		int vitesse=130;
 		int longueur=0;
 		List<Etat> etats=new ArrayList<Etat>();
 
