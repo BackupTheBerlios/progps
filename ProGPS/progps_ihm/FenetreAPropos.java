@@ -46,6 +46,7 @@ public class FenetreAPropos extends JDialog {
 	private void initialize() {
 		this.setSize(480, 220);
 		this.setTitle("A propos de ProGPS...");
+		this.setIconImage(this.getToolkit().getImage("images//gps_small.png"));
 		this.setContentPane(getJContentPane());
 	}
 
@@ -57,7 +58,7 @@ public class FenetreAPropos extends JDialog {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jLabel_logo = new JLabel();
-			jLabel_logo.setIcon(new ImageIcon("C://progps_images//logo.jpg"));
+			jLabel_logo.setIcon(new ImageIcon("images//logo.jpg"));
 			jLabel_logo.setPreferredSize(new Dimension(135,135));
 			
 			jLabel_title = new JLabel();
