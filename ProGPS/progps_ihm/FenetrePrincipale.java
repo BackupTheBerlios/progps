@@ -1100,7 +1100,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						// Cas ou l'utilisateur se paume
 						// TODO tester si l'utilisateur n'est pas à destination !
 						if (!((String)jComboBox_villeCourante.getSelectedItem()).equals(jLabel_itineraireArrivee.getText())) {
-							
+				
 							rafraichirItineraire(lUser.getItineraireCourant());
 							actualiserVillesAccessibles();
 							JOptionPane.showMessageDialog(null, "Vous itinéraire a été recalculé suite à une erreur de parcours.", "Information", JOptionPane.INFORMATION_MESSAGE);
@@ -1873,9 +1873,20 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_options4.setText("Je souhaite éviter les limitations");
 			jLabel_options4.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
-					jCheckBox_options4.setSelected(!jCheckBox_options4.isSelected());
+					/*jCheckBox_options4.setSelected(!jCheckBox_options4.isSelected());
 					jLabel_options42.setEnabled(!jLabel_options42.isEnabled());
-					jComboBox_limitations.setEnabled(!jComboBox_limitations.isEnabled());
+					jComboBox_limitations.setEnabled(!jComboBox_limitations.isEnabled());*/
+					if (jComboBox_limitations.isEnabled()) {
+						jLabel_options42.setEnabled(false);
+						jComboBox_limitations.setEnabled(false);
+						lUser.desactiverPreference(Preference.Vitesse);
+					}
+					else {
+						jLabel_options42.setEnabled(true);
+						jComboBox_limitations.setEnabled(true);
+						lUser.activerPreference(Preference.Vitesse);
+						lUser.setVitesseMin((new Integer((String)jComboBox_limitations.getSelectedItem())).intValue());
+					}
 				}
 			});
 			jLabel_empty17 = new JLabel();
@@ -1892,6 +1903,11 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_options3.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					jCheckBox_options3.setSelected(!jCheckBox_options3.isSelected());
+					if (jCheckBox_options3.isSelected()) {
+						lUser.activerPreference(Preference.Radars);
+					}
+					else lUser.desactiverPreference(Preference.Radars);
+					
 				}
 			});
 			jLabel_empty16 = new JLabel();
@@ -1906,6 +1922,10 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_options2.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					jCheckBox_options2.setSelected(!jCheckBox_options2.isSelected());
+					if (jCheckBox_options2.isSelected()) {
+						lUser.activerPreference(Preference.Payant);
+					}
+					else lUser.desactiverPreference(Preference.Payant);
 				}
 			});
 			jLabel_options1 = new JLabel();
@@ -1913,6 +1933,10 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			jLabel_options1.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					jCheckBox_options1.setSelected(!jCheckBox_options1.isSelected());
+					if (jCheckBox_options1.isSelected()) {
+						lUser.activerPreference(Preference.Touristique);
+					}
+					else lUser.desactiverPreference(Preference.Touristique);
 				}
 			});
 			jLabel_empty13 = new JLabel();
