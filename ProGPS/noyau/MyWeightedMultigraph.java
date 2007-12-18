@@ -326,7 +326,10 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			}
 			villePrecedente=villeSuivante;
 		}
-		
+		for (Itineraire itineraire : result) {
+			if(itineraire.getLesTroncons()!=null && itineraire.getLesTroncons().size()>0)
+				itineraire.setTronconCourant(itineraire.getLesTroncons().get(0));
+		}
 		
 		return result;
 	}
@@ -375,6 +378,9 @@ public class MyWeightedMultigraph extends WeightedMultigraph<Ville, Troncon> {
 			result.concat(unItineraireDeEtape);
 			villePrecedente=villeSuivante;
 		}
+		if(result.getLesTroncons()!=null && result.getLesTroncons().size()>0)
+			result.setTronconCourant(result.getLesTroncons().get(0));
+		
 		return result;
 	}
 

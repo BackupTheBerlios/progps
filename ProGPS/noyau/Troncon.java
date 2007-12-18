@@ -202,4 +202,8 @@ public class Troncon
 		return tempsMaxi;
 	}
 	
+	public String toString(){
+		return "Entre : "+ville1+" et "+ville2;
+	}
+	
 }

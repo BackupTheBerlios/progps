@@ -1,5 +1,6 @@
 package noyau;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class User {
 	private List<Itineraire> itineraireCalcules = new Vector<Itineraire>();
 
 	private List<Ville> villesTraversees = new Vector<Ville>();
-	private List<Troncon> tronconsTraverses = new Vector<Troncon>();
+	private List<Troncon> tronconsTraverses = new ArrayList<Troncon>();
 
 	private int vitesseMin=50;
 
@@ -65,7 +66,8 @@ public class User {
 		
 		nouveau.concat(nouvelItiASuivre);
 		
-		nouveau.setTronconCourant(getDernierTronconParcouru());
+		nouveau.setTronconCourant(nouvelItiASuivre.getTronconCourant());
+		
 		itineraireCourant=nouveau;
 	}
 	
@@ -83,7 +85,7 @@ public class User {
 				listeVilleEtape=threadOrd.getVillesOrdonnees();
 			}
 			Itineraire nouvelItiASuivre=theProgps.graph.trouverLeChemin(villeActuelle, villeA, villesAEviter, listeVilleEtape);
-			
+
 			mettreAjourItiCourant(nouvelItiASuivre);
 			
 			// Met à jour la ville suivante
@@ -207,6 +209,7 @@ public class User {
 
 		if(!v.equals(villeSuivante)){
 			Ville precedente=getDerniereVilleTraversee();
+			System.out.println(precedente);
 
 			// Ajoute la ville traversée
 			this.villesTraversees.add(v);
@@ -234,6 +237,7 @@ public class User {
 			try {
 				villeSuivante=itineraireCourant.getVilleSuivante(v);
 				itineraireCourant.passerAuTronconSuivant();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
