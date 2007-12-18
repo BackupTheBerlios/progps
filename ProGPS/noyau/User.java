@@ -64,7 +64,8 @@ public class User {
 		}
 		
 		nouveau.concat(nouvelItiASuivre);
-		nouveau.setTronconCourant(itineraireCourant.getTronconCourant());
+		
+		nouveau.setTronconCourant(getDernierTronconParcouru());
 		itineraireCourant=nouveau;
 	}
 	
