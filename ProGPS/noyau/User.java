@@ -66,12 +66,10 @@ public class User {
 		nouveau.concat(nouvelItiASuivre);
 		nouveau.setTronconCourant(itineraireCourant.getTronconCourant());
 		itineraireCourant=nouveau;
-		System.out.println(itineraireCourant.toString());
 	}
 	
 	public boolean rafraichirItineraire(){
 		Ville villeActuelle=getDerniereVilleTraversee();
-		System.out.println("De "+villeActuelle+" à "+villeA);
 
 		try {
 			// Les villes étapes n'incluent plus les villes par lesquelle l'utilisateur est passé
@@ -205,11 +203,15 @@ public class User {
 	}
 
 	public boolean avancerA(Ville v){
-		// Ajoute la ville traversée
-		this.villesTraversees.add(v);
 
 		if(!v.equals(villeSuivante)){
-			Set<Troncon> tousLesTroncons=theProgps.graph.getAllEdges(getDerniereVilleTraversee(), v);
+			Ville precedente=getDerniereVilleTraversee();
+
+			// Ajoute la ville traversée
+			this.villesTraversees.add(v);
+			Set<Troncon> tousLesTroncons=theProgps.graph.getAllEdges(precedente, v);
+			
+			
 			for (Troncon unTroncon : tousLesTroncons) {
 				this.tronconsTraverses.add(unTroncon);
 				break;
@@ -217,9 +219,11 @@ public class User {
 			
 			if(v.equals(villeA))
 				return true;
-			System.out.println("Je suis à "+v);
+			
 			rafraichirItineraire();
 		}else{
+			// Ajoute la ville traversée
+			this.villesTraversees.add(v);
 //			Ajoute le troncon utilisé
 			this.tronconsTraverses.add(itineraireCourant.getTronconCourant());
 			// Teste si on est au bout de l'iti
