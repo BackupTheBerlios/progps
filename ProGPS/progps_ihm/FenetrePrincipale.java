@@ -631,6 +631,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		else {
 			jTable_etapes.setDefaultRenderer(Object.class, new CellGrisee(numEtapeTemp+1));
 			jTable_etapes.getColumnModel().getColumn(5).setCellRenderer(new TabInfos(numEtapeTemp+1));
+			numEtape=numEtapeTemp+1;
 			jTable_etapes.repaint();
 		}
 	}
