@@ -1100,7 +1100,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 						// Cas ou l'utilisateur se paume
 						// TODO tester si l'utilisateur n'est pas à destination !
 						if (!((String)jComboBox_villeCourante.getSelectedItem()).equals(jLabel_itineraireArrivee.getText())) {
-							System.out.println("Recalcul necessaire !");
+							
 							rafraichirItineraire(lUser.getItineraireCourant());
 							actualiserVillesAccessibles();
 							JOptionPane.showMessageDialog(null, "Vous itinéraire a été recalculé suite à une erreur de parcours.", "Information", JOptionPane.INFORMATION_MESSAGE);
