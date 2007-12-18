@@ -506,7 +506,7 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		Ville villeDep = iti.getVilleDep();
 		Ville villeArr = iti.getVilleArr();
 		Ville derniereVilleTrav = villeDep;
-		Ville tmp;
+		Ville tmp=villeDep;
 		String infos = "";
 
 		jLabel_itineraireDepart.setText(villeDep.getNomVille());
@@ -516,7 +516,16 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 			Troncon tronc = (Troncon)iter.next();
 			line.add("" + num);												// Numero de l'etape
 			line.add(derniereVilleTrav.getNomVille());						// Ville départ troncon			
-			tmp = iti.getVilleSuivante(derniereVilleTrav);
+//			tmp = iti.getVilleSuivante(derniereVilleTrav);
+			for (Iterator iterator = tronc.getSesVilles().iterator(); iterator.hasNext();) {
+				Ville uneVille = (Ville) iterator.next();
+				if (uneVille.equals(derniereVilleTrav)) {
+					tmp=((Ville) iterator.next());
+				} else {
+					tmp=uneVille;
+					iterator.next();
+				}
+			}
 			line.add(tmp.getNomVille());									// Ville arrivée troncon
 			line.add(tronc.getSaRoute().getNomRoute());						// Nom de la route
 			line.add(tronc.getLongueur()+" km(s)");
