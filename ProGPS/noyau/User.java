@@ -66,7 +66,8 @@ public class User {
 		
 		nouveau.concat(nouvelItiASuivre);
 		
-		nouveau.setTronconCourant(nouvelItiASuivre.getTronconCourant());
+		nouveau.setTronconCourant(getDernierTronconParcouru());
+//		nouveau.setTronconCourant(nouvelItiASuivre.getTronconCourant());
 		
 		itineraireCourant=nouveau;
 	}
@@ -105,12 +106,16 @@ public class User {
 	}
 
 	public void addVilleEtapes(Ville villeEtapes) {
+		if(villeEtapes==null)
+			return;
 		this.villesEtapes.add(villeEtapes);
 		// On indique au thread
 		threadOrd.setVillesEtapes(villeD, villeA, this.villesEtapes);
 	}
 
 	public void removeVilleEtapes(Ville villeEtapes) {
+		if(villeEtapes==null)
+			return;
 		this.villesEtapes.remove(villeEtapes);
 		// On indique au thread
 		threadOrd.setVillesEtapes(villeD, villeA, this.villesEtapes);
@@ -153,11 +158,15 @@ public class User {
 	}
 
 	public void addVilleAEviter(Ville villeAEviter) {
+		if(villeAEviter==null)
+			return;
 		this.villesAEviter.add(villeAEviter);
 		theProgps.graph.addVilleAEviter(villeAEviter);
 	}
 
 	public void removeVilleAEviter(Ville villeAEviter) {
+		if(villeAEviter==null)
+			return;
 		this.villesAEviter.remove(villeAEviter);
 		theProgps.graph.removeVilleAEviter(villeAEviter);
 	}
