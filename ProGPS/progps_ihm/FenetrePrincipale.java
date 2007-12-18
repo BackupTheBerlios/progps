@@ -1090,9 +1090,16 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 					else {
 						// Cas ou l'utilisateur se paume
 						// TODO tester si l'utilisateur n'est pas à destination !
-						System.out.println("Recalcul necessaire !");
-						// TODO lister les nouvelles étapes
-						actualiserVillesAccessibles();
+						if (!((String)jComboBox_villeCourante.getSelectedItem()).equals(jLabel_villeArrivee.getText())) {
+							System.out.println("Recalcul necessaire !");
+							rafraichirItineraire(lUser.getItineraireCourant());
+							actualiserVillesAccessibles();
+						}
+						else {
+							jButton_OKlocalisation.setEnabled(false);
+							jComboBox_villeCourante.setEnabled(false);
+							JOptionPane.showMessageDialog(null, "Vous êtes arrivés à destination !", "Arrivée", JOptionPane.INFORMATION_MESSAGE);
+						}
 					}
 				}
 			});
