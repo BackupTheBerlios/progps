@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Tue Dec 18 15:14:06 CET 2007
+onejar.license.required=true
+manifest.classpath=.\\
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=C\:\\Clement\\IFIPS\\COURS\\5\u00E8me ann\u00E9e\\Projet GL\\progps.jar
+manifest.mergeall=true
+manifest.mainclass=noyau.SingletonProgps
+manifest.file=<createnew>
+jarname.isextern=true
+onejar.expand=
+excludes=<po|ProGPS_CVS>~.cvsignore;<po|ProGPS_CVS>~hs_err_pid4668.log;<po|ProGPS_CVS>~TODO.txt;<po|ProGPS_CVS>~xalan.jar;<jar|xalan.jar>
+includes=

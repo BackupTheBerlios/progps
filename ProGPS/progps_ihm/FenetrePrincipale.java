@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -816,6 +818,19 @@ public class FenetrePrincipale extends javax.swing.JFrame {
 		if (jMenuItem_Aide == null) {
 			jMenuItem_Aide = new JMenuItem();
 			jMenuItem_Aide.setText("Aide");
+			jMenuItem_Aide.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try{
+						Process p = Runtime.getRuntime().exec("cmd /C start manuel.pdf");
+						InputStream stdOut = p.getInputStream();
+						if(stdOut.read() != -1){
+							System.err.println("Erreur ! Acrobat Reader est-il installé ?");
+						}
+					}catch(Exception exception){
+						System.err.println("Exception occured: " + e);
+					} 
+				}
+			});
 		}
 		return jMenuItem_Aide;
 	}
