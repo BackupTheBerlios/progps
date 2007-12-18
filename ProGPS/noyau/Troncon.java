@@ -112,11 +112,14 @@ public class Troncon
 	}
 	
 	public boolean isRelieVille(Set<Ville> lesVilles) {
-		for (Iterator iter = lesVilles.iterator(); iter.hasNext();) {
-			Ville uneVille = (Ville) iter.next();
-			if (this.isRelieVille(uneVille)) return true;
-		}
-		return false;
+		if(lesVilles==null)
+			return false;
+		return lesVilles.contains(ville1) || lesVilles.contains(ville2);
+//		for (Iterator iter = lesVilles.iterator(); iter.hasNext();) {
+//			Ville uneVille = (Ville) iter.next();
+//			if (this.isRelieVille(uneVille)) return true;
+//		}
+//		return false;
 	}
 
 	public void setSesVilles(Ville ville1, Ville ville2) {

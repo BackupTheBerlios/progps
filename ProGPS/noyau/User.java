@@ -66,10 +66,12 @@ public class User {
 		nouveau.concat(nouvelItiASuivre);
 		nouveau.setTronconCourant(itineraireCourant.getTronconCourant());
 		itineraireCourant=nouveau;
+		System.out.println(itineraireCourant.toString());
 	}
 	
 	public boolean rafraichirItineraire(){
 		Ville villeActuelle=getDerniereVilleTraversee();
+		System.out.println("De "+villeActuelle+" à "+villeA);
 
 		try {
 			// Les villes étapes n'incluent plus les villes par lesquelle l'utilisateur est passé
@@ -215,7 +217,7 @@ public class User {
 			
 			if(v.equals(villeA))
 				return true;
-
+			System.out.println("Je suis à "+v);
 			rafraichirItineraire();
 		}else{
 //			Ajoute le troncon utilisé

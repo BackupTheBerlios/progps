@@ -40,6 +40,15 @@ public class Ville {
 		this.typeVille = typeVille;
 		this.touristique = touristique;
 	}
+	
+	public Ville(Ville v){
+		super();
+		this.idVille = v.getIdVille();
+		this.nomVille = v.getNomVille();
+		this.dispoVille = v.isDispoVille();
+		this.typeVille = v.getTypeVille();
+		this.touristique = v.isTouristique();
+	}
 
 	public void setNomVille(String nomVille) {
 		this.nomVille = nomVille;

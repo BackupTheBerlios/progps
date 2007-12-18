@@ -40,8 +40,8 @@ public class Itineraire {
 	}
 
 	private int compteEtapesViolees() {
-		Set<Ville> eTemp=SingletonProgps.getInstance().getSonUser().getVillesEtapes();
-		for (Ville v : eTemp) {
+		Set<Ville> eTemp=new HashSet<Ville>(SingletonProgps.getInstance().getSonUser().getVillesEtapes());
+		for (Ville v : SingletonProgps.getInstance().getSonUser().getVillesEtapes()) {
 			for (Troncon t : lesTroncons) {
 				if (t.isRelieVille(v))
 					eTemp.remove(v);
