@@ -3,6 +3,7 @@ package com.ifips.walletOptimiser;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class Solution {
 	private Probleme monProbleme;
@@ -215,6 +216,42 @@ public class Solution {
 		return sesValeurs.get(i);
 	}
 
+	public Solution getSolutionVoisine(int nbrDeVariablesModifiees, double variationMax) throws Exception{
+		ArrayList<ArrayList<Double>> lesValeurs=new ArrayList<ArrayList<Double>>();
+		int i=0;
+		for (Variable uneVar : sesVariables) {
+			ArrayList<Double> unVecteur=new ArrayList<Double>();
+			for (int j = 0; j < uneVar.getDimension(); j++) {
+				unVecteur.add(0.0);
+			}
+			lesValeurs.add(unVecteur);
+			i++;
+		}
+		Solution res=new Solution(this.monProbleme, this.sesVariables, lesValeurs);
+		
+		Random randomise=new Random();
+		
+		ArrayList<Double> unVecteur;
+		while(!res.estAdmissible()){
+			// On modifie autant de variables que demandé
+			for (i = 0; i < nbrDeVariablesModifiees; i++) {
+				int j=randomise.nextInt(sesVariables.size());
+				unVecteur = lesValeurs.get(j);
+				int k=0;
+				for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
+					Double uneVal = (Double) iter.next();
+					uneVal=uneVal+(randomise.nextDouble()*variationMax)-(randomise.nextDouble()*variationMax);
+					unVecteur.set(k, uneVal);
+					k++;
+				}
+				lesValeurs.set(j, unVecteur);
+			}
+			res.setSolution(this.sesVariables, lesValeurs);
+		}
+		return res;
+	}
+	
+	
 //	public void modifierVariable(String variableAModifier, double valeur) {
 //		int position = variable.getPosition(variableAModifier);
 //		this.valeur.set(position, valeur);

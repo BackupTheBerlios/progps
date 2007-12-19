@@ -7,11 +7,11 @@ public class Fonction {
 	protected Variable laVariable;
 	protected ArrayList<Double> mesPoids;
 	
-//	public Fonction(){};
+	protected Fonction(){};
 	
 	public Fonction(Variable v, List<Double> cst) throws Exception{
 		if(v.getDimension()!=cst.size())
-			throw new Exception("Impossible de créer la fonction : le vecteur variable et celui de constante n'ont pas la même dimention.");
+			throw new Exception("Impossible de créer la fonction : le vecteur variable et celui de constante n'ont pas la même dimension.");
 		laVariable = v;
 		mesPoids = (ArrayList<Double>) cst;
 	}

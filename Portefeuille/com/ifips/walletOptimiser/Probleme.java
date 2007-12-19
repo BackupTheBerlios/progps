@@ -41,13 +41,14 @@ public class Probleme {
 		for (Iterator iter = mesContraintes.iterator(); iter.hasNext();) {
 			Contrainte element = (Contrainte) iter.next();
 			element.afficher();
+			System.out.println();
 		}
 	}
 	
-	public Solution getSolutionInitiale() {
-		// TODO ben tout...
-		return new Solution(this);
-	}
+//	public Solution getSolutionInitiale() {
+//		// TODO ben tout...
+//		return new Solution(this);
+//	}
 
 //		public Solution getSolutionInitial() {
 //		int i = 0;
