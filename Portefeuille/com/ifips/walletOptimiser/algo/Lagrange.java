@@ -7,7 +7,7 @@ public class Lagrange extends Algorithme {
 
 	
 	private Solution solDuale;
-	private Fonction fctLagrangienne;
+	private FonctionLagrange fctLagrangienne;
 	private Probleme dual;
 	private Probleme sousPb;
 	private Contrainte contrainteRelaxe;
@@ -15,12 +15,17 @@ public class Lagrange extends Algorithme {
 	
 	
 	
-	private Lagrange(Probleme pbCourant, Contrainte contrainteRelaxe) {
-		
+	private Lagrange(Probleme pbCourant, Contrainte contrainteRelaxe) throws Exception {
+		this.sousPb=pbCourant;
+		this.contrainteRelaxe=contrainteRelaxe;
+		this.fctLagrangienne=new FonctionLagrange(pbCourant.getFonctionObjective().getLaVariable(), pbCourant.getFonctionObjective().getMesPoids(), contrainteRelaxe);
 	}
 	
+	
 	public Solution resoudre() {
-		return null;
+		double lambda=0.0;
+		double z=this.fctLagrangienne.getValeur(sousPb.getSolutionInitiale()., lambda)
+		
 	}
 	
 	private void initialiserDual() {

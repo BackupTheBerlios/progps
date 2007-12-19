@@ -44,8 +44,10 @@ public class Probleme {
 		}
 	}
 	
-	
-	
+	public Solution getSolutionInitiale() {
+		// TODO ben tout...
+		return new Solution(this);
+	}
 
 //		public Solution getSolutionInitial() {
 //		int i = 0;
