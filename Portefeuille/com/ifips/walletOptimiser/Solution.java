@@ -8,7 +8,6 @@ public class Solution {
 	private Probleme monProbleme;
 	private ArrayList<Variable> sesVariables;
 	private ArrayList<ArrayList<Double>> sesValeurs;
-	private Variable variable;
 
 
 	public Solution(Probleme p) {
@@ -207,6 +206,13 @@ public class Solution {
 //			}
 //		}
 //		return valeurRetour;
+	}
+
+	public ArrayList<Double> getValeursDeVariable(Variable v) throws Exception {
+		int i=sesVariables.indexOf(v);
+		if(i==-1)
+			throw new Exception("Solution : La variable demandée est inconnue de la solution.");
+		return sesValeurs.get(i);
 	}
 
 //	public void modifierVariable(String variableAModifier, double valeur) {

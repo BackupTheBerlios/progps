@@ -1,7 +1,7 @@
 package com.ifips.walletOptimiser;
 
 
-public class Variable {
+public class Variable{
 //	private static HashSet<String> toutesLesVariables = new HashSet<String>();
 	private String nom;
 	private int dimension;

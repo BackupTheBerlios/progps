@@ -13,6 +13,13 @@ import com.ifips.walletOptimiser.Variable;
 
 public class Main {
 
+//	private Probleme genererProbleme1(){
+//		// Déclaration des variables
+//		Variable variableX=new Variable("x", 5);
+//		Variable variableY=new Variable("y", 5);
+//	}
+	
+	
 	/**
 	 * @param args
 	 * @throws Exception 

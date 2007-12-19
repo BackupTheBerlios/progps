@@ -43,6 +43,9 @@ public class Probleme {
 			element.afficher();
 		}
 	}
+	
+	
+	
 
 //		public Solution getSolutionInitial() {
 //		int i = 0;

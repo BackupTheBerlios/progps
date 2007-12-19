@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Fonction {
-	private Variable laVariable;
-	private ArrayList<Double> mesPoids;
+	protected Variable laVariable;
+	protected ArrayList<Double> mesPoids;
 	
 //	public Fonction(){};
 	
