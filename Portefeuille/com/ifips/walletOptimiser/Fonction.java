@@ -27,7 +27,7 @@ public class Fonction {
 	public void afficher() {
 		int i=0;
 		for (Double poids : mesPoids) {
-			System.out.print("+( "+poids+"*"+laVariable.getNom()+"["+i+"] )");
+			System.out.print("+ "+poids+"*"+laVariable.getNom()+"["+i+"] ");
 			i++;
 		}	
 	}

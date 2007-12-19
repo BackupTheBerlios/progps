@@ -14,6 +14,23 @@ public class Solution {
 	public Solution(Probleme p) {
 		monProbleme = p;
 	}
+	
+	public Solution(Probleme p,ArrayList<Variable> var, ArrayList<ArrayList<Double>> val) throws Exception {
+		monProbleme = p;
+		if(var.size()!=val.size())
+			throw new Exception("Solution : impossible de créer une solution qui n'a pas les valeurs pour toutes les variables");
+
+		// Vérification que les vecteurs de valeurs ont la mm dim que les variables
+		int i=0;
+		for (ArrayList<Double> listValeurs : val) {
+			if(listValeurs.size()!=var.get(i).getDimension())
+				throw new Exception("Solution : un vecteur de valeur n'a pas la même dimension que la variable");
+		}
+		
+		sesVariables=var;
+		sesValeurs=val;
+	}
+	
 
 	public void setSolution(ArrayList<Variable> variables, ArrayList<ArrayList<Double>> valeurs) throws Exception {
 		// Vérification sur le nbr de vecteurs de valeurs et le nbr de variables
@@ -63,7 +80,7 @@ public class Solution {
 //			j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 			if(i==-1)
 				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution");
-			if(uneContrainte.estRespectee(sesValeurs.get(i)))
+			if(!uneContrainte.estRespectee(sesValeurs.get(i)))
 				return false;
 		}
 		return true;

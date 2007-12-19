@@ -55,6 +55,28 @@ public class Main {
 		
 		monProbleme.afficherProbleme();
 		
+		// Création d'une solution
+		ArrayList<Variable> listeDeVariables=new ArrayList<Variable>();
+		listeDeVariables.add(variableX);
+		// Création des valeurs de x
+		ArrayList<Double> vecteurValeursX=new ArrayList<Double>();
+		vecteurValeursX.add(10.0);
+		vecteurValeursX.add(2.0);
+		vecteurValeursX.add(0.0);
+		vecteurValeursX.add(6.0);
+		vecteurValeursX.add(1.0);
+		// Création de la liste de vecteur
+		ArrayList<ArrayList<Double>> listeDeVecteurValeur=new ArrayList<ArrayList<Double>>();
+		listeDeVecteurValeur.add(vecteurValeursX);
+		
+		uneSolution=new Solution(monProbleme, listeDeVariables, listeDeVecteurValeur);
+		
+		System.out.println();
+		System.out.println("**********");
+		uneSolution.afficher();
+		System.out.println("Est admissible : "+uneSolution.estAdmissible());
+		System.out.println("Coût :"+uneSolution.getCout());
+		
 //		constante.add(1);
 //		constante.add(2);
 //		constante.add(3);
