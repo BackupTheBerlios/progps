@@ -20,7 +20,7 @@ public class Lagrange extends Algorithme {
 	}
 	
 	public Solution resoudre() {
-		
+		return null;
 	}
 	
 	private void initialiserDual() {

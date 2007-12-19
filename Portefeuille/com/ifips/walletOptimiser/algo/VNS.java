@@ -9,11 +9,12 @@ public class VNS extends Algorithme {
 	
 	public VNS(Probleme pb){
 		monProbleme = pb;
-		maSolution = monProbleme.getSolutionInitial();
-		tailleVoisinage = monProbleme.getFonctionObjective().getMesVariables().getDimension()/4;
+//		maSolution = monProbleme.getSolutionInitial();
+		tailleVoisinage = monProbleme.getFonctionObjective().getLaVariable().getDimension()/4;
 	}
 	
 	public Solution resoudre() {
+		return maSolution;
 		
 	}
 	
