@@ -1,18 +1,16 @@
 package commande;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 import com.ifips.walletOptimiser.Contrainte;
 import com.ifips.walletOptimiser.ContrainteEgale;
-import com.ifips.walletOptimiser.ContrainteInferieur;
 import com.ifips.walletOptimiser.ContrainteSuperieur;
 import com.ifips.walletOptimiser.Fonction;
 import com.ifips.walletOptimiser.FonctionQuadratique;
 import com.ifips.walletOptimiser.Probleme;
 import com.ifips.walletOptimiser.Solution;
 import com.ifips.walletOptimiser.Variable;
+import com.ifips.walletOptimiser.algo.Aleatoire;
 
 public class Main {
 
@@ -41,11 +39,11 @@ public class Main {
 		ArrayList<Double> identite=new ArrayList<Double>();
 		identite.add(1.0);
 		identite.add(1.0);
-		try {
-			f1=new Fonction(variableX, identite);
-			a1=new ContrainteEgale(f1, 1.0);
-			leProb.ajouterContrainte(a1);
-		} catch (Exception e) { e.printStackTrace(); }
+//		try {
+//			f1=new Fonction(variableX, identite);
+//			a1=new ContrainteEgale(f1, 1.0);
+//			leProb.ajouterContrainte(a1);
+//		} catch (Exception e) { e.printStackTrace(); }
 		
 //		 Contrainte 1b
 		ArrayList<Double> mu=new ArrayList<Double>();
@@ -66,6 +64,13 @@ public class Main {
 		
 		
 		leProb.afficherProbleme();
+		Aleatoire algoAleat=new Aleatoire(leProb);
+		
+		Solution solInitiale=algoAleat.resoudre();
+		if(solInitiale!=null)
+			solInitiale.afficher();
+		System.out.println("fini");
+		
 		return null;
 	}
 	
@@ -75,72 +80,13 @@ public class Main {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		Solution uneSolution;
-		Probleme monProbleme;
-		Fonction fonctionObjective;
-		Fonction f1;
-		
-		
-		// Déclaration d'une variable
-		Variable variableX=new Variable("x", 5);
-		// Déclaration d'un vecteur de poids
-		ArrayList<Double> vecteurPoids=new ArrayList<Double>();
-		vecteurPoids.add(1.0);
-		vecteurPoids.add(2.0);
-		vecteurPoids.add(6.0);
-		vecteurPoids.add(7.0);
-		vecteurPoids.add(100.0);
-		// Déclaration d'une fonction : x1 + 2x2 + 6x3 + 7x4 + 100x5
-		fonctionObjective=new Fonction(variableX, vecteurPoids);
-		// Déclaration d'un problème
-		monProbleme=new Probleme(fonctionObjective);
-		
-		// Déclaration d'un autre vecteur poids
-		vecteurPoids=new ArrayList<Double>();
-		vecteurPoids.add(0.0);
-		vecteurPoids.add(1.0);
-		vecteurPoids.add(6.0);
-		vecteurPoids.add(0.0);
-		vecteurPoids.add(8.0);
-		f1=new Fonction(variableX, vecteurPoids);
-		//Ajoute une contrainte au pb
-		monProbleme.ajouterContrainte(new ContrainteSuperieur(f1, 10.0));
-		
-		monProbleme.afficherProbleme();
-		
-		// Création d'une solution
-		ArrayList<Variable> listeDeVariables=new ArrayList<Variable>();
-		listeDeVariables.add(variableX);
-		// Création des valeurs de x
-		ArrayList<Double> vecteurValeursX=new ArrayList<Double>();
-		vecteurValeursX.add(10.0);
-		vecteurValeursX.add(2.0);
-		vecteurValeursX.add(2.0);
-		vecteurValeursX.add(6.0);
-		vecteurValeursX.add(1.0);
-		// Création de la liste de vecteur
-		ArrayList<ArrayList<Double>> listeDeVecteurValeur=new ArrayList<ArrayList<Double>>();
-		listeDeVecteurValeur.add(vecteurValeursX);
-		
-		uneSolution=new Solution(monProbleme, listeDeVariables, listeDeVecteurValeur);
-		
+				
 		System.out.println();
-		System.out.println("**********");
-		uneSolution.afficher();
-		System.out.println("Est admissible : "+uneSolution.estAdmissible());
-		System.out.println("Coût :"+uneSolution.getCout());
+		System.out.println();
+		System.out.println();
+		System.out.println("Notre PB :");
 		
-		Solution sol2 = uneSolution.getSolutionVoisine(2, 0.02);
-		sol2.afficher();
-		System.out.println("Est admissible : "+sol2.estAdmissible());
-		System.out.println("Coût :"+sol2.getCout());
-		
-//		System.out.println();
-//		System.out.println();
-//		System.out.println();
-//		System.out.println("Notre PB :");
-//		
-//		genererProbleme1();
+		genererProbleme1();
 		
 		
 		

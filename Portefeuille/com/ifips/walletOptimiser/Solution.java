@@ -251,6 +251,15 @@ public class Solution {
 		return res;
 	}
 	
+	public double temp(){
+		Double res=0.0;
+		for (ArrayList<Double> unVecteur : sesValeurs) {
+			for (Double double1 : unVecteur) {
+				res+=double1;
+			}
+		}
+		return res;
+	}
 	
 //	public void modifierVariable(String variableAModifier, double valeur) {
 //		int position = variable.getPosition(variableAModifier);
