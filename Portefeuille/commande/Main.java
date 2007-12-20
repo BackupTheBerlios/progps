@@ -19,6 +19,7 @@ import com.ifips.walletOptimiser.Solution;
 import com.ifips.walletOptimiser.Variable;
 import com.ifips.walletOptimiser.algo.Aleatoire;
 import com.ifips.walletOptimiser.algo.RecuitSimule;
+import com.ifips.walletOptimiser.algo.VNS;
 
 public class Main {
 
@@ -74,7 +75,7 @@ public class Main {
 //		 Contrainte 1c
 		try {
 			f1=new Fonction(variableY, identite);
-			a1=new ContrainteEgale(f1, new FonctionConstante(2.0));
+			a1=new ContrainteEgale(f1, new FonctionConstante(1.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
@@ -110,24 +111,25 @@ public class Main {
 		
 		leProb.afficherProbleme();
 		
-		System.out.println("Solution trouvée aléatoirement");
 		Aleatoire algoAleat=new Aleatoire(leProb);
 		Solution solInitiale=algoAleat.resoudre();
 		
+		System.out.println("Solution trouvée aléatoirement");
 		if(solInitiale!=null)
 			solInitiale.afficher();
+		System.out.println("+ Coût de cette solution : "+algoAleat.getSolCourante().getCout());
 		
+		RecuitSimule algoRecuit=new RecuitSimule(leProb);
+		algoRecuit.resoudre();
 		System.out.println("Solution trouvée par la méthode du recuit");
-		RecuitSimule recuit=new RecuitSimule(leProb);
-		recuit.resoudre();
-		recuit.getSolCourante().afficher();
-		try {
-			System.out.println(recuit.getSolCourante().estAdmissible());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-				
+		algoRecuit.getSolCourante().afficher();
+		System.out.println("+ Coût de cette solution : "+algoRecuit.getSolCourante().getCout());
+		
+		VNS algoVNS = new VNS(leProb);
+		algoVNS.resoudre();
+		System.out.println("Solution trouvée par la méthode de VNS");
+		algoVNS.getSolCourante().afficher();
+		System.out.println("+ Coût de cette solution : "+algoVNS.getSolCourante().getCout());
 		
 		System.out.println("Fin.");
 		

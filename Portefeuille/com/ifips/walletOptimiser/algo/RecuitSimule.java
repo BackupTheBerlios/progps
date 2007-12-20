@@ -29,7 +29,7 @@ public class RecuitSimule extends Algorithme {
 			int i=0;
 			while(i<nbrIterationParPaliers){
 				try {
-					solutionCandidate=solCourante.getSolutionVoisine(1+(solCourante.getNombreDeVariables()/4), 0.1);
+					solutionCandidate=solCourante.getSolutionVoisine(0.1);
 				} catch (Exception e) { e.printStackTrace(); return null;}
 				
 				// Si la nvelle solution est meilleure
@@ -72,7 +72,7 @@ public class RecuitSimule extends Algorithme {
 			while(i<nbrIterationParPaliers){
 				Solution solutionCandidate=null;
 				try {
-					solutionCandidate=solCourante.getSolutionVoisine(1+(solCourante.getNombreDeVariables()/4), 0.1);
+					solutionCandidate=solCourante.getSolutionVoisine(0.1);
 				} catch (Exception e) { e.printStackTrace(); return false; }
 				
 				// Teste si on conserve la solution

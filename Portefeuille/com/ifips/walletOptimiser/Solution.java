@@ -48,30 +48,6 @@ public class Solution{
 				throw new Exception("Solution : La taille du vecteur de valeurs n'est pas la même que la dimension de la variable "+variables.get(i).getNom()+".");
 		}
 		
-		
-//		int compteurVariable = 0;
-//		
-//		if (val.size() != var.getDimension()) {
-//			throw new Exception(
-//					"Solution : Le nombre de variable et le nombre de valeur proposé n'est pas égale.");
-//		}
-//		
-//		
-//		for (Iterator it = var.getMesNomVariables().iterator(); it.hasNext();) {
-//			String element = (String) it.next();
-//			if (!monProbleme.getFonctionObjective().getLaVariable()
-//					.contains(element)) {
-//				throw new Exception(
-//						"Solution : Une variable dans solution proposé est inéxistante dans le problème.");
-//			}
-//			compteurVariable++;
-//		}
-//
-//		
-//		if (compteurVariable!=monProbleme.getFonctionObjective().getLaVariable().getDimension()) {
-//			throw new Exception(
-//					"Solution : La solution proposé ne donne pas de valeur pour toutes les variables du problème.");
-//		}
 		sesValeurs = valeurs;
 		sesVariables = variables;
 	}
@@ -82,7 +58,7 @@ public class Solution{
 		for (Contrainte uneContrainte : monProbleme.getMesContraintes()) {
 			i=sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
 			if(i==-1)
-				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
+				throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
 			if(uneContrainte.getPartieDroite() instanceof FonctionConstante){
 				// La partie droite ne contient pas de variable
 				if(!uneContrainte.estRespectee(sesValeurs.get(i),null))
@@ -91,29 +67,12 @@ public class Solution{
 				// La partie droite contient une variable
 				j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 				if(j==-1)
-					throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
+					throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
 				if(!uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(j)))
 					return false;
 			}
 		}
 		return true;
-//		
-//		int partieGauche;
-//		boolean valeurRetour=true;
-//		for (Iterator it = monProbleme.getMesContraintes().iterator(); it.hasNext();) {
-//			Contrainte element = (Contrainte) it.next();
-//			partieGauche=element.calculerPartieGauche(valeur, variable);
-//			if(element.getClass()==ContrainteEgale.class){
-//				valeurRetour = valeurRetour && (partieGauche == element.getPartieDroite());
-//			}else if(element.getClass()==ContrainteSuperieur.class){
-//				valeurRetour = valeurRetour && (partieGauche > element.getPartieDroite());
-//			}else if(element.getClass()==ContrainteInferieur.class){
-//				valeurRetour = valeurRetour && (partieGauche < element.getPartieDroite());
-//			}else{
-//				throw new Exception("Solution : Contrainte non prise en charge");
-//			}
-//		}
-//		return valeurRetour;
 	}
 
 	public void afficher() {
@@ -124,18 +83,6 @@ public class Solution{
 			}
 			i++;
 		}
-		
-//		int i=0;
-//		for (Iterator iter = variable.getMesNomVariables().iterator(); iter.hasNext();) {
-//			String element = (String) iter.next();
-//			System.out.print(element + " = " + valeur.get(i) +"; ");
-//			i++;
-//		}
-//		System.out.println();
-//		if(!tousDefini()){
-//			System.err.println("Attention cette solution ne donne pas de valeur à toutes les variables");
-//		}
-		
 	}
 
 	public double getCout() {
@@ -155,41 +102,7 @@ public class Solution{
 			e.printStackTrace();
 			return Double.MAX_VALUE;
 		}
-		
-		
-//		int i=0;
-//		int position;
-//		int somme = 0;
-//		double[] mesVal;
-//		if(valeur.size()!=0){
-//			if(tousDefini()){
-//			mesVal = new double[monProbleme.getFonctionObjective().getLaVariable().getDimension()];
-//			for (Iterator it = variable.getMesNomVariables().iterator(); it.hasNext();) {
-//				String element = (String) it.next();
-//				position = monProbleme.getFonctionObjective().getLaVariable().getPosition(element);
-//				mesVal[position] = valeur.get(i);
-//				i++;
-//			}
-//			for (int j = 0; j < valeur.size(); j++) {
-//				somme += monProbleme.getFonctionObjective().getMesPoids().getValeur(j) * mesVal[j];
-//			}
-//			return somme;
-//			}else 
-//				throw new Exception("Solution : Solution incomplete.");
-//		}else{
-//			throw new Exception("Solution : Aucune valeur de solution n'a été fournie.");
-//		}
-		
 	}
-
-//	private boolean tousDefini() {
-//		for (Iterator iter = monProbleme.getFonctionObjective().getLaVariable().getMesNomVariables().iterator(); iter.hasNext();) {
-//			String element = (String) iter.next();
-//			if(!variable.contains(element))
-//				return false;
-//		}
-//		return true;
-//	}
 
 	public int getNbContrainteRespecter() throws Exception {
 		int cpt=0;
@@ -198,7 +111,7 @@ public class Solution{
 		for (Contrainte uneContrainte : monProbleme.getMesContraintes()) {
 			i=sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
 			if(i==-1)
-				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
+				throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
 			if(uneContrainte.getPartieDroite() instanceof FonctionConstante){
 				// La partie droite ne contient pas de variable
 				if(uneContrainte.estRespectee(sesValeurs.get(i),null))
@@ -207,34 +120,12 @@ public class Solution{
 				// La partie droite contient une variable
 				j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 				if(j==-1)
-					throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
+					throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
 				if(uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(j)))
 					cpt++;
 			}
 		}
 		return cpt;
-//		
-//		
-//		
-//		int partieGauche;
-//		int valeurRetour=0;
-//		for (Iterator it = monProbleme.getMesContraintes().iterator(); it.hasNext();) {
-//			Contrainte element = (Contrainte) it.next();
-//			partieGauche=element.calculerPartieGauche(valeur, variable);
-//			if(element.getClass()==ContrainteEgale.class){
-//				if(partieGauche == element.getPartieDroite())
-//					valeurRetour++;
-//			}else if(element.getClass()==ContrainteSuperieur.class){
-//				if(partieGauche > element.getPartieDroite())
-//					valeurRetour++;
-//			}else if(element.getClass()==ContrainteInferieur.class){
-//				if(partieGauche < element.getPartieDroite())
-//					valeurRetour++;
-//			}else{
-//				throw new Exception("Solution : Contrainte non prise en charge");
-//			}
-//		}
-//		return valeurRetour;
 	}
 
 	public ArrayList<Double> getValeursDeVariable(Variable v) throws Exception {
@@ -244,14 +135,13 @@ public class Solution{
 		return sesValeurs.get(i);
 	}
 
-	public Solution getSolutionVoisine(int nbrDeVariablesModifiees, double variationMax) throws Exception{
-
+	public Solution getSolutionVoisine(double variationMax) throws Exception{
+		int nbrDeVariablesModifiees=1+(this.getNombreDeVariables()/4);
+		
 		ArrayList<ArrayList<Double>> lesValeurs=this.sesValeurs;
 		Solution res=new Solution(this.monProbleme, this.sesVariables, lesValeurs);
 		
 		Random randomise=new Random();
-		
-		
 		ArrayList<Double> unVecteur;
 		do{
 			// On prend les valeurs identique à la solution actuelle
@@ -291,6 +181,17 @@ public class Solution{
 		return distance;
 	}
 	
+	public ArrayList<Solution> getSolutionsVoisines(int nbrVoisins, double variationMax){
+		ArrayList<Solution> result = new ArrayList<Solution>();
+		while(result.size()<nbrVoisins) {
+			try {
+				result.add(this.getSolutionVoisine(variationMax));
+			} catch (Exception e) {
+				System.out.println("Erreur lors de la génération du voisinage...");
+			}
+		}
+		return result;
+	}
 
 	public ArrayList<Solution> calculerVoisinage(double proportion) throws Exception {
 		ArrayList<ArrayList<Double>> lesValeurs = new ArrayList<ArrayList<Double>>();
@@ -345,10 +246,4 @@ public class Solution{
 		}
 		return res;
 	}
-	
-//	public void modifierVariable(String variableAModifier, double valeur) {
-//		int position = variable.getPosition(variableAModifier);
-//		this.valeur.set(position, valeur);
-//	}
-
 }
