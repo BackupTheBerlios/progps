@@ -31,7 +31,7 @@ public class Aleatoire extends Algorithme {
 			varUtilisees.add(uneContrainte.getPartieGauche().getLaVariable());
 		}
 		ArrayList<Variable> sesVariables=new ArrayList<Variable>(varUtilisees);
-		int nbrDeVariablesModifiees=1+(sesVariables.size()/10);
+		int nbrDeVariablesModifiees=1+(sesVariables.size()/4);
 		double variationMax=0.1;
 
 		// Initialies tous les vecteurs à 0
@@ -59,7 +59,7 @@ public class Aleatoire extends Algorithme {
 					int k=0;
 					for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
 						Double uneVal = (Double) iter.next();
-						System.out.println(uneVal);
+//						System.out.println(uneVal);
 						uneVal = sesVariables.get(j).getMonDomaine().getValeurAleatoire(uneVal, variationMax);
 						//uneVal=uneVal+(randomise.nextDouble()*variationMax)-(randomise.nextDouble()*variationMax);
 						unVecteur.set(k, uneVal);

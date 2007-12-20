@@ -15,7 +15,7 @@ public class Fonction {
 		laVariable = v;
 		mesPoids = (ArrayList<Double>) cst;
 	}
-
+	
 	public Variable getLaVariable() {
 		return laVariable;
 	}

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class Solution {
+public class Solution{
 	private Probleme monProbleme;
 	private ArrayList<Variable> sesVariables;
 	private ArrayList<ArrayList<Double>> sesValeurs;
@@ -30,6 +30,7 @@ public class Solution {
 		sesVariables=var;
 		sesValeurs=val;
 	}
+	
 	
 	public int getNombreDeVariables(){
 		return sesValeurs.size();
@@ -134,8 +135,9 @@ public class Solution {
 		Variable laVariable=monProbleme.getFonctionObjective().getLaVariable();
 		int i=sesVariables.indexOf(laVariable);
 		// TODO tester si le indexOf a retourné qqch
-		if(i!=-1)
+		if(i==-1)
 			return Double.MAX_VALUE;
+			
 		
 		// Demande la valeur de la fct obj selon le vecteur de valeur
 		try {

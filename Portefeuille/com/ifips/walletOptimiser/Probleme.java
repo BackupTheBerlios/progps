@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Probleme {
 	private Fonction fonctionObjective;
-	private List<Contrainte> mesContraintes;
+	private ArrayList<Contrainte> mesContraintes;
 	
 	public Probleme(Fonction fctObj){
 		fonctionObjective = fctObj;
