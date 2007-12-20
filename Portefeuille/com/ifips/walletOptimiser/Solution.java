@@ -274,6 +274,50 @@ public class Solution {
 		return distance;
 	}
 	
+
+	public ArrayList<Solution> calculerVoisinage(double proportion) throws Exception {
+		ArrayList<ArrayList<Double>> lesValeurs = new ArrayList<ArrayList<Double>>();
+		ArrayList<Solution> lesSolutionsVoisines = new ArrayList<Solution>();
+		int z = 0;
+		int maxVoisinage = 6;
+		while (z < maxVoisinage) {
+			int i=0;
+			for (Variable uneVar : sesVariables) {
+				ArrayList<Double> unVecteur=new ArrayList<Double>();
+				for (int j = 0; j < uneVar.getDimension(); j++) {
+					unVecteur.add(0.0);
+				}
+				lesValeurs.add(unVecteur);
+				i++;
+			}
+			Solution res=new Solution(this.monProbleme, this.sesVariables, lesValeurs);
+			
+			Random randomise=new Random();
+			
+			ArrayList<Double> unVecteur;
+			while(!res.estAdmissible()){
+				// On modifie 1/4 des variables
+				for (i = 0; i < sesVariables.size()/4; i++) {
+					int j=randomise.nextInt(sesVariables.size());
+					unVecteur = lesValeurs.get(j);
+					int k=0;
+					for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
+						Double uneVal = (Double) iter.next();
+						uneVal=uneVal+(randomise.nextDouble()*proportion)-(randomise.nextDouble()*proportion);
+						unVecteur.set(k, uneVal);
+						k++;
+					}
+					lesValeurs.set(j, unVecteur);
+				}
+				res.setSolution(this.sesVariables, lesValeurs);
+			}
+			lesSolutionsVoisines.add(res);
+			z++;
+		}
+		return lesSolutionsVoisines;
+	}
+	
+	
 	public double temp(){
 		Double res=0.0;
 		for (ArrayList<Double> unVecteur : sesValeurs) {
