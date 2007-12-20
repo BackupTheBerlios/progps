@@ -3,10 +3,10 @@ package com.ifips.walletOptimiser;
 import java.util.List;
 import java.util.Random;
 
-public class DomaineFermer extends Domaine {
+public class DomaineFerme extends Domaine {
 	List<Double> elements;
 	
-	public DomaineFermer(List<Double> elems) {
+	public DomaineFerme(List<Double> elems) {
 		elements = elems;
 	}
 
@@ -18,7 +18,7 @@ public class DomaineFermer extends Domaine {
 	@Override
 	public double getValeurAleatoire(double valeurInit, double variationMax) {
 		Random randomise=new Random();
-		return elements.get((int)randomise.nextFloat()*elements.size());
+		return elements.get(randomise.nextInt(elements.size()));
 	}
 
 }

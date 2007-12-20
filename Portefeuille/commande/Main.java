@@ -9,7 +9,7 @@ import com.ifips.walletOptimiser.ContrainteEgale;
 import com.ifips.walletOptimiser.ContrainteInferieur;
 import com.ifips.walletOptimiser.ContrainteSuperieur;
 import com.ifips.walletOptimiser.Domaine;
-import com.ifips.walletOptimiser.DomaineFermer;
+import com.ifips.walletOptimiser.DomaineFerme;
 import com.ifips.walletOptimiser.Fonction;
 import com.ifips.walletOptimiser.FonctionConstante;
 import com.ifips.walletOptimiser.FonctionQuadratique;
@@ -27,10 +27,15 @@ public class Main {
 		Fonction f2;
 		Contrainte a1;
 		Domaine domaineY;
+		ArrayList<Double> dY=new ArrayList<Double>();
+		dY.add(0.0);
+		dY.add(1.0);
+		domaineY = new DomaineFerme(dY);
+		
 		
 		// Déclaration des variables
 		Variable variableX=new Variable("x", 2);
-		Variable variableY=new Variable("y", 2);
+		Variable variableY=new Variable("y", 2, domaineY);
 		// Fonction Obj
 		ArrayList<Double> sigma=new ArrayList<Double>();
 		sigma.add(1.0);
