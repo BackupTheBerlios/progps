@@ -10,6 +10,10 @@ public abstract class Algorithme {
 		pbCourant=p;
 	}
 	
+	public void setPbCourant(Probleme p) {
+		pbCourant=p;
+	}
+	
 	public abstract Solution resoudre();
 
 }
