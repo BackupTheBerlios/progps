@@ -2,20 +2,19 @@ package com.ifips.walletOptimiser;
 
 import java.util.Random;
 
-public class DomainePositif extends Domaine {
-	private static DomainePositif instance = null;
+public class DomaineBorne extends Domaine {
 	
-	private DomainePositif(){}
+	private double borneSup;
+	private double borneInf;
 	
-	public static DomainePositif getInstance(){
-		if(instance==null)
-			instance = new DomainePositif();
-		return instance;
+	public DomaineBorne(double inf, double sup){
+		borneInf=inf;
+		borneSup=sup;
 	}
-	
+
 	@Override
 	public boolean estDansDomaine(double valeur) {
-		return (valeur>=0);
+		return (valeur>=borneInf && valeur<=borneSup);
 	}
 
 	@Override
@@ -28,4 +27,5 @@ public class DomainePositif extends Domaine {
 		}while(!estDansDomaine(valeurRetour));
 		return valeurRetour;
 	}
+
 }

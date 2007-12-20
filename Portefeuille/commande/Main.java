@@ -9,6 +9,7 @@ import com.ifips.walletOptimiser.ContrainteEgale;
 import com.ifips.walletOptimiser.ContrainteInferieur;
 import com.ifips.walletOptimiser.ContrainteSuperieur;
 import com.ifips.walletOptimiser.Domaine;
+import com.ifips.walletOptimiser.DomaineBorne;
 import com.ifips.walletOptimiser.DomaineFerme;
 import com.ifips.walletOptimiser.Fonction;
 import com.ifips.walletOptimiser.FonctionConstante;
@@ -27,6 +28,7 @@ public class Main {
 		Fonction f2;
 		Contrainte a1;
 		Domaine domaineY;
+		Domaine domaineX = new DomaineBorne(0.0,1.0);
 		ArrayList<Double> dY=new ArrayList<Double>();
 		dY.add(0.0);
 		dY.add(1.0);
@@ -34,7 +36,7 @@ public class Main {
 		
 		
 		// Déclaration des variables
-		Variable variableX=new Variable("x", 2);
+		Variable variableX=new Variable("x", 2, domaineX);
 		Variable variableY=new Variable("y", 2, domaineY);
 		// Fonction Obj
 		ArrayList<Double> sigma=new ArrayList<Double>();
@@ -65,14 +67,14 @@ public class Main {
 		mu.add(21.0);
 		try {
 			f1=new Fonction(variableX, mu);
-			a1=new ContrainteInferieur(f1, new FonctionConstante(200.0));
+			a1=new ContrainteSuperieur(f1, new FonctionConstante(0.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
 //		 Contrainte 1c
 		try {
 			f1=new Fonction(variableY, identite);
-			a1=new ContrainteSuperieur(f1, new FonctionConstante(3.0));
+			a1=new ContrainteSuperieur(f1, new FonctionConstante(0.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
@@ -107,16 +109,16 @@ public class Main {
 		
 		
 		leProb.afficherProbleme();
-		RecuitSimule recuit=new RecuitSimule(leProb);
-		System.out.println(recuit.kirkPatrick());
+//		RecuitSimule recuit=new RecuitSimule(leProb);
+//		System.out.println(recuit.kirkPatrick());
 		
 		
-//		Aleatoire algoAleat=new Aleatoire(leProb);
-//		
-//		Solution solInitiale=algoAleat.resoudre();
-//		if(solInitiale!=null)
-//			solInitiale.afficher();
-//		System.out.println("fini");
+		Aleatoire algoAleat=new Aleatoire(leProb);
+		
+		Solution solInitiale=algoAleat.resoudre();
+		if(solInitiale!=null)
+			solInitiale.afficher();
+		System.out.println("fini");
 		
 		return null;
 	}
@@ -128,9 +130,6 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 				
-		System.out.println();
-		System.out.println();
-		System.out.println();
 		System.out.println("Notre PB :");
 		
 		genererProbleme1();
