@@ -63,8 +63,8 @@ public class Main {
 		
 //		 Contrainte 1b
 		ArrayList<Double> mu=new ArrayList<Double>();
-		mu.add(1.0);
-		mu.add(1.0);
+		mu.add(2.0);
+		mu.add(2.0);
 		try {
 			f1=new Fonction(variableX, mu);
 			a1=new ContrainteSuperieur(f1, new FonctionConstante(1.0));
@@ -78,38 +78,10 @@ public class Main {
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
-		//Contrainte 1d
-		
-//		ArrayList<Double> epsilon=new ArrayList<Double>();
-//		epsilon.add(0.1);
-//		epsilon.add(0.1);
-//		
-//		ArrayList<Double> constante=new ArrayList<Double>();
-//		constante.add(1.0);
-//		constante.add(1.0);
-//		try{
-//			f1 = new Fonction(variableY,epsilon);
-//			f2 = new Fonction(variableX, constante);
-//			a1 = new ContrainteInferieur(f1,f2);
-//			leProb.ajouterContrainte(a1);
-//		}catch(Exception e) { e.printStackTrace(); }
-//		
-//		ArrayList<Double> delta=new ArrayList<Double>();
-//		delta.add(0.9);
-//		delta.add(0.9);
-//		
-//		try{
-//			f1 = new Fonction(variableY,delta);
-//			f2 = new Fonction(variableX, constante);
-//			a1 = new ContrainteInferieur(f2,f1);
-//			leProb.ajouterContrainte(a1);
-//		}catch(Exception e) { e.printStackTrace(); }
-		
+		//Contrainte 1d		
 		ArrayList<Double> epsilon=new ArrayList<Double>();
 		ArrayList<Double>delta=new ArrayList<Double>();
 		ArrayList<Double> constante=new ArrayList<Double>();
-		
-
 		
 		for(int i = 0; i<variableX.getDimension(); i++){
 			epsilon=new ArrayList<Double>();
@@ -133,19 +105,31 @@ public class Main {
 				leProb.ajouterContrainte(a1);
 			}catch(Exception e) { e.printStackTrace(); }
 		}
+		// Fin contrainte 1d
+		
 		
 		leProb.afficherProbleme();
-		RecuitSimule recuit=new RecuitSimule(leProb);
-		recuit.resoudre();
-//		System.out.println(recuit.kirkPatrick());
 		
-		
+		System.out.println("Solution trouvée aléatoirement");
 		Aleatoire algoAleat=new Aleatoire(leProb);
-		
 		Solution solInitiale=algoAleat.resoudre();
+		
 		if(solInitiale!=null)
 			solInitiale.afficher();
-		System.out.println("fini");
+		
+		System.out.println("Solution trouvée par la méthode du recuit");
+		RecuitSimule recuit=new RecuitSimule(leProb);
+		recuit.resoudre();
+		recuit.getSolCourante().afficher();
+		try {
+			System.out.println(recuit.getSolCourante().estAdmissible());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		
+		System.out.println("Fin.");
 		
 		return null;
 	}

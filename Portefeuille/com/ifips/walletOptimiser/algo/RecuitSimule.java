@@ -7,7 +7,7 @@ import com.ifips.walletOptimiser.Solution;
 
 public class RecuitSimule extends Algorithme {
 	private double tempInitiale;
-	private double tempMini=0.01;
+	private double tempMini=0.0001;
 	private int nbrIterationParPaliers=100;
 	private double coeffDecroissance=0.95;
 
@@ -24,7 +24,6 @@ public class RecuitSimule extends Algorithme {
 		Solution solutionCandidate;
 		double temperatureCourante=tempInitiale;
 		Random rand=new Random();
-		
 		
 		while(temperatureCourante>tempMini){
 			int i=0;
@@ -47,8 +46,8 @@ public class RecuitSimule extends Algorithme {
 				i++;
 			}
 			temperatureCourante=temperatureCourante*coeffDecroissance;
-			System.out.println("Diminution de la température. T="+temperatureCourante);
-			System.out.println("Cout de la sol : "+solCourante.getCout());
+//			System.out.println("Diminution de la température. T="+temperatureCourante);
+//			System.out.println("Cout de la sol : "+solCourante.getCout());
 		}
 		return meilleureSol;
 	}
@@ -57,14 +56,14 @@ public class RecuitSimule extends Algorithme {
 		// Méthode de recherche de sol initiale par l'aléatoire
 		Algorithme algoSolInit = new Aleatoire(pbCourant);
 		System.out.println("Méthode de KirkPatrick");
+		System.out.println("Recherche une solution Initale");
+		solCourante=algoSolInit.resoudre();
+		System.out.println("Solution Initale trouvée");
 		Random rand;
-		tempInitiale=10.0;
+		tempInitiale=0.1;
 		
 		double txAccept=0.0;
 		while(txAccept<0.8){
-			System.out.println("Recherche une solution Initale");
-			solCourante=algoSolInit.resoudre();
-			System.out.println("Solution Initale trouvée");
 			txAccept=0.0;
 			int i=0;
 			int mvtPositifsTotaux=1;
@@ -73,7 +72,7 @@ public class RecuitSimule extends Algorithme {
 			while(i<nbrIterationParPaliers){
 				Solution solutionCandidate=null;
 				try {
-					solutionCandidate=solCourante.getSolutionVoisine(1+(solCourante.getNombreDeVariables()/4), 0.01);
+					solutionCandidate=solCourante.getSolutionVoisine(1+(solCourante.getNombreDeVariables()/4), 0.1);
 				} catch (Exception e) { e.printStackTrace(); return false; }
 				
 				// Teste si on conserve la solution
@@ -85,7 +84,6 @@ public class RecuitSimule extends Algorithme {
 					mvtPositifsTotaux++;
 					double degradation=solutionCandidate.getCout()-solCourante.getCout();
 					rand=new Random();
-					
 					if(rand.nextDouble() <= Math.exp((-degradation)/tempInitiale)){
 						solCourante=solutionCandidate;
 						mvtPositifsAcceptes++;
@@ -96,8 +94,8 @@ public class RecuitSimule extends Algorithme {
 			txAccept=(double)mvtPositifsAcceptes/(double)mvtPositifsTotaux;
 			if(txAccept<0.8)
 				tempInitiale=tempInitiale*2;
-			System.out.println(txAccept);
 		}
+		System.out.println("Température initiale : "+tempInitiale);
 		return true;
 	}
 	

@@ -17,4 +17,9 @@ public class FonctionConstante extends Fonction {
 	public void afficher() {
 		System.out.print(valeur);
 	}
+	
+	@Override
+	public Variable getLaVariable() {
+		return null;
+	}
 }

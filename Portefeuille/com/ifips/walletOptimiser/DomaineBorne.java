@@ -38,7 +38,7 @@ public class DomaineBorne extends Domaine {
 
 	@Override
 	public void afficher() {
-		System.out.print("["+borneInf + " , " + borneSup + "]");
+		System.out.println("["+borneInf + " , " + borneSup + "]");
 	}
 
 }

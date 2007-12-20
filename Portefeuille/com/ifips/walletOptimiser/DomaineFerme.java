@@ -27,10 +27,10 @@ public class DomaineFerme extends Domaine {
 		System.out.print("{");
 		for (Iterator iter = elements.iterator(); iter.hasNext();) {
 			Double element = (Double) iter.next();
-			System.out.println(element);
+			System.out.print(element);
 			System.out.print(" ");
 		}
-		System.out.print("}");
+		System.out.println("}");
 	}
 
 }

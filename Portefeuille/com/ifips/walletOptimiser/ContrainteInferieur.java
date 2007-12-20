@@ -11,7 +11,7 @@ public class ContrainteInferieur extends Contrainte{
 	@Override
 	public void afficher() {
 		partieGauche.afficher();
-		System.out.print("<");
+		System.out.print("< ");
 		partieDroite.afficher();
 	}
 	

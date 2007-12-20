@@ -78,14 +78,23 @@ public class Solution{
 
 	public boolean estAdmissible() throws Exception {
 		int i;
-//		int j;
+		int j;
 		for (Contrainte uneContrainte : monProbleme.getMesContraintes()) {
 			i=sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
-//			j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 			if(i==-1)
-				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution");
-			if(!uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(i)))
-				return false;
+				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
+			if(uneContrainte.getPartieDroite() instanceof FonctionConstante){
+				// La partie droite ne contient pas de variable
+				if(!uneContrainte.estRespectee(sesValeurs.get(i),null))
+					return false;
+			}else{
+				// La partie droite contient une variable
+				j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
+				if(j==-1)
+					throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
+				if(!uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(j)))
+					return false;
+			}
 		}
 		return true;
 //		
@@ -183,16 +192,25 @@ public class Solution{
 //	}
 
 	public int getNbContrainteRespecter() throws Exception {
-		int i;
-//		int j;
 		int cpt=0;
+		int i;
+		int j;
 		for (Contrainte uneContrainte : monProbleme.getMesContraintes()) {
 			i=sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
-//			j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 			if(i==-1)
-				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution");
-			if(uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(i)))
-				cpt++;
+				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
+			if(uneContrainte.getPartieDroite() instanceof FonctionConstante){
+				// La partie droite ne contient pas de variable
+				if(uneContrainte.estRespectee(sesValeurs.get(i),null))
+					cpt++;
+			}else{
+				// La partie droite contient une variable
+				j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
+				if(j==-1)
+					throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
+				if(uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(j)))
+					cpt++;
+			}
 		}
 		return cpt;
 //		
@@ -233,10 +251,9 @@ public class Solution{
 		
 		Random randomise=new Random();
 		
-		boolean premier=true;
+		
 		ArrayList<Double> unVecteur;
-		while(!res.estAdmissible()||premier){
-			premier=false;
+		do{
 			// On prend les valeurs identique à la solution actuelle
 			lesValeurs=new ArrayList<ArrayList<Double>>(this.sesValeurs);
 			
@@ -247,14 +264,15 @@ public class Solution{
 				int k=0;
 				for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
 					Double uneVal = (Double) iter.next();
-					uneVal=uneVal+(randomise.nextDouble()*variationMax)-(randomise.nextDouble()*variationMax);
+//					uneVal=uneVal+(randomise.nextDouble()*variationMax)-(randomise.nextDouble()*variationMax);
+					uneVal = sesVariables.get(j).getMonDomaine().getValeurAleatoire(uneVal, variationMax);
 					unVecteur.set(k, uneVal);
 					k++;
 				}
 				lesValeurs.set(j, unVecteur);
 			}
 			res.setSolution(this.sesVariables, lesValeurs);
-		}
+		}while(!res.estAdmissible() || this.getDistanceAvec(res)<0.001);
 		return res;
 	}
 	
@@ -302,7 +320,8 @@ public class Solution{
 					int k=0;
 					for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
 						Double uneVal = (Double) iter.next();
-						uneVal=uneVal+(randomise.nextDouble()*proportion)-(randomise.nextDouble()*proportion);
+//						uneVal=uneVal+(randomise.nextDouble()*proportion)-(randomise.nextDouble()*proportion);
+						uneVal = sesVariables.get(j).getMonDomaine().getValeurAleatoire(uneVal, proportion);
 						unVecteur.set(k, uneVal);
 						k++;
 					}
