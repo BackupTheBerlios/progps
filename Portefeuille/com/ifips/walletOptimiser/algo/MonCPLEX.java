@@ -34,6 +34,7 @@ public class MonCPLEX extends Algorithme{
 				varsCplex.add(modele.numVar(((DomaineBorne)fonctionObj.getLaVariable().getMonDomaine()).getBorneInf(), ((DomaineBorne)fonctionObj.getLaVariable().getMonDomaine()).getBorneInf(), IloNumVarType.Float));
 				obj.addTerm(fonctionObj.getMesPoids().get(i), varsCplex.get(i));
 			}
+			//définition des contraintes
 			for (int i = 0; i < contraintes.size(); i++) {
 				contraintesCplex.add(modele.linearNumExpr());
 				for (int j=0; i< contraintes.get(i).getPartieGauche().getLaVariable().getDimension();j++) {
@@ -65,6 +66,8 @@ public class MonCPLEX extends Algorithme{
 		} catch (IloException e) {
 			e.printStackTrace();
 		}
+		
+		
 		return null;
 	}
 	
