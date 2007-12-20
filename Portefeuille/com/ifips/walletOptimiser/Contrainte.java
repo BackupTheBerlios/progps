@@ -5,17 +5,24 @@ import java.util.List;
 
 public abstract class Contrainte {
 	protected Fonction partieGauche;
-	protected double partieDroite;
+	protected Fonction partieDroite;
 
-	public Contrainte(Fonction gauche, double droite) throws Exception{
+	public Contrainte(Fonction gauche, Fonction droite) throws Exception{
 		if(gauche.getLaVariable().getDimension()!=gauche.getMesPoids().size())
 			throw new Exception("Le vecteur de valeur n'a pas la même dimension que le vecteur variable");
 		partieGauche=gauche;
 		partieDroite=droite;
 	}
 	
-	public double getPartieDroite() {
+	public Fonction getPartieDroite() {
 		return partieDroite;
+	}
+	
+	public double calculerPartieDroite(List<Double> valeurs) throws Exception{
+		if(valeurs.size()!=partieDroite.getLaVariable().getDimension())
+			throw new Exception("Le vecteur de valeur n'a pas la même dimension que le vecteur variable");
+		
+		return partieDroite.getValeur(valeurs);
 	}
 
 	public Fonction getPartieGauche() {
@@ -77,7 +84,7 @@ public abstract class Contrainte {
 //		System.out.println(partieDroite);
 //	}
 	
-	public abstract boolean estRespectee(ArrayList<Double> vecteurVarGauche);
+	public abstract boolean estRespectee(ArrayList<Double> vecteurVarGauche, ArrayList<Double> vecteurVarDroite);
 	
 //	public void ajouterVariable(String nomVariable, double valeurVariable) {
 //		try {

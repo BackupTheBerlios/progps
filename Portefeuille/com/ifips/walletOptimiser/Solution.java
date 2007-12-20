@@ -80,7 +80,7 @@ public class Solution {
 //			j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 			if(i==-1)
 				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution");
-			if(!uneContrainte.estRespectee(sesValeurs.get(i)))
+			if(!uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(i)))
 				return false;
 		}
 		return true;
@@ -181,7 +181,7 @@ public class Solution {
 //			j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 			if(i==-1)
 				throw new Exception("Variable de la contrainte non trouvée dans les variables de la solution");
-			if(uneContrainte.estRespectee(sesValeurs.get(i)))
+			if(uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(i)))
 				cpt++;
 		}
 		return cpt;

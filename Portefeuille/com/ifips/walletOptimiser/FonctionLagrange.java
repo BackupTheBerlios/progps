@@ -26,9 +26,9 @@ public class FonctionLagrange extends Fonction {
 		}
 		res+=contrainteRelaxe.partieGauche.getValeur(valeurs);
 		if (contrainteRelaxe instanceof ContrainteInferieur)
-			res-=contrainteRelaxe.partieDroite;
+			res-=contrainteRelaxe.partieDroite.getValeur(valeurs);
 		else if (contrainteRelaxe instanceof ContrainteSuperieur)
-			res+=contrainteRelaxe.partieDroite;
+			res+=contrainteRelaxe.partieDroite.getValeur(valeurs);
 		else
 			throw new Exception("FonctionLagrange : Impossible de relaxer une contrainte d'égalité.");
 		return res;

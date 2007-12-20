@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import com.ifips.walletOptimiser.Contrainte;
 import com.ifips.walletOptimiser.ContrainteEgale;
+import com.ifips.walletOptimiser.ContrainteInferieur;
 import com.ifips.walletOptimiser.ContrainteSuperieur;
 import com.ifips.walletOptimiser.Fonction;
+import com.ifips.walletOptimiser.FonctionConstante;
 import com.ifips.walletOptimiser.FonctionQuadratique;
 import com.ifips.walletOptimiser.Probleme;
 import com.ifips.walletOptimiser.Solution;
@@ -51,14 +53,14 @@ public class Main {
 		mu.add(21.0);
 		try {
 			f1=new Fonction(variableX, mu);
-			a1=new ContrainteSuperieur(f1, 200.0);
+			a1=new ContrainteEgale(f1, new FonctionConstante(200.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
 //		 Contrainte 1c
 		try {
 			f1=new Fonction(variableY, identite);
-			a1=new ContrainteSuperieur(f1, 3.0);
+			a1=new ContrainteSuperieur(f1, new FonctionConstante(3.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		

@@ -4,20 +4,21 @@ import java.util.ArrayList;
 
 public class ContrainteEgale extends Contrainte {
 
-	public ContrainteEgale(Fonction gauche, double droite) throws Exception {
+	public ContrainteEgale(Fonction gauche, Fonction droite) throws Exception {
 		super(gauche, droite);
 	}
 
 	@Override
 	public void afficher() {
 		partieGauche.afficher();
-		System.out.print("="+partieDroite);
+		System.out.print("=");
+		partieDroite.afficher();
 	}
 
 	@Override
-	public boolean estRespectee(ArrayList<Double> vecteurVarGauche) {
+	public boolean estRespectee(ArrayList<Double> vecteurVarGauche, ArrayList<Double> vecteurVarDroite) {
 		try {
-			return partieGauche.getValeur(vecteurVarGauche)==partieDroite;
+			return partieGauche.getValeur(vecteurVarGauche)==partieDroite.getValeur(vecteurVarDroite);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
