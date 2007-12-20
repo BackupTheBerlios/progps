@@ -14,6 +14,18 @@ public abstract class Algorithme {
 		pbCourant=p;
 	}
 	
+	public Solution getSolCourante() {
+		return solCourante;
+	}
+
+	public void setSolCourante(Solution solCourante) {
+		this.solCourante = solCourante;
+	}
+
+	public Probleme getPbCourant() {
+		return pbCourant;
+	}
+
 	public abstract Solution resoudre();
 
 }

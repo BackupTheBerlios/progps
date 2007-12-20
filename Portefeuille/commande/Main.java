@@ -17,6 +17,7 @@ import com.ifips.walletOptimiser.Probleme;
 import com.ifips.walletOptimiser.Solution;
 import com.ifips.walletOptimiser.Variable;
 import com.ifips.walletOptimiser.algo.Aleatoire;
+import com.ifips.walletOptimiser.algo.RecuitSimule;
 
 public class Main {
 
@@ -101,12 +102,16 @@ public class Main {
 		
 		
 		leProb.afficherProbleme();
-		Aleatoire algoAleat=new Aleatoire(leProb);
+		RecuitSimule recuit=new RecuitSimule(leProb);
+		System.out.println(recuit.kirkPatrick());
 		
-		Solution solInitiale=algoAleat.resoudre();
-		if(solInitiale!=null)
-			solInitiale.afficher();
-		System.out.println("fini");
+		
+//		Aleatoire algoAleat=new Aleatoire(leProb);
+//		
+//		Solution solInitiale=algoAleat.resoudre();
+//		if(solInitiale!=null)
+//			solInitiale.afficher();
+//		System.out.println("fini");
 		
 		return null;
 	}

@@ -225,26 +225,23 @@ public class Solution {
 	}
 
 	public Solution getSolutionVoisine(int nbrDeVariablesModifiees, double variationMax) throws Exception{
-		ArrayList<ArrayList<Double>> lesValeurs=new ArrayList<ArrayList<Double>>();
-		int i=0;
-		for (Variable uneVar : sesVariables) {
-			ArrayList<Double> unVecteur=new ArrayList<Double>();
-			for (int j = 0; j < uneVar.getDimension(); j++) {
-				unVecteur.add(0.0);
-			}
-			lesValeurs.add(unVecteur);
-			i++;
-		}
+
+		ArrayList<ArrayList<Double>> lesValeurs=this.sesValeurs;
 		Solution res=new Solution(this.monProbleme, this.sesVariables, lesValeurs);
 		
 		Random randomise=new Random();
 		
+		boolean premier=true;
 		ArrayList<Double> unVecteur;
-		while(!res.estAdmissible()){
+		while(!res.estAdmissible()||premier){
+			premier=false;
+			// On prend les valeurs identique à la solution actuelle
+			lesValeurs=new ArrayList<ArrayList<Double>>(this.sesValeurs);
+			
 			// On modifie autant de variables que demandé
-			for (i = 0; i < nbrDeVariablesModifiees; i++) {
+			for (int i = 0; i < nbrDeVariablesModifiees; i++) {
 				int j=randomise.nextInt(sesVariables.size());
-				unVecteur = lesValeurs.get(j);
+				unVecteur = new ArrayList<Double>(lesValeurs.get(j));
 				int k=0;
 				for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
 					Double uneVal = (Double) iter.next();
