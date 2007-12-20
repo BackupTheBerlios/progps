@@ -10,10 +10,10 @@ public class VNS extends Algorithme {
 
 	public VNS(Probleme pb){
 		super(pb);
-		tailleVoisinage = 10;
+		this.tailleVoisinage = 10;
 		System.out.println("Recherche une solution Initale");
 		Aleatoire algoSolInit = new Aleatoire(pb);
-		solCourante=algoSolInit.resoudre();
+		this.solCourante=algoSolInit.resoudre();
 		System.out.println("Solution Initale trouvée");
 	}
 
@@ -26,9 +26,9 @@ public class VNS extends Algorithme {
 		ArrayList<Solution> voisins = new ArrayList<Solution>();
 		//Solution solCourante = maSolution;
 
-		while (distance < distanceMaxVoisinage) {
+		while (distance < this.distanceMaxVoisinage) {
 
-			voisins = solCourante.getSolutionsVoisines(tailleVoisinage, proportion);	
+			voisins = this.solCourante.getSolutionsVoisines(this.tailleVoisinage, proportion);	
 			// on calcule les solutions dans le voisinage de la solution courante
 			// --> 1/4 des variables de la solution varient selon une proportion
 			if(voisins==null || voisins.size()==0){
@@ -53,8 +53,8 @@ public class VNS extends Algorithme {
 				}
 			}
 
-			if (meilleurVoisin.getCout() < solCourante.getCout()) {
-				solCourante = meilleurVoisin;
+			if (meilleurVoisin.getCout() < this.solCourante.getCout()) {
+				this.solCourante = meilleurVoisin;
 			}
 			else {
 				distance++;
@@ -63,7 +63,7 @@ public class VNS extends Algorithme {
 
 		}
 
-		return solCourante;
+		return this.solCourante;
 
 	}
 

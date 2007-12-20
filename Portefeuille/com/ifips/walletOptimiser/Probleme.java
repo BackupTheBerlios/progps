@@ -1,7 +1,7 @@
 package com.ifips.walletOptimiser;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 
 public class Probleme {
@@ -9,87 +9,49 @@ public class Probleme {
 	private ArrayList<Contrainte> mesContraintes;
 	
 	public Probleme(Fonction fctObj){
-		fonctionObjective = fctObj;
-		mesContraintes = new ArrayList<Contrainte>();		
+		this.fonctionObjective = fctObj;
+		this.mesContraintes = new ArrayList<Contrainte>();		
 	}
 	
 	public void ajouterContrainte(Contrainte c) throws Exception{
-//		for (Iterator it = c.partieGauche.getLaVariable().getMesNomVariables().iterator(); it.hasNext();) {
-//			String el = (String) it.next();
-//			if(!fonctionObjective.getLaVariable().contains(el)){
-//				throw new Exception("Probleme " + el +
-//						" : Tentative d'ajout de contrainte ayant de variable incunnu du problème.");
-//			}
-//		}
-		mesContraintes.add(c);		
+		this.mesContraintes.add(c);		
 	}
 
 	public Fonction getFonctionObjective() {
-		return fonctionObjective;
+		return this.fonctionObjective;
 	}
 
 	public List<Contrainte> getMesContraintes() {
-		return mesContraintes;
+		return this.mesContraintes;
 	}
 	
 	public void afficherProbleme(){
 		System.out.println("Fonction objective : ");
-		fonctionObjective.afficher();
+		this.fonctionObjective.afficher();
 		System.out.println();
 		System.out.println("Sous les contraintes : ");
-		for (Iterator iter = mesContraintes.iterator(); iter.hasNext();) {
-			Contrainte element = (Contrainte) iter.next();
+		for (Object element0 : this.mesContraintes) {
+			Contrainte element = (Contrainte) element0;
 			element.afficher();
 			System.out.println();
 		}
 		System.out.println("Domaines de définitions : ");
-		System.out.print(fonctionObjective.getLaVariable().getNom() + " = ");
-		fonctionObjective.getLaVariable().getMonDomaine().afficher();
+		for (Variable uneVar : getToutesLesVariables()) {
+			System.out.print(uneVar.getNom()+" = ");
+			uneVar.getMonDomaine().afficher();
+		}
 	}
 	
-//	public Solution getSolutionInitiale() {
-//		// TODO ben tout...
-//		return new Solution(this);
-//	}
-
-//		public Solution getSolutionInitial() {
-//		int i = 0;
-//		Solution solutionRetour = new Solution(this);
-//		LinkedList<Double> valeur = new LinkedList<Double>();
-//		String variableAModifier;
-//		double valeurModifiante = 0;
-//		long debut,fin;
-//		int nbContrainteRealise;
-//		int nbtest = 0;
-//		for (Iterator iter = fonctionObjective.getLaVariable().getMesNomVariables().iterator(); iter.hasNext();) {
-//			String element = (String) iter.next();
-//			valeur.add(0.0);
-//		}
-//		try {
-//			solutionRetour.setSolution(valeur, fonctionObjective.getLaVariable());
-//			while(!solutionRetour.estAdmissible()){
-//				nbContrainteRealise = solutionRetour.getNbContrainteRespecter();
-//				variableAModifier = fonctionObjective.getLaVariable().getMesNomVariables().get(i);
-//				debut = System.currentTimeMillis();
-//				nbtest = 0;
-//				do{
-//					valeurModifiante += 0.00001;
-//					solutionRetour.modifierVariable(variableAModifier,i);
-//					nbtest++;
-//					fin = System.currentTimeMillis();
-//					//System.out.println((fin-debut));
-//				}while((fin-debut)<200 || nbContrainteRealise<solutionRetour.getNbContrainteRespecter());
-//				
-//				i++;
-//				valeurModifiante=0;
-//				System.out.println("nombre de test : " + nbtest);
-//				System.out.println("nb contrainte satisfaite " + nbContrainteRealise);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		// TODO Auto-generated method stub
-//		return solutionRetour;
-//	}
+	public ArrayList<Variable> getToutesLesVariables(){
+		HashSet<Variable> setVar=new HashSet<Variable>();
+		setVar.add(this.fonctionObjective.getLaVariable());
+		for (Contrainte uneContrainte : this.mesContraintes) {
+			setVar.add(uneContrainte.getPartieGauche().getLaVariable());
+			if(!(uneContrainte.getPartieDroite() instanceof FonctionConstante)){
+				setVar.add(uneContrainte.getPartieDroite().getLaVariable());
+			}
+		}
+		return new ArrayList<Variable>(setVar); 
+	}
 
 }

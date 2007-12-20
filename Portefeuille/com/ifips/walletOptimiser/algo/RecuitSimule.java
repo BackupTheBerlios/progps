@@ -20,32 +20,32 @@ public class RecuitSimule extends Algorithme {
 		if(!this.kirkPatrick())
 			System.err.println("Recuit Simulé : Impossible de déterminer la température initiale");
 		
-		Solution meilleureSol = solCourante;
+		Solution meilleureSol = this.solCourante;
 		Solution solutionCandidate;
-		double temperatureCourante=tempInitiale;
+		double temperatureCourante=this.tempInitiale;
 		Random rand=new Random();
 		
-		while(temperatureCourante>tempMini){
+		while(temperatureCourante>this.tempMini){
 			int i=0;
-			while(i<nbrIterationParPaliers){
+			while(i<this.nbrIterationParPaliers){
 				try {
-					solutionCandidate=solCourante.getSolutionVoisine(0.1);
+					solutionCandidate=this.solCourante.getSolutionVoisine(0.1);
 				} catch (Exception e) { e.printStackTrace(); return null;}
 				
 				// Si la nvelle solution est meilleure
-				if(solutionCandidate.getCout()<solCourante.getCout()){
-					solCourante=solutionCandidate;
-					if(solCourante.getCout()<meilleureSol.getCout())
-						meilleureSol=solCourante;
+				if(solutionCandidate.getCout()<this.solCourante.getCout()){
+					this.solCourante=solutionCandidate;
+					if(this.solCourante.getCout()<meilleureSol.getCout())
+						meilleureSol=this.solCourante;
 				}else{
 					// Teste si on conserve une solution moins bonne
-					double degradation=solutionCandidate.getCout()-solCourante.getCout();
+					double degradation=solutionCandidate.getCout()-this.solCourante.getCout();
 					if(rand.nextDouble()<=Math.exp(-degradation/temperatureCourante))
-						solCourante=solutionCandidate;
+						this.solCourante=solutionCandidate;
 				}
 				i++;
 			}
-			temperatureCourante=temperatureCourante*coeffDecroissance;
+			temperatureCourante=temperatureCourante*this.coeffDecroissance;
 //			System.out.println("Diminution de la température. T="+temperatureCourante);
 //			System.out.println("Cout de la sol : "+solCourante.getCout());
 		}
@@ -54,13 +54,13 @@ public class RecuitSimule extends Algorithme {
 
 	public boolean kirkPatrick(){
 		// Méthode de recherche de sol initiale par l'aléatoire
-		Algorithme algoSolInit = new Aleatoire(pbCourant);
+		Algorithme algoSolInit = new Aleatoire(this.pbCourant);
 		System.out.println("Méthode de KirkPatrick");
 		System.out.println("Recherche une solution Initale");
-		solCourante=algoSolInit.resoudre();
+		this.solCourante=algoSolInit.resoudre();
 		System.out.println("Solution Initale trouvée");
 		Random rand;
-		tempInitiale=0.1;
+		this.tempInitiale=0.1;
 		
 		double txAccept=0.0;
 		while(txAccept<0.8){
@@ -69,23 +69,23 @@ public class RecuitSimule extends Algorithme {
 			int mvtPositifsTotaux=1;
 			int mvtPositifsAcceptes=1;
 			
-			while(i<nbrIterationParPaliers){
+			while(i<this.nbrIterationParPaliers){
 				Solution solutionCandidate=null;
 				try {
-					solutionCandidate=solCourante.getSolutionVoisine(0.1);
+					solutionCandidate=this.solCourante.getSolutionVoisine(0.1);
 				} catch (Exception e) { e.printStackTrace(); return false; }
 				
 				// Teste si on conserve la solution
-				if(solutionCandidate!=null && solutionCandidate.getCout()<solCourante.getCout()){
+				if(solutionCandidate!=null && solutionCandidate.getCout()<this.solCourante.getCout()){
 					// Conserve la solution
-					solCourante=solutionCandidate;
+					this.solCourante=solutionCandidate;
 				}else{
 					// Test si on conserve
 					mvtPositifsTotaux++;
-					double degradation=solutionCandidate.getCout()-solCourante.getCout();
+					double degradation=solutionCandidate.getCout()-this.solCourante.getCout();
 					rand=new Random();
-					if(rand.nextDouble() <= Math.exp((-degradation)/tempInitiale)){
-						solCourante=solutionCandidate;
+					if(rand.nextDouble() <= Math.exp((-degradation)/this.tempInitiale)){
+						this.solCourante=solutionCandidate;
 						mvtPositifsAcceptes++;
 					}
 				}
@@ -93,9 +93,9 @@ public class RecuitSimule extends Algorithme {
 			}
 			txAccept=(double)mvtPositifsAcceptes/(double)mvtPositifsTotaux;
 			if(txAccept<0.8)
-				tempInitiale=tempInitiale*2;
+				this.tempInitiale=this.tempInitiale*2;
 		}
-		System.out.println("Température initiale : "+tempInitiale);
+		System.out.println("Température initiale : "+this.tempInitiale);
 		return true;
 	}
 	

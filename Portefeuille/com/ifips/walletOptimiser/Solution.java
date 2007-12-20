@@ -12,11 +12,11 @@ public class Solution{
 
 
 	public Solution(Probleme p) {
-		monProbleme = p;
+		this.monProbleme = p;
 	}
 	
 	public Solution(Probleme p,ArrayList<Variable> var, ArrayList<ArrayList<Double>> val) throws Exception {
-		monProbleme = p;
+		this.monProbleme = p;
 		if(var.size()!=val.size())
 			throw new Exception("Solution : impossible de créer une solution qui n'a pas les valeurs pour toutes les variables");
 
@@ -27,13 +27,13 @@ public class Solution{
 				throw new Exception("Solution : un vecteur de valeur n'a pas la même dimension que la variable");
 		}
 		
-		sesVariables=var;
-		sesValeurs=val;
+		this.sesVariables=var;
+		this.sesValeurs=val;
 	}
 	
 	
 	public int getNombreDeVariables(){
-		return sesValeurs.size();
+		return this.sesValeurs.size();
 	}
 	
 	public void setSolution(ArrayList<Variable> variables, ArrayList<ArrayList<Double>> valeurs) throws Exception {
@@ -48,27 +48,27 @@ public class Solution{
 				throw new Exception("Solution : La taille du vecteur de valeurs n'est pas la même que la dimension de la variable "+variables.get(i).getNom()+".");
 		}
 		
-		sesValeurs = valeurs;
-		sesVariables = variables;
+		this.sesValeurs = valeurs;
+		this.sesVariables = variables;
 	}
 
 	public boolean estAdmissible() throws Exception {
 		int i;
 		int j;
-		for (Contrainte uneContrainte : monProbleme.getMesContraintes()) {
-			i=sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
+		for (Contrainte uneContrainte : this.monProbleme.getMesContraintes()) {
+			i=this.sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
 			if(i==-1)
 				throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
 			if(uneContrainte.getPartieDroite() instanceof FonctionConstante){
 				// La partie droite ne contient pas de variable
-				if(!uneContrainte.estRespectee(sesValeurs.get(i),null))
+				if(!uneContrainte.estRespectee(this.sesValeurs.get(i),null))
 					return false;
 			}else{
 				// La partie droite contient une variable
-				j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
+				j=this.sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 				if(j==-1)
 					throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
-				if(!uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(j)))
+				if(!uneContrainte.estRespectee(this.sesValeurs.get(i),this.sesValeurs.get(j)))
 					return false;
 			}
 		}
@@ -77,9 +77,9 @@ public class Solution{
 
 	public void afficher() {
 		int i=0;
-		for (Variable uneVariable : sesVariables) {
+		for (Variable uneVariable : this.sesVariables) {
 			for (int j = 0; j < uneVariable.getDimension(); j++) {
-				System.out.println(uneVariable.getNom()+"["+j+"]="+sesValeurs.get(i).get(j));
+				System.out.println(uneVariable.getNom()+"["+j+"]="+this.sesValeurs.get(i).get(j));
 			}
 			i++;
 		}
@@ -88,8 +88,8 @@ public class Solution{
 	public double getCout() {
 		
 		// Recherche la variable utilisée pour la fct obj
-		Variable laVariable=monProbleme.getFonctionObjective().getLaVariable();
-		int i=sesVariables.indexOf(laVariable);
+		Variable laVariable=this.monProbleme.getFonctionObjective().getLaVariable();
+		int i=this.sesVariables.indexOf(laVariable);
 		// TODO tester si le indexOf a retourné qqch
 		if(i==-1)
 			return Double.MAX_VALUE;
@@ -97,7 +97,7 @@ public class Solution{
 		
 		// Demande la valeur de la fct obj selon le vecteur de valeur
 		try {
-			return monProbleme.getFonctionObjective().getValeur(sesValeurs.get(i));
+			return this.monProbleme.getFonctionObjective().getValeur(this.sesValeurs.get(i));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Double.MAX_VALUE;
@@ -108,20 +108,20 @@ public class Solution{
 		int cpt=0;
 		int i;
 		int j;
-		for (Contrainte uneContrainte : monProbleme.getMesContraintes()) {
-			i=sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
+		for (Contrainte uneContrainte : this.monProbleme.getMesContraintes()) {
+			i=this.sesVariables.indexOf(uneContrainte.getPartieGauche().getLaVariable());
 			if(i==-1)
 				throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieGauche().getLaVariable().getNom());
 			if(uneContrainte.getPartieDroite() instanceof FonctionConstante){
 				// La partie droite ne contient pas de variable
-				if(uneContrainte.estRespectee(sesValeurs.get(i),null))
+				if(uneContrainte.estRespectee(this.sesValeurs.get(i),null))
 					cpt++;
 			}else{
 				// La partie droite contient une variable
-				j=sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
+				j=this.sesVariables.indexOf(uneContrainte.getPartieDroite().getLaVariable());
 				if(j==-1)
 					throw new Exception("Solution : Variable de la contrainte non trouvée dans les variables de la solution : "+uneContrainte.getPartieDroite().getLaVariable().getNom());
-				if(uneContrainte.estRespectee(sesValeurs.get(i),sesValeurs.get(j)))
+				if(uneContrainte.estRespectee(this.sesValeurs.get(i),this.sesValeurs.get(j)))
 					cpt++;
 			}
 		}
@@ -129,10 +129,10 @@ public class Solution{
 	}
 
 	public ArrayList<Double> getValeursDeVariable(Variable v) throws Exception {
-		int i=sesVariables.indexOf(v);
+		int i=this.sesVariables.indexOf(v);
 		if(i==-1)
 			throw new Exception("Solution : La variable demandée est inconnue de la solution.");
-		return sesValeurs.get(i);
+		return this.sesValeurs.get(i);
 	}
 
 	public Solution getSolutionVoisine(double variationMax) throws Exception{
@@ -149,13 +149,13 @@ public class Solution{
 			
 			// On modifie autant de variables que demandé
 			for (int i = 0; i < nbrDeVariablesModifiees; i++) {
-				int j=randomise.nextInt(sesVariables.size());
+				int j=randomise.nextInt(this.sesVariables.size());
 				unVecteur = new ArrayList<Double>(lesValeurs.get(j));
 				int k=0;
-				for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
-					Double uneVal = (Double) iter.next();
+				for (Object element : unVecteur) {
+					Double uneVal = (Double) element;
 //					uneVal=uneVal+(randomise.nextDouble()*variationMax)-(randomise.nextDouble()*variationMax);
-					uneVal = sesVariables.get(j).getMonDomaine().getValeurAleatoire(uneVal, variationMax);
+					uneVal = this.sesVariables.get(j).getMonDomaine().getValeurAleatoire(uneVal, variationMax);
 					unVecteur.set(k, uneVal);
 					k++;
 				}
@@ -169,7 +169,7 @@ public class Solution{
 	public double getDistanceAvec(Solution s){
 		double distance=0.0;
 		int i=0;
-		for (ArrayList<Double> unVecteurDeLaSol : sesValeurs) {
+		for (ArrayList<Double> unVecteurDeLaSol : this.sesValeurs) {
 			ArrayList<Double> unVecteurCorrespondant=s.sesValeurs.get(i);
 			int j=0;
 			for (Double uneValeur : unVecteurDeLaSol) {
@@ -191,59 +191,5 @@ public class Solution{
 			}
 		}
 		return result;
-	}
-
-	public ArrayList<Solution> calculerVoisinage(double proportion) throws Exception {
-		ArrayList<ArrayList<Double>> lesValeurs = new ArrayList<ArrayList<Double>>();
-		ArrayList<Solution> lesSolutionsVoisines = new ArrayList<Solution>();
-		int z = 0;
-		int maxVoisinage = 6;
-		while (z < maxVoisinage) {
-			int i=0;
-			for (Variable uneVar : sesVariables) {
-				ArrayList<Double> unVecteur=new ArrayList<Double>();
-				for (int j = 0; j < uneVar.getDimension(); j++) {
-					unVecteur.add(0.0);
-				}
-				lesValeurs.add(unVecteur);
-				i++;
-			}
-			Solution res=new Solution(this.monProbleme, this.sesVariables, lesValeurs);
-			
-			Random randomise=new Random();
-			
-			ArrayList<Double> unVecteur;
-			while(!res.estAdmissible()){
-				// On modifie 1/4 des variables
-				for (i = 0; i < sesVariables.size()/4; i++) {
-					int j=randomise.nextInt(sesVariables.size());
-					unVecteur = lesValeurs.get(j);
-					int k=0;
-					for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
-						Double uneVal = (Double) iter.next();
-//						uneVal=uneVal+(randomise.nextDouble()*proportion)-(randomise.nextDouble()*proportion);
-						uneVal = sesVariables.get(j).getMonDomaine().getValeurAleatoire(uneVal, proportion);
-						unVecteur.set(k, uneVal);
-						k++;
-					}
-					lesValeurs.set(j, unVecteur);
-				}
-				res.setSolution(this.sesVariables, lesValeurs);
-			}
-			lesSolutionsVoisines.add(res);
-			z++;
-		}
-		return lesSolutionsVoisines;
-	}
-	
-	
-	public double temp(){
-		Double res=0.0;
-		for (ArrayList<Double> unVecteur : sesValeurs) {
-			for (Double double1 : unVecteur) {
-				res+=double1;
-			}
-		}
-		return res;
 	}
 }

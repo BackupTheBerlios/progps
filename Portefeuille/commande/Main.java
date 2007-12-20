@@ -75,7 +75,7 @@ public class Main {
 //		 Contrainte 1c
 		try {
 			f1=new Fonction(variableY, identite);
-			a1=new ContrainteEgale(f1, new FonctionConstante(1.0));
+			a1=new ContrainteEgale(f1, new FonctionConstante(2.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
