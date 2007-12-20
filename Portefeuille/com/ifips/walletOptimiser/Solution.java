@@ -251,6 +251,21 @@ public class Solution {
 		return res;
 	}
 	
+	public double getDistanceAvec(Solution s){
+		double distance=0.0;
+		int i=0;
+		for (ArrayList<Double> unVecteurDeLaSol : sesValeurs) {
+			ArrayList<Double> unVecteurCorrespondant=s.sesValeurs.get(i);
+			int j=0;
+			for (Double uneValeur : unVecteurDeLaSol) {
+				distance+=Math.abs(uneValeur-unVecteurCorrespondant.get(j));
+				j++;
+			}
+			i++;
+		}
+		return distance;
+	}
+	
 	public double temp(){
 		Double res=0.0;
 		for (ArrayList<Double> unVecteur : sesValeurs) {
