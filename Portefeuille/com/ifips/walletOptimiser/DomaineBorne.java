@@ -28,4 +28,12 @@ public class DomaineBorne extends Domaine {
 		return valeurRetour;
 	}
 
+	public double getBorneSup() {
+		return borneSup;
+	}
+
+	public double getBorneInf() {
+		return borneInf;
+	}
+
 }
