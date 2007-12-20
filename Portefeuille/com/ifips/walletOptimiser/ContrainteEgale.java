@@ -18,7 +18,11 @@ public class ContrainteEgale extends Contrainte {
 	@Override
 	public boolean estRespectee(ArrayList<Double> vecteurVarGauche, ArrayList<Double> vecteurVarDroite) {
 		try {
-			return partieGauche.getValeur(vecteurVarGauche)==partieDroite.getValeur(vecteurVarDroite);
+			// Egalité exacte
+			//return partieGauche.getValeur(vecteurVarGauche)==partieDroite.getValeur(vecteurVarDroite);
+			// Egalité à 1% de marge
+			return (partieGauche.getValeur(vecteurVarGauche)<=partieDroite.getValeur(vecteurVarDroite)*1.01
+					&& partieGauche.getValeur(vecteurVarGauche)>=partieDroite.getValeur(vecteurVarDroite)*0.99);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
