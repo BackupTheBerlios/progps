@@ -1,9 +1,8 @@
 package com.ifips.walletOptimiser;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
 
 public class Probleme {
 	private Fonction fonctionObjective;
@@ -11,7 +10,7 @@ public class Probleme {
 	
 	public Probleme(Fonction fctObj){
 		fonctionObjective = fctObj;
-		mesContraintes = new Vector<Contrainte>();		
+		mesContraintes = new ArrayList<Contrainte>();		
 	}
 	
 	public void ajouterContrainte(Contrainte c) throws Exception{
