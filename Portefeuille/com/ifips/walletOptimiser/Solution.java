@@ -31,7 +31,10 @@ public class Solution {
 		sesValeurs=val;
 	}
 	
-
+	public int getNombreDeVariables(){
+		return sesValeurs.size();
+	}
+	
 	public void setSolution(ArrayList<Variable> variables, ArrayList<ArrayList<Double>> valeurs) throws Exception {
 		// Vérification sur le nbr de vecteurs de valeurs et le nbr de variables
 		if(variables.size()!=valeurs.size())
@@ -125,17 +128,22 @@ public class Solution {
 		
 	}
 
-	public double getCout() throws Exception {
+	public double getCout() {
 		
 		// Recherche la variable utilisée pour la fct obj
 		Variable laVariable=monProbleme.getFonctionObjective().getLaVariable();
 		int i=sesVariables.indexOf(laVariable);
 		// TODO tester si le indexOf a retourné qqch
-		if(i!=i)
-			throw new Exception("Solution : La variable de la fonction objectif n'a pas été trouvée dans la liste des variables de la solution");
+		if(i!=-1)
+			return Double.MAX_VALUE;
 		
 		// Demande la valeur de la fct obj selon le vecteur de valeur
-		return monProbleme.getFonctionObjective().getValeur(sesValeurs.get(i));
+		try {
+			return monProbleme.getFonctionObjective().getValeur(sesValeurs.get(i));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Double.MAX_VALUE;
+		}
 		
 		
 //		int i=0;
