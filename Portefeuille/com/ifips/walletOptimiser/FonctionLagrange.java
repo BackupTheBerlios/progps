@@ -2,13 +2,15 @@ package com.ifips.walletOptimiser;
 
 import java.util.List;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 public class FonctionLagrange extends Fonction {
 	
 	private Contrainte contrainteRelaxe;
 
 	public FonctionLagrange(Variable v, List<Double> cst, Contrainte cr) throws Exception {
 		super(v,cst);
-		this.contrainteRelaxe=cr;
+		contrainteRelaxe=cr;
 	}
 	
 	
@@ -22,8 +24,13 @@ public class FonctionLagrange extends Fonction {
 			res+=uneValeur*mesPoids.get(i);
 			i++;
 		}
-		res+=this.contrainteRelaxe.partieGauche.getValeur(valeurs);
-		res-=this.contrainteRelaxe.partieDroite;
+		res+=contrainteRelaxe.partieGauche.getValeur(valeurs);
+		if (contrainteRelaxe instanceof ContrainteInferieur)
+			res-=contrainteRelaxe.partieDroite;
+		else if (contrainteRelaxe instanceof ContrainteSuperieur)
+			res+=contrainteRelaxe.partieDroite;
+		else
+			throw new Exception("FonctionLagrange : Impossible de relaxer une contrainte d'égalité.");
 		return res;
 	}
 	
