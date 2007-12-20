@@ -27,6 +27,8 @@ public class Lagrange extends Algorithme {
 		 *end loop 
 		 *retourne solCourante ;
 	*/
+	
+	
 	private Solution solDuale;
 	private FonctionLagrange fctLagrangienne;
 	private Probleme dual;
@@ -43,7 +45,7 @@ public class Lagrange extends Algorithme {
 	
 	
 	public Solution resoudre() {
-		double lambda=0.0;
+		Variable lambda = new Variable("lambda", 1);
 		double z=0.0;
 		try {
 			Aleatoire ale=new Aleatoire(sousPb);
@@ -52,7 +54,7 @@ public class Lagrange extends Algorithme {
 			initialiserDual();
 			solDuale=new Solution(dual);
 			while (solCourante.getCout()!=solDuale.getCout()) {
-				ajouterContrainteDual(solCourante);
+				ajouterContrainteDual(solCourante, lambda);
 				ale.setPbCourant(dual);
 				solDuale=ale.resoudre();
 			}
@@ -60,21 +62,25 @@ public class Lagrange extends Algorithme {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return solCourante;
 	}
 	
 	private void initialiserDual() {
+		Variable varW = new Variable("w",1);
 		List<Double>l = new ArrayList<Double>();
 		l.add(0.0);
 		try {
-			dual=new Probleme(new Fonction(new Variable("w",1), l));
+			dual=new Probleme(new Fonction(varW, l));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private void ajouterContrainteDual(Solution s) {
+	private void ajouterContrainteDual(Solution s, Variable lambda) {
+	//	Fonction fg = dual.getFonctionObjective();
+	//	Fonction fd = new FonctionConstante(lambda);
+		//Contrainte c = new Contrainte()
 		// TODO la méthode...
 	}
 	
