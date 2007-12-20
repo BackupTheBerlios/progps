@@ -2,7 +2,6 @@ package com.ifips.walletOptimiser;
 
 import java.util.List;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
 
 public class FonctionLagrange extends Fonction {
 	
