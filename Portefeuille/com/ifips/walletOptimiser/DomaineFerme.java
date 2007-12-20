@@ -1,5 +1,6 @@
 package com.ifips.walletOptimiser;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +20,17 @@ public class DomaineFerme extends Domaine {
 	public double getValeurAleatoire(double valeurInit, double variationMax) {
 		Random randomise=new Random();
 		return elements.get(randomise.nextInt(elements.size()));
+	}
+
+	@Override
+	public void afficher() {
+		System.out.print("{");
+		for (Iterator iter = elements.iterator(); iter.hasNext();) {
+			Double element = (Double) iter.next();
+			System.out.println(element);
+			System.out.print(" ");
+		}
+		System.out.print("}");
 	}
 
 }

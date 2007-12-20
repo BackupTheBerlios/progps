@@ -42,6 +42,9 @@ public class Probleme {
 			element.afficher();
 			System.out.println();
 		}
+		System.out.println("Domaines de définitions : ");
+		System.out.print(fonctionObjective.getLaVariable().getNom() + " = ");
+		fonctionObjective.getLaVariable().getMonDomaine().afficher();
 	}
 	
 //	public Solution getSolutionInitiale() {

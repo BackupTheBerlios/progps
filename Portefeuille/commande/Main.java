@@ -120,7 +120,7 @@ public class Main {
 		
 		Aleatoire algoAleat=new Aleatoire(leProb);
 //		
-		Solution solInitiale=algoAleat.resoudre();
+//		Solution solInitiale=algoAleat.resoudre();
 //		if(solInitiale!=null)
 //			solInitiale.afficher();
 //		System.out.println("fini");

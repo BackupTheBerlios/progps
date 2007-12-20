@@ -28,4 +28,9 @@ public class DomainePositif extends Domaine {
 		}while(!estDansDomaine(valeurRetour));
 		return valeurRetour;
 	}
+
+	@Override
+	public void afficher() {
+		System.out.println("Réel positif.");	
+	}
 }
