@@ -2,6 +2,7 @@ package commande;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.ifips.walletOptimiser.Contrainte;
@@ -63,47 +64,51 @@ public class Main {
 		
 //		 Contrainte 1b
 		ArrayList<Double> mu=new ArrayList<Double>();
-		mu.add(20.0);
-		mu.add(21.0);
+		mu.add(1.0);
+		mu.add(1.0);
 		try {
 			f1=new Fonction(variableX, mu);
-			a1=new ContrainteSuperieur(f1, new FonctionConstante(0.0));
+			a1=new ContrainteEgale(f1, new FonctionConstante(1.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
 //		 Contrainte 1c
 		try {
 			f1=new Fonction(variableY, identite);
-			a1=new ContrainteSuperieur(f1, new FonctionConstante(0.0));
+			a1=new ContrainteSuperieur(f1, new FonctionConstante(1.0));
 			leProb.ajouterContrainte(a1);
 		} catch (Exception e) { e.printStackTrace(); }
 		
 		//Contrainte 1d
 		
 		ArrayList<Double> epsilon=new ArrayList<Double>();
-		epsilon.add(0.1);
-		epsilon.add(0.1);
-		
+		ArrayList<Double>delta=new ArrayList<Double>();
 		ArrayList<Double> constante=new ArrayList<Double>();
-		constante.add(1.0);
-		constante.add(1.0);
-		try{
-			f1 = new Fonction(variableY,epsilon);
-			f2 = new Fonction(variableX, constante);
-			a1 = new ContrainteInferieur(f1,f2);
-			leProb.ajouterContrainte(a1);
-		}catch(Exception e) { e.printStackTrace(); }
 		
-		ArrayList<Double> delta=new ArrayList<Double>();
-		delta.add(0.9);
-		delta.add(0.9);
+
 		
-		try{
-			f1 = new Fonction(variableY,delta);
-			f2 = new Fonction(variableX, constante);
-			a1 = new ContrainteInferieur(f2,f1);
-			leProb.ajouterContrainte(a1);
-		}catch(Exception e) { e.printStackTrace(); }
+		for(int i = 0; i<variableX.getDimension(); i++){
+			epsilon=new ArrayList<Double>();
+			delta=new ArrayList<Double>();
+			constante=new ArrayList<Double>();
+			for(int j = 0; j<variableX.getDimension(); j++){
+				epsilon.add(0.0);
+				delta.add(0.0);
+				constante.add(0.0);
+			}
+			epsilon.set(i, 0.1);
+			constante.set(i, 1.0);
+			delta.set(i,0.9);
+			try{
+				f1 = new Fonction(variableY,epsilon);
+				f2 = new Fonction(variableX, constante);
+				a1 = new ContrainteInferieur(f1,f2);
+				leProb.ajouterContrainte(a1);
+				f1 = new Fonction(variableY,delta);
+				a1 = new ContrainteInferieur(f2,f1);
+				leProb.ajouterContrainte(a1);
+			}catch(Exception e) { e.printStackTrace(); }
+		}
 		
 		
 		
@@ -114,12 +119,12 @@ public class Main {
 		
 		
 		Aleatoire algoAleat=new Aleatoire(leProb);
-		
+//		
 		Solution solInitiale=algoAleat.resoudre();
-		if(solInitiale!=null)
-			solInitiale.afficher();
-		System.out.println("fini");
-		
+//		if(solInitiale!=null)
+//			solInitiale.afficher();
+//		System.out.println("fini");
+//		
 		return null;
 	}
 	

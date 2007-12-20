@@ -68,6 +68,7 @@ public class Aleatoire extends Algorithme {
 					lesValeurs.set(j, unVecteur);
 				}
 				solCourante.setSolution(sesVariables, lesValeurs);
+				
 			}
 		}
 		catch(Exception e){ System.err.println(e.getMessage());;}
