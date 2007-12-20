@@ -5,10 +5,18 @@ public class Variable{
 //	private static HashSet<String> toutesLesVariables = new HashSet<String>();
 	private String nom;
 	private int dimension;
+	private Domaine monDomaine;
 	
 	public Variable(String name, int dim){
 		nom=name;
 		dimension=dim;
+		monDomaine = DomainePositif.getInstance();
+	}
+	
+	public Variable(String name, int dim, Domaine dom){
+		nom=name;
+		dimension=dim;
+		monDomaine = dom;
 	}
 	
 	public int getDimension(){
@@ -17,6 +25,14 @@ public class Variable{
 	
 	public String getNom() {
 		return nom;
+	}
+
+	public Domaine getMonDomaine() {
+		return monDomaine;
+	}
+	
+	public double getValeurAleatoire(double valeurInit, double variationMax) {
+		return monDomaine.getValeurAleatoire(valeurInit, variationMax);
 	}
 	
 //	public void addVariableProbleme(String s){

@@ -2,11 +2,14 @@ package commande;
 
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ifips.walletOptimiser.Contrainte;
 import com.ifips.walletOptimiser.ContrainteEgale;
 import com.ifips.walletOptimiser.ContrainteInferieur;
 import com.ifips.walletOptimiser.ContrainteSuperieur;
+import com.ifips.walletOptimiser.Domaine;
+import com.ifips.walletOptimiser.DomaineFermer;
 import com.ifips.walletOptimiser.Fonction;
 import com.ifips.walletOptimiser.FonctionConstante;
 import com.ifips.walletOptimiser.FonctionQuadratique;
@@ -22,6 +25,7 @@ public class Main {
 		Fonction f1;
 		Fonction f2;
 		Contrainte a1;
+		Domaine domaineY;
 		
 		// Déclaration des variables
 		Variable variableX=new Variable("x", 2);

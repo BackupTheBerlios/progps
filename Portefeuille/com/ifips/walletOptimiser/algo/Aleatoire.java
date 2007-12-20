@@ -59,7 +59,9 @@ public class Aleatoire extends Algorithme {
 					int k=0;
 					for (Iterator iter = unVecteur.iterator(); iter.hasNext();) {
 						Double uneVal = (Double) iter.next();
-						uneVal=uneVal+(randomise.nextDouble()*variationMax)-(randomise.nextDouble()*variationMax);
+						//System.out.println(uneVal);
+						uneVal = sesVariables.get(j).getMonDomaine().getValeurAleatoire(uneVal, variationMax);
+						//uneVal=uneVal+(randomise.nextDouble()*variationMax)-(randomise.nextDouble()*variationMax);
 						unVecteur.set(k, uneVal);
 						k++;
 					}
