@@ -20,15 +20,15 @@ public class RecuitSimule extends Algorithme {
 	public Solution resoudre() {
 		if(tempAuto)
 			if(!this.kirkPatrick())
-				System.err.println("Recuit Simulé : Impossible de déterminer la température initiale");
+				fenetreDeSortie.ajouterTexteJournal("Recuit Simulé : Impossible de déterminer la température initiale");
 		
 		Solution meilleureSol = this.solCourante;
 		if(meilleureSol==null){
 			Algorithme algoSolInit = new Aleatoire(this.pbCourant);
 			algoSolInit.setFenetreDeSortie(this.fenetreDeSortie);
-			System.out.println("Recherche une solution Initale");
+			fenetreDeSortie.ajouterTexteJournal("Recherche une solution Initale");
 			this.solCourante=algoSolInit.resoudre();
-			System.out.println("Solution Initale trouvée");
+			fenetreDeSortie.ajouterTexteJournal("Solution Initale trouvée");
 		}
 		
 		Solution solutionCandidate;
@@ -56,8 +56,6 @@ public class RecuitSimule extends Algorithme {
 				i++;
 			}
 			temperatureCourante=temperatureCourante*this.coeffDecroissance;
-//			System.out.println("Diminution de la température. T="+temperatureCourante);
-//			System.out.println("Cout de la sol : "+solCourante.getCout());
 		}
 		return meilleureSol;
 	}
@@ -66,10 +64,10 @@ public class RecuitSimule extends Algorithme {
 		// Méthode de recherche de sol initiale par l'aléatoire
 		Algorithme algoSolInit = new Aleatoire(this.pbCourant);
 		algoSolInit.setFenetreDeSortie(this.fenetreDeSortie);
-		System.out.println("Méthode de KirkPatrick");
-		System.out.println("Recherche une solution Initale");
+		fenetreDeSortie.ajouterTexteJournal("Méthode de KirkPatrick");
+		fenetreDeSortie.ajouterTexteJournal("Recherche une solution Initale");
 		this.solCourante=algoSolInit.resoudre();
-		System.out.println("Solution Initale trouvée");
+		fenetreDeSortie.ajouterTexteJournal("Solution Initale trouvée");
 		Random rand;
 		this.tempInitiale=0.1;
 		
@@ -106,7 +104,7 @@ public class RecuitSimule extends Algorithme {
 			if(txAccept<0.8)
 				this.tempInitiale=this.tempInitiale*2;
 		}
-		System.out.println("Température initiale : "+this.tempInitiale);
+		fenetreDeSortie.ajouterTexteJournal("Température initiale selon KirkPatrick : "+this.tempInitiale);
 		return true;
 	}
 

@@ -19,11 +19,11 @@ public class VNS extends Algorithme {
 	}
 
 	public Solution resoudre() {
-		System.out.println("Recherche une solution Initale");
+		fenetreDeSortie.ajouterTexteJournal("Recherche une solution Initale");
 		Aleatoire algoSolInit = new Aleatoire(this.pbCourant);
 		algoSolInit.setFenetreDeSortie(this.fenetreDeSortie);
 		this.solCourante=algoSolInit.resoudre();
-		System.out.println("Solution Initale trouvée");
+		fenetreDeSortie.ajouterTexteJournal("Solution Initale trouvée");
 		
 		int distance = 1;
 		int i = 0;
@@ -38,7 +38,7 @@ public class VNS extends Algorithme {
 			// on calcule les solutions dans le voisinage de la solution courante
 			// --> 1/4 des variables de la solution varient selon une proportion
 			if(voisins==null || voisins.size()==0){
-				System.err.println("Impossible de créer le voisinage.");
+				fenetreDeSortie.ajouterTexteJournal("Impossible de créer le voisinage.");
 				return null;
 			}
 			meilleurVoisin = voisins.get(0);
@@ -75,6 +75,10 @@ public class VNS extends Algorithme {
 
 	public void setDistanceMaxVoisinage(int distanceMaxVoisinage) {
 		this.distanceMaxVoisinage = distanceMaxVoisinage;
+	}
+
+	public void setProportionMaxVariation(int proportionMaxVariation) {
+		this.proportionMaxVariation = proportionMaxVariation;
 	}
 
 

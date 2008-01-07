@@ -32,6 +32,16 @@ public class Fonction {
 		}	
 	}
 	
+	public String toString(){
+		String ret=new String();
+		int i=0;
+		for (Double poids : mesPoids) {
+			ret=ret.concat("+ "+poids+"*"+laVariable.getNom()+"["+i+"] ");
+			i++;
+		}	
+		return ret;
+	}
+	
 	double getValeur(List<Double> valeurs) throws Exception{
 		if(valeurs.size()!=laVariable.getDimension())
 			throw new Exception("Le vecteur de valeur n'a pas la même dimension que le vecteur variable");
