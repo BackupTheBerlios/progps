@@ -10,7 +10,7 @@ public class FonctionQuadratique extends Fonction {
 	public FonctionQuadratique(Variable v1, Variable v2, ArrayList<Double> cst) throws Exception {
 		if(v1.getDimension()!=v2.getDimension())
 			throw new Exception("Fonction Quadratique : Les deux variables n'ont pas la même dimension");
-		if((v1.getDimension()+v2.getDimension())!=cst.size())
+		if((v1.getDimension()*v2.getDimension())!=cst.size())
 			throw new Exception("Fonction Quadratique : La matrice de poids n'a pas la dimension voulue.");
 		laVariable=v1;
 		laVariable2=v2;

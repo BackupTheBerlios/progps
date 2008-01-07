@@ -15,16 +15,24 @@ import com.ifips.walletOptimiser.Fonction;
 import com.ifips.walletOptimiser.FonctionConstante;
 import com.ifips.walletOptimiser.FonctionQuadratique;
 import com.ifips.walletOptimiser.Probleme;
+import com.ifips.walletOptimiser.ProblemeDeterministe;
 import com.ifips.walletOptimiser.Solution;
 import com.ifips.walletOptimiser.Variable;
 import com.ifips.walletOptimiser.algo.Aleatoire;
+import com.ifips.walletOptimiser.algo.Lagrange;
+import com.ifips.walletOptimiser.algo.MonCPLEX;
 import com.ifips.walletOptimiser.algo.RecuitSimule;
 import com.ifips.walletOptimiser.algo.VNS;
 import com.ifips.walletOptimiser.fenetrePrincipale.FenetreIHM;
+import com.ifips.walletOptimiser.outils.ChargeurFichier;
 
 public class Main {
 	
 	private static FenetreIHM fen = new FenetreIHM();
+	private static RecuitSimule algoRecuit = null;
+	private static VNS algoVNS = null;
+	private static Lagrange algoLagr = null;
+	private static MonCPLEX algoCPLEX = null;
 
 	private static Probleme genererProbleme1(){
 		Probleme leProb;
@@ -84,7 +92,7 @@ public class Main {
 		
 		//Contrainte 1d		
 		ArrayList<Double> epsilon=new ArrayList<Double>();
-		ArrayList<Double>delta=new ArrayList<Double>();
+		ArrayList<Double> delta=new ArrayList<Double>();
 		ArrayList<Double> constante=new ArrayList<Double>();
 		
 		for(int i = 0; i<variableX.getDimension(); i++){
@@ -153,80 +161,23 @@ public class Main {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
+		ChargeurFichier reader = new ChargeurFichier("fichiers/DAX.txt");
+		ProblemeDeterministe pbDet = new ProblemeDeterministe(reader.getNbrTitres());
+		// Création des objets de résolution
+		algoRecuit=new RecuitSimule(pbDet.getLeProbleme());
+		fen.setRecuit(algoRecuit);
 		
-		System.out.println("Notre PB :");
+		algoVNS=new VNS(pbDet.getLeProbleme());
+		fen.setVNS(algoVNS);
+
+//		algoLagr=new Lagrange(pbDet.getLeProbleme(),pbDet.getContrainteRelaxee());
+//		fen.setLagrange(algoLagr);
 		
-		genererProbleme1();
+//		algoCPLEX=new MonCPLEX(pbDet.getLeProbleme());
+//		fen.setCPLEX(algoCPLEX);
+		
+		//genererProbleme1();
 		
 		fen.setVisible(true);
-		
-//		constante.add(1);
-//		constante.add(2);
-//		constante.add(3);
-//		constante.add(2);
-//		constante.add(4);
-//		constante.add(1);
-//		
-//		variable.add("x1");
-//		variable.add("x2");
-//		variable.add("x3");
-//		variable.add("x4");
-//		variable.add("x5");
-//		variable.add("x6");
-//		
-//		fonctionObjective = new Fonction(variable, constante);
-//		monProbleme = new Probleme(fonctionObjective);
-//		
-//		constante = new Constante();
-//		variable = new Variable();
-//		constante.add(1);
-//		constante.add(4);
-//		constante.add(3);
-//
-//		variable.add("x1");
-//		variable.add("x2");
-//		variable.add("x6");
-//		
-//		f1 = new Fonction(variable, constante);
-//		
-//		c1 = new ContrainteInferieur(f1, 0);
-//		
-//		monProbleme.ajouterContrainte(c1);
-//		c1 = new ContrainteInferieur(f1, 30);
-//		
-//		monProbleme.ajouterContrainte(c1);
-//		uneSolution = new Solution(monProbleme);
-//		
-//		
-//		variable = new Variable();
-//		valeur.add(0.0);
-//		valeur.add(1.0);
-//		valeur.add(1.0);
-//		valeur.add(1.0);
-//		valeur.add(1.0);
-//		valeur.add(1.0);
-//		
-//		variable.add("x2");
-//		variable.add("x1");
-//		variable.add("x3");
-//		variable.add("x4");
-//		variable.add("x5");
-//		variable.add("x6");
-//		
-//		monProbleme.afficherProbleme();
-//		
-//		uneSolution.setSolution(valeur,variable);
-//		//monProbleme.getFonctionObjective().ajouterVariable("x7",9);
-//		
-//		System.out.println("Solution :");
-//		uneSolution.afficher();
-//		if(uneSolution.estAdmissible()){
-//			System.out.println("Cette solution est admissible.");
-//			int cout = uneSolution.getCout();
-//			System.out.println("Cout de cette solution : " + cout);
-//		}else 
-//			System.out.println("Cette solution n'est pas admissible.");
-//		//uneSolution = monProbleme.getSolutionInitial();
-		}
-
+	}
 }

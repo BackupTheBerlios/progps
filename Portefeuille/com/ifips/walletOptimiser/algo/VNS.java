@@ -11,13 +11,18 @@ public class VNS extends Algorithme {
 	public VNS(Probleme pb){
 		super(pb);
 		this.tailleVoisinage = 10;
-		System.out.println("Recherche une solution Initale");
-		Aleatoire algoSolInit = new Aleatoire(pb);
-		this.solCourante=algoSolInit.resoudre();
-		System.out.println("Solution Initale trouvée");
+//		System.out.println("Recherche une solution Initale");
+//		Aleatoire algoSolInit = new Aleatoire(pb);
+//		this.solCourante=algoSolInit.resoudre();
+//		System.out.println("Solution Initale trouvée");
 	}
 
 	public Solution resoudre() {
+		System.out.println("Recherche une solution Initale");
+		Aleatoire algoSolInit = new Aleatoire(this.pbCourant);
+		this.solCourante=algoSolInit.resoudre();
+		System.out.println("Solution Initale trouvée");
+		
 		int distance = 1;
 		double proportion = distance*0.1;
 		int i = 0;

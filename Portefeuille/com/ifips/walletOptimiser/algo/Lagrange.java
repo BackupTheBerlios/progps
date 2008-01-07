@@ -37,7 +37,7 @@ public class Lagrange extends Algorithme {
 	
 	
 	
-	private Lagrange(Probleme pbCourant, Contrainte contrainteRelaxe) throws Exception {
+	public Lagrange(Probleme pbCourant, Contrainte contrainteRelaxe) throws Exception {
 		super(pbCourant);
 		this.sousPb=pbCourant;
 		this.fctLagrangienne=new FonctionLagrange(pbCourant.getFonctionObjective().getLaVariable(), pbCourant.getFonctionObjective().getMesPoids(), contrainteRelaxe);
