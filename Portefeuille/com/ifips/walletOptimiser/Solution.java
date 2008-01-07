@@ -84,6 +84,21 @@ public class Solution{
 			i++;
 		}
 	}
+	
+	public String toString() {
+		afficher();
+		String ret="";
+		int i=0;
+		for (Variable uneVariable : this.sesVariables) {
+			for (int j = 0; j < uneVariable.getDimension(); j++) {
+				ret=ret+(uneVariable.getNom()+"["+j+"]="+this.sesValeurs.get(i).get(j)+"\n");
+			}
+			i++;
+		}
+		if(ret.length()>1)
+			return ret.substring(1);
+		return new String("Erreur : solution illisible");
+	}
 
 	public double getCout() {
 		

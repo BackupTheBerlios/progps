@@ -34,4 +34,7 @@ public abstract class Algorithme {
 		this.fenetreDeSortie = fenetreDeSortie;
 	}
 
+	protected void ecrireSolution(){
+		fenetreDeSortie.ajouterTexteSolution(solCourante.toString());
+	}
 }

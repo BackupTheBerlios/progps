@@ -56,8 +56,12 @@ public class RecuitSimule extends Algorithme {
 				i++;
 			}
 			temperatureCourante=temperatureCourante*this.coeffDecroissance;
+			fenetreDeSortie.ajouterTexteJournal("Diminution de la température à : "+temperatureCourante);
+			fenetreDeSortie.ajouterTexteJournal("Meilleure solution actuelle : "+meilleureSol.getCout());
 		}
-		return meilleureSol;
+		solCourante=meilleureSol;
+		ecrireSolution();
+		return solCourante;
 	}
 
 	public boolean kirkPatrick(){

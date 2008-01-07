@@ -64,13 +64,14 @@ public class VNS extends Algorithme {
 			}
 			else {
 				distance++;
+				fenetreDeSortie.ajouterTexteJournal("Augmentation du voisinage à : "+distance);
+				fenetreDeSortie.ajouterTexteJournal("Meilleure solution actuelle : "+solCourante.getCout());
 //				proportionMaxVariation = distance*0.1;	// le voisinage augmente avec la proportion de variation
 			}
 
 		}
-
+		ecrireSolution();
 		return this.solCourante;
-
 	}
 
 	public void setDistanceMaxVoisinage(int distanceMaxVoisinage) {

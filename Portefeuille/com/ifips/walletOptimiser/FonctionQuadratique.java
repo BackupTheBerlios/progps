@@ -35,7 +35,7 @@ public class FonctionQuadratique extends Fonction {
 	}
 	
 	public String toString() {
-		String ret=new String();
+		String ret="";
 		int i=0;
 		int j=0;
 		for (Double poids : mesPoids) {
@@ -47,7 +47,7 @@ public class FonctionQuadratique extends Fonction {
 			}
 		}
 		if(ret.length()>1)
-			ret.substring(1);
+			return ret.substring(1);
 		return new String("Erreur");
 	}
 	
