@@ -63,6 +63,7 @@ public class FenetreIHM extends JFrame {
 	public FenetreIHM() {
 		super();
 		initialize();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	/**
