@@ -194,7 +194,7 @@ public class ParamsVNS extends JFrame {
 			jButton_ok.setText("OK");
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("OK!"); // TODO Auto-generated Event stub actionPerformed()
+					// TODO setParams
 				}
 			});
 		}

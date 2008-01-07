@@ -12,6 +12,7 @@ import java.awt.GridBagLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -51,7 +52,7 @@ public class ParamsRecuit extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 285);
+		this.setSize(300, 260);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Paramètres Recuit");
 	}
@@ -184,8 +185,33 @@ public class ParamsRecuit extends JFrame {
 			jButton_ok.setText("OK");
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					
-					System.out.println("OK!"); // TODO Auto-generated Event stub actionPerformed()
+					if (jCheckBox_tempInit.isSelected()) {
+						if (jTextField1.getText().equals("") || !jTextField1.getText().matches("[0-9]+")) {
+							JOptionPane.showMessageDialog(null, "Température initiale incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
+						}
+						else if (jTextField2.getText().equals("") || !jTextField2.getText().matches("[0-9]+")) {
+							JOptionPane.showMessageDialog(null, "Température minimale incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
+						}
+						else if (jTextField3.getText().equals("") || !jTextField3.getText().matches("[0-9]+")) {
+							JOptionPane.showMessageDialog(null, "Nombre d'itérations incorrect (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
+						}
+						else {
+							// TODO
+						}
+					}
+					else {
+						// TODO TEMPERATURE INITIALE
+						
+						if (jTextField2.getText().equals("") || !jTextField2.getText().matches("[0-9]+")) {
+							JOptionPane.showMessageDialog(null, "Température minimale incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
+						}
+						else if (jTextField3.getText().equals("") || !jTextField3.getText().matches("[0-9]+")) {
+							JOptionPane.showMessageDialog(null, "Nombre d'itérations incorrect (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
+						}
+						else {
+							// TODO
+						}
+					}
 				}
 			});
 		}

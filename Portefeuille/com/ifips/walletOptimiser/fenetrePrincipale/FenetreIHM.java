@@ -18,6 +18,7 @@ import com.ifips.walletOptimiser.algo.RecuitSimule;
 import com.ifips.walletOptimiser.algo.VNS;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Vector;
 
 public class FenetreIHM extends JFrame {
@@ -219,7 +220,15 @@ public class FenetreIHM extends JFrame {
 			jMenuItem_help.setText("Aide");
 			jMenuItem_help.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
+					try{
+						Process p = Runtime.getRuntime().exec("cmd /C start manuel.pdf");
+						InputStream stdOut = p.getInputStream();
+						if(stdOut.read() != -1){
+							System.err.println("Erreur ! Acrobat Reader est-il installé ?");
+						}
+					}catch(Exception exception){
+						System.err.println("Exception occured: " + e);
+					} 
 				}
 			});
 		}
@@ -237,8 +246,8 @@ public class FenetreIHM extends JFrame {
 			jMenuItem_about.setText("A propos...");
 			jMenuItem_about.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					JOptionPane.showMessageDialog(null, "Gestion de problèmes d'optimisation v0.8\n\n" +
-							"IFIPS CI-3 Informatique\n\n" +
+					JOptionPane.showMessageDialog(null, "Gestion de problèmes d'optimisation v1.0\n\n" +
+							"IFIPS CI-3 Informatique - Groupe BERTHOMME\n\n" +
 							"Année 2007-2008",
 							"A propos...",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -324,6 +333,22 @@ public class FenetreIHM extends JFrame {
 	
 	public void setFonctionObjectif(String fct) {
 		panProb.setFonctionObjectif(fct);
+	}
+	
+	public VNS getVNS() {
+		return leVNS;
+	}
+	
+	public RecuitSimule getRecuit() {
+		return leRecuit;
+	}
+	
+	public Lagrange getLagrange() {
+		return leLagrange;
+	}
+	
+	public MonCPLEX getCPLEX() {
+		return leCPLEX;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

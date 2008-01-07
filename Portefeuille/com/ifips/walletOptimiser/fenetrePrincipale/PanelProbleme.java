@@ -109,33 +109,35 @@ public class PanelProbleme extends JPanel {
 	}
 	
 	private void launchResolution() {
-		if (jRadioButton_opt1.isSelected()) {
-			// Descente
-			
-		}
-		else if (jRadioButton_opt2.isSelected()) {
-			// Recuit
-			
-		}
-		else if (jRadioButton_opt3.isSelected()) {
-			// VNS
-			ParamsVNS vns = new ParamsVNS((FenetreIHM)getTopLevelAncestor());
-			vns.setLocation(((FenetreIHM)getTopLevelAncestor()).getLocation());
-			vns.setVisible(true);
-		}
-		else if (jRadioButton_opt4.isSelected()) {
-			// CPLEX
-			
-		}
-		else if (jRadioButton_opt5.isSelected()) {
-			// Relaxation Lagrangienne
-			
-		}
-		else {
+		if (radioGroup.getSelection() == null) {
 			JOptionPane.showMessageDialog(this, "Erreur : aucune méthode n'a été sélectionnée", "Erreur", JOptionPane.ERROR_MESSAGE);
 			return;
+		}		
+		else {
+			((FenetreIHM)getTopLevelAncestor()).launchResolution();
+			
+			if (jRadioButton_opt1.isSelected()) {
+				// Descente
+				
+			}
+			else if (jRadioButton_opt2.isSelected()) {
+				// Recuit
+				parent.getRecuit().resoudre();
+			}
+			else if (jRadioButton_opt3.isSelected()) {
+				// VNS
+				parent.getVNS().resoudre();
+			}
+			else if (jRadioButton_opt4.isSelected()) {
+				// CPLEX
+				parent.getVNS().resoudre();
+			}
+			else if (jRadioButton_opt5.isSelected()) {
+				// Relaxation Lagrangienne
+				parent.getLagrange().resoudre();
+			}
+				
 		}
-		((FenetreIHM)getTopLevelAncestor()).launchResolution();
 	}
 	
 	private void launchParams() {
