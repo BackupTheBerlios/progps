@@ -38,7 +38,9 @@ public class Fonction {
 		for (Double poids : mesPoids) {
 			ret=ret.concat("+ "+poids+"*"+laVariable.getNom()+"["+i+"] ");
 			i++;
-		}	
+		}
+		if(ret.length()>1)
+			ret.substring(1);
 		return ret;
 	}
 	

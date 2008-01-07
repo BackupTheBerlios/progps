@@ -162,7 +162,8 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 		ChargeurFichier reader = new ChargeurFichier("fichiers/DAX.txt");
-		ProblemeDeterministe pbDet = new ProblemeDeterministe(reader.getNbrTitres());
+		ProblemeDeterministe pbDet = new ProblemeDeterministe(2/*reader.getNbrTitres()*/);
+		fen.setFonctionObjectif(pbDet.getLeProbleme().getFonctionObjective().toString());
 		// Création des objets de résolution
 		algoRecuit=new RecuitSimule(pbDet.getLeProbleme());
 		algoRecuit.setFenetreDeSortie(fen);

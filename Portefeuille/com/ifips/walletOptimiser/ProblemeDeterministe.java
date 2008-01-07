@@ -25,6 +25,7 @@ public class ProblemeDeterministe {
 		} catch (Exception e) {	e.printStackTrace(); }
 		leProbleme=new Probleme(foncObj);
 		
+		
 		// Création des contraintes
 		// Contrainte 1a
 		Contrainte a1;

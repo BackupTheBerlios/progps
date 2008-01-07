@@ -34,6 +34,23 @@ public class FonctionQuadratique extends Fonction {
 		}
 	}
 	
+	public String toString() {
+		String ret=new String();
+		int i=0;
+		int j=0;
+		for (Double poids : mesPoids) {
+			ret=ret+"+ "+poids+"*"+laVariable.getNom()+"["+i+"]*"+laVariable2.getNom()+"["+j+"]";
+			j++;
+			if(j==laVariable.getDimension()){
+				j=0;
+				i++;
+			}
+		}
+		if(ret.length()>1)
+			ret.substring(1);
+		return new String("Erreur");
+	}
+	
 	double getValeur(List<Double> valeurs) throws Exception{
 		if(valeurs.size()!=laVariable.getDimension() 
 				|| valeurs.size()!=laVariable2.getDimension())
