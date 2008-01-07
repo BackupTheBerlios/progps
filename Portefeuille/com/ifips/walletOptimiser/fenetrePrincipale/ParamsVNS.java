@@ -194,7 +194,9 @@ public class ParamsVNS extends JFrame {
 			jButton_ok.setText("OK");
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					// TODO setParams
+					parent.getVNS().setDistanceMaxVoisinage(jSlider_opt1.getValue());
+					parent.getVNS().setProportionMaxVariation(jSlider_opt2.getValue());
+					dispose();
 				}
 			});
 		}

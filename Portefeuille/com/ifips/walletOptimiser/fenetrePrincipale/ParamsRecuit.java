@@ -52,7 +52,7 @@ public class ParamsRecuit extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(300, 260);
+		this.setSize(300, 289);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Paramètres Recuit");
 	}
@@ -186,22 +186,26 @@ public class ParamsRecuit extends JFrame {
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (jCheckBox_tempInit.isSelected()) {
-						if (jTextField1.getText().equals("") || !jTextField1.getText().matches("[0-9]+")) {
+						if (jTextField1.getText().equals("") || !jTextField1.getText().matches("[0-9]+(.[0-9]+)?")) {
 							JOptionPane.showMessageDialog(null, "Température initiale incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
-						else if (jTextField2.getText().equals("") || !jTextField2.getText().matches("[0-9]+")) {
+						else if (jTextField2.getText().equals("") || !jTextField2.getText().matches("[0-9]+(.[0-9]+)?")) {
 							JOptionPane.showMessageDialog(null, "Température minimale incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
 						else if (jTextField3.getText().equals("") || !jTextField3.getText().matches("[0-9]+")) {
 							JOptionPane.showMessageDialog(null, "Nombre d'itérations incorrect (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
 						else {
-							// TODO
+							parent.getRecuit().setTempAuto(false);
+							parent.getRecuit().setTempInitiale(Double.parseDouble(jTextField1.getText()));
+							parent.getRecuit().setTempMini(Double.parseDouble(jTextField2.getText()));
+							parent.getRecuit().setCoeffDecroissance(jSlider_opt2.getValue());
+							parent.getRecuit().setNbrIterationParPaliers(Integer.parseInt(jTextField3.getText()));
+							dispose();
 						}
 					}
 					else {
-						// TODO TEMPERATURE INITIALE
-						
+
 						if (jTextField2.getText().equals("") || !jTextField2.getText().matches("[0-9]+")) {
 							JOptionPane.showMessageDialog(null, "Température minimale incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
@@ -209,7 +213,11 @@ public class ParamsRecuit extends JFrame {
 							JOptionPane.showMessageDialog(null, "Nombre d'itérations incorrect (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
 						else {
-							// TODO
+							parent.getRecuit().setTempAuto(true);
+							parent.getRecuit().setTempMini(Double.parseDouble(jTextField2.getText()));
+							parent.getRecuit().setCoeffDecroissance(jSlider_opt2.getValue());
+							parent.getRecuit().setNbrIterationParPaliers(Integer.parseInt(jTextField3.getText()));
+							dispose();
 						}
 					}
 				}
