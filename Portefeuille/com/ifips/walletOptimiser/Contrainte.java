@@ -83,6 +83,7 @@ public abstract class Contrainte {
 //		}
 //		System.out.println(partieDroite);
 //	}
+	public abstract String toString();
 	
 	public abstract boolean estRespectee(ArrayList<Double> vecteurVarGauche, ArrayList<Double> vecteurVarDroite);
 	

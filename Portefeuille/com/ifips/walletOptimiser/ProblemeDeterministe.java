@@ -1,6 +1,8 @@
 package com.ifips.walletOptimiser;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class ProblemeDeterministe {
 	private Probleme leProbleme;
@@ -103,6 +105,18 @@ public class ProblemeDeterministe {
 
 	public Contrainte getContrainteRelaxee() {
 		return contrainteRelaxee;
+	}
+	
+	public Vector<String> contraintesToString(){
+		Vector<String> ret=new Vector<String>();
+		for (Contrainte uneContrainte : leProbleme.getMesContraintes()) {
+			ret.add(uneContrainte.toString());
+		}
+		for (int i = 0; i < (leProbleme.getFonctionObjective().laVariable.getDimension()*2); i++) {
+			ret.remove(ret.size()-1);
+		}
+		ret.add("Contrainte 1d complexe à afficher.");
+		return ret;
 	}
 
 }

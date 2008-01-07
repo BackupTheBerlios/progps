@@ -86,7 +86,6 @@ public class Solution{
 	}
 	
 	public String toString() {
-		afficher();
 		String ret="";
 		int i=0;
 		for (Variable uneVariable : this.sesVariables) {

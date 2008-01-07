@@ -19,6 +19,11 @@ public class FonctionConstante extends Fonction {
 	}
 	
 	@Override
+	public String toString() {
+		return String.valueOf(valeur);
+	}
+	
+	@Override
 	public Variable getLaVariable() {
 		return null;
 	}

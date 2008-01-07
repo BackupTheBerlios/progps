@@ -14,6 +14,15 @@ public class ContrainteEgale extends Contrainte {
 		System.out.print("= ");
 		partieDroite.afficher();
 	}
+	
+	@Override
+	public String toString() {
+		String ret=new String();
+		ret+=partieGauche.toString();
+		ret+="= ";
+		ret+=partieDroite.toString();
+		return ret;
+	}
 
 	@Override
 	public boolean estRespectee(ArrayList<Double> vecteurVarGauche, ArrayList<Double> vecteurVarDroite) {
