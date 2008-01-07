@@ -1,10 +1,12 @@
 package com.ifips.walletOptimiser.algo;
 
 import com.ifips.walletOptimiser.*;
+import com.ifips.walletOptimiser.fenetrePrincipale.FenetreIHM;
 
 public abstract class Algorithme {
 	protected Probleme pbCourant;
 	protected Solution solCourante;
+	protected FenetreIHM fenetreDeSortie;
 	
 	public Algorithme(Probleme p){
 		pbCourant=p;
@@ -27,5 +29,9 @@ public abstract class Algorithme {
 	}
 
 	public abstract Solution resoudre();
+
+	public void setFenetreDeSortie(FenetreIHM fenetreDeSortie) {
+		this.fenetreDeSortie = fenetreDeSortie;
+	}
 
 }

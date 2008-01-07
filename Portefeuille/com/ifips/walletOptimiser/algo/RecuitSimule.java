@@ -6,6 +6,7 @@ import com.ifips.walletOptimiser.Probleme;
 import com.ifips.walletOptimiser.Solution;
 
 public class RecuitSimule extends Algorithme {
+	private boolean tempAuto=true;
 	private double tempInitiale;
 	private double tempMini=0.0001;
 	private int nbrIterationParPaliers=100;
@@ -17,10 +18,19 @@ public class RecuitSimule extends Algorithme {
 
 	@Override
 	public Solution resoudre() {
-		if(!this.kirkPatrick())
-			System.err.println("Recuit Simulé : Impossible de déterminer la température initiale");
+		if(tempAuto)
+			if(!this.kirkPatrick())
+				System.err.println("Recuit Simulé : Impossible de déterminer la température initiale");
 		
 		Solution meilleureSol = this.solCourante;
+		if(meilleureSol==null){
+			Algorithme algoSolInit = new Aleatoire(this.pbCourant);
+			algoSolInit.setFenetreDeSortie(this.fenetreDeSortie);
+			System.out.println("Recherche une solution Initale");
+			this.solCourante=algoSolInit.resoudre();
+			System.out.println("Solution Initale trouvée");
+		}
+		
 		Solution solutionCandidate;
 		double temperatureCourante=this.tempInitiale;
 		Random rand=new Random();
@@ -55,6 +65,7 @@ public class RecuitSimule extends Algorithme {
 	public boolean kirkPatrick(){
 		// Méthode de recherche de sol initiale par l'aléatoire
 		Algorithme algoSolInit = new Aleatoire(this.pbCourant);
+		algoSolInit.setFenetreDeSortie(this.fenetreDeSortie);
 		System.out.println("Méthode de KirkPatrick");
 		System.out.println("Recherche une solution Initale");
 		this.solCourante=algoSolInit.resoudre();
@@ -97,6 +108,26 @@ public class RecuitSimule extends Algorithme {
 		}
 		System.out.println("Température initiale : "+this.tempInitiale);
 		return true;
+	}
+
+	public void setCoeffDecroissance(int coeffDec) {
+		this.coeffDecroissance = coeffDec/100.0;
+	}
+
+	public void setNbrIterationParPaliers(int nbrIterationParPaliers) {
+		this.nbrIterationParPaliers = nbrIterationParPaliers;
+	}
+
+	public void setTempAuto(boolean tempAuto) {
+		this.tempAuto = tempAuto;
+	}
+
+	public void setTempInitiale(double tempInitiale) {
+		this.tempInitiale = tempInitiale;
+	}
+
+	public void setTempMini(double tempMini) {
+		this.tempMini = tempMini;
 	}
 	
 }

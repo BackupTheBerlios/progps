@@ -165,9 +165,11 @@ public class Main {
 		ProblemeDeterministe pbDet = new ProblemeDeterministe(reader.getNbrTitres());
 		// Création des objets de résolution
 		algoRecuit=new RecuitSimule(pbDet.getLeProbleme());
+		algoRecuit.setFenetreDeSortie(fen);
 		fen.setRecuit(algoRecuit);
 		
 		algoVNS=new VNS(pbDet.getLeProbleme());
+		algoVNS.setFenetreDeSortie(fen);
 		fen.setVNS(algoVNS);
 
 //		algoLagr=new Lagrange(pbDet.getLeProbleme(),pbDet.getContrainteRelaxee());
