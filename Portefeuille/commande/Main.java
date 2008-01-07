@@ -20,8 +20,11 @@ import com.ifips.walletOptimiser.Variable;
 import com.ifips.walletOptimiser.algo.Aleatoire;
 import com.ifips.walletOptimiser.algo.RecuitSimule;
 import com.ifips.walletOptimiser.algo.VNS;
+import com.ifips.walletOptimiser.fenetrePrincipale.FenetreIHM;
 
 public class Main {
+	
+	private static FenetreIHM fen = new FenetreIHM();
 
 	private static Probleme genererProbleme1(){
 		Probleme leProb;
@@ -120,12 +123,20 @@ public class Main {
 		System.out.println("+ Coût de cette solution : "+algoAleat.getSolCourante().getCout());
 		
 		RecuitSimule algoRecuit=new RecuitSimule(leProb);
+		
+		// MODIF CLEM
+		fen.setRecuit(algoRecuit);
+		
 		algoRecuit.resoudre();
 		System.out.println("Solution trouvée par la méthode du recuit");
 		algoRecuit.getSolCourante().afficher();
 		System.out.println("+ Coût de cette solution : "+algoRecuit.getSolCourante().getCout());
 		
 		VNS algoVNS = new VNS(leProb);
+		
+		// MODIF CLEM
+		fen.setVNS(algoVNS);
+		
 		algoVNS.resoudre();
 		System.out.println("Solution trouvée par la méthode de VNS");
 		algoVNS.getSolCourante().afficher();
@@ -142,12 +153,12 @@ public class Main {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-				
+		
 		System.out.println("Notre PB :");
 		
 		genererProbleme1();
 		
-		
+		fen.setVisible(true);
 		
 //		constante.add(1);
 //		constante.add(2);
