@@ -29,7 +29,7 @@ public class FenetreIHM extends JFrame {
 	
 	private PanelResolution panReso = new PanelResolution();
 	
-	private VNS leVNS = null;
+	private VNS leVNS = null;  //  @jve:decl-index=0:
 	
 	private RecuitSimule leRecuit = null;
 	

@@ -62,8 +62,8 @@ public class PanelProbleme extends JPanel {
 	 */
 	public PanelProbleme() {
 		super();
-		//parent = p;
 		initialize();
+		
 	}
 
 	/**
@@ -109,6 +109,7 @@ public class PanelProbleme extends JPanel {
 	}
 	
 	private void launchResolution() {
+		parent = ((FenetreIHM)getTopLevelAncestor());
 		if (radioGroup.getSelection() == null) {
 			JOptionPane.showMessageDialog(this, "Erreur : aucune méthode n'a été sélectionnée", "Erreur", JOptionPane.ERROR_MESSAGE);
 			return;
@@ -122,11 +123,15 @@ public class PanelProbleme extends JPanel {
 			}
 			else if (jRadioButton_opt2.isSelected()) {
 				// Recuit
-				parent.getRecuit().resoudre();
+				if (parent.getRecuit() != null)
+					parent.getRecuit().resoudre();
+				else System.out.println("null !");
 			}
 			else if (jRadioButton_opt3.isSelected()) {
 				// VNS
-				parent.getVNS().resoudre();
+				if (parent.getVNS() != null)
+					parent.getVNS().resoudre();
+				else System.out.println("null !");
 			}
 			else if (jRadioButton_opt4.isSelected()) {
 				// CPLEX

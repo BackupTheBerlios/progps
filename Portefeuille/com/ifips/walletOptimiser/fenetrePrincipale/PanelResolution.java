@@ -248,11 +248,11 @@ public class PanelResolution extends JPanel {
 
 	
 	public void appendTextJournal(String text) {
-		jTextArea_journal.append(text);
+		jTextArea_journal.append(text + "\n");
 	}
 	
 	public void appendTextSolution(String text) {
-		jTextArea_solutions.append(text);
+		jTextArea_solutions.append(text + "\n");
 	}
 	
 	public void clearTextJournal() {
