@@ -186,10 +186,10 @@ public class ParamsRecuit extends JFrame {
 			jButton_ok.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					if (jCheckBox_tempInit.isSelected()) {
-						if (jTextField1.getText().equals("") || jTextField1.getText().matches(".*[a-zA-Z]+.*")) {
+						if (jTextField1.getText().equals("")) {
 							JOptionPane.showMessageDialog(null, "Température initiale incorrecte (doit etre un nombre flottant).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
-						else if (jTextField2.getText().equals("") || jTextField2.getText().matches(".*[a-zA-Z]+.*")) {
+						else if (jTextField2.getText().equals("")) {
 							JOptionPane.showMessageDialog(null, "Température minimale incorrecte (doit etre un nombre flottant).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
 						else if (jTextField3.getText().equals("") || !jTextField3.getText().matches("[0-9]+")) {
@@ -206,7 +206,7 @@ public class ParamsRecuit extends JFrame {
 					}
 					else {
 
-						if (jTextField2.getText().equals("") || !jTextField2.getText().matches("[0-9]+")) {
+						if (jTextField2.getText().equals("")) {
 							JOptionPane.showMessageDialog(null, "Température minimale incorrecte (doit etre un nombre).", "Erreur", JOptionPane.ERROR_MESSAGE);
 						}
 						else if (jTextField3.getText().equals("") || !jTextField3.getText().matches("[0-9]+")) {
