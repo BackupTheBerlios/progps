@@ -95,7 +95,7 @@ public class Solution{
 			i++;
 		}
 		if(ret.length()>1)
-			return ret.substring(1);
+			return ret;
 		return new String("Erreur : solution illisible");
 	}
 
